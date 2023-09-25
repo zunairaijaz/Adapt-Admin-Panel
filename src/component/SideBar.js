@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import '../style/app.css';
 import '../style/pace.min.css';
 import '../style/bootstrap.min.css';
@@ -20,7 +20,7 @@ function SideBar() {
 
   const linkStyle = {
     textDecoration: 'none',
-    color: 'white', // Set text color to white
+    color: 'white',
   };
 
   const sidebarStyle = {
@@ -30,9 +30,14 @@ function SideBar() {
   };
 
   const logoTextStyle = {
-    color: 'black', // Set text color of logo text to black
-    padding: '10px', // Add padding to logo text
-    textAlign: 'center', // Center align text
+    color: 'black',
+    padding: '10px',
+    textAlign: 'center',
+  };
+
+  const activeLinkStyle = {
+    backgroundColor: 'white',
+    color: 'black',
   };
 
   return (
@@ -56,34 +61,34 @@ function SideBar() {
 
           <ul className="metismenu" id="menu">
             <li>
-              <Link to="/news" style={linkStyle}>
+              <NavLink to="/news" style={linkStyle} activeStyle={activeLinkStyle}>
                 <div className="parent-icon">
-                  <InsertPhotoIcon style={{ color: 'white' }} /> {/* Set icon color to white */}
+                  <InsertPhotoIcon style={{ color: 'white' }} />
                 </div>
                 <div className={`menu-title ${!sidebarVisible ? 'hidden' : ''}`}>
                   News
                 </div>
-              </Link>
+              </NavLink>
             </li>
             <li>
-              <Link to="/time" style={linkStyle}>
+              <NavLink to="/time" style={linkStyle} activeStyle={activeLinkStyle}>
                 <div className="parent-icon">
-                  <TimelineRoundedIcon style={{ color: 'white' }} /> {/* Set icon color to white */}
+                  <TimelineRoundedIcon style={{ color: 'white' }} />
                 </div>
                 <div className={`menu-title ${!sidebarVisible ? 'hidden' : ''}`}>
                   Time
                 </div>
-              </Link>
+              </NavLink>
             </li>
             <li>
-              <Link to="/faq" style={linkStyle}>
+              <NavLink to="/faq" style={linkStyle} activeStyle={activeLinkStyle}>
                 <div className="parent-icon">
-                  <LiveHelpRoundedIcon style={{ color: 'white' }} /> {/* Set icon color to white */}
+                  <LiveHelpRoundedIcon style={{ color: 'white' }} />
                 </div>
                 <div className={`menu-title ${!sidebarVisible ? 'hidden' : ''}`}>
                   FAQ
                 </div>
-              </Link>
+              </NavLink>
             </li>
           </ul>
         </div>
