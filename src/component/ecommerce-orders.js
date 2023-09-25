@@ -9,7 +9,7 @@ import OrderTable from '../component/OrdersTable';
 import '../style/icons.css';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
-function orders() {
+function Orders() {
   return (
     <div className="App">
       <Header /> {/* Include the Header component */}
@@ -19,4 +19,4 @@ function orders() {
   );
 }
 
-export default orders;
+export default Orders;

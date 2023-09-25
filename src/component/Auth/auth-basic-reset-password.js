@@ -1,7 +1,7 @@
 
 import '../../style/app.css';
 
-function resetpass() {
+function Resetpass() {
   return (
     <div classNameName="App">
      <div class="wrapper">
@@ -40,4 +40,4 @@ function resetpass() {
   );
 }
 
-export default resetpass;
+export default Resetpass;
