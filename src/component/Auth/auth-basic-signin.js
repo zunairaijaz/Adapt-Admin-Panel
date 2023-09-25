@@ -3,8 +3,8 @@ import '../../style/app.css';
 import { IconButton } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import { toast } from 'react-toastify';
-import axios from 'axios';
+import { toast, ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';import axios from 'axios';
 import { useHistory } from 'react-router-dom';
 import config from '../../config'; // Import or define 'config' here
 import { Link } from 'react-router-dom';
@@ -20,7 +20,7 @@ function Signin() {
   const history = useHistory(); // Initialize 'history' here
 
   if (localStorage.getItem('admin')) {
-    history.push('/admin/newsTable');
+    history.push('/news');
   }
 
   const handleChange = (inputValue) => (event) => {
@@ -29,6 +29,13 @@ function Signin() {
 
   const clickSubmit = (event) => {
     event.preventDefault();
+  
+    // Check if email or password is empty
+    if (!email || !password) {
+      toast.error('Email and password are required.');
+      return;
+    }
+  
     setValues({ ...values, buttonText: 'Submitting..' });
     axios({
       method: 'POST',
@@ -45,13 +52,18 @@ function Signin() {
         toast.success(response.data.message);
         localStorage.setItem('admin', response.data.token);
         history.push('/news'); // Updated route to '/news'
-
       })
       .catch((error) => {
         setValues({ ...values, buttonText: 'Sign In' });
-        toast.error(error?.response?.data?.message);
+        // Check for specific error messages from the server
+        if (error?.response?.data?.message) {
+          toast.error(error.response.data.message);
+        } else {
+          toast.error('An error occurred. Please try again later.');
+        }
       });
   };
+  
 
   const [passwordVisible, setPasswordVisible] = useState(false);
 
@@ -131,7 +143,9 @@ function Signin() {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
+   
   );
 }
 

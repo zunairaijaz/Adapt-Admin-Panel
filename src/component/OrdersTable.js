@@ -306,8 +306,14 @@ function OrderTable() {
                                  <td style={{ whiteSpace: 'normal' }}>{news.title}</td>
                                  <td style={{ whiteSpace: 'normal' }}>{news.description}</td>
 	                             <td>{news.newsImage ? (<img src={news.newsImage} 
-								 alt={news.title} width="50" height="50" />) : null}</td>
-                                 <td style={{ whiteSpace: 'normal' }}>{news.newsVideoLink}</td>
+								                  alt={news.title} width="50" height="50" />) : null}</td>
+                               <td style={{ whiteSpace: 'normal' }}>
+                                  {news.newsVideoLink ? (
+                                  <a href={news.newsVideoLink} target="_blank" rel="noopener noreferrer">
+                                   {news.newsVideoLink}
+                                  </a>
+                                  ) : null}
+                                  </td>
                                  <td><div class="d-flex order-actions">
                                  <a title="edit" href="javascript:;" onClick={() => openPopupModal('Update News', news)}>
                                  <i className='bx bxs-edit'></i>
@@ -407,9 +413,12 @@ function OrderTable() {
                   setImageSelected(e.target.files[0]);
                   setValues({ ...values, newsImage: URL.createObjectURL(e.target.files[0]) });
                 }}/>
-               {modalTitle === 'Update News' && showImage ? (
-                    <img src={showImage} alt="Selected Image" className="img-thumbnail" />
-                  ) : null}
+            {modalTitle === 'Update News' ? (
+          <img
+          src={values.newsImage}
+          alt="News Image"
+          style={{ width: '200px', height: '150px' }} // Adjust the width and height here
+           />) : null}
               </div>
             </div>
             </div>

@@ -3103,3 +3103,16 @@ a {
   /*................TABLE................*/
   /* Add this CSS to your component's stylesheet or import an external CSS file */
 
+/* Default (Left) Sidebar Position */
+.left-sidebar {
+	display: flex;
+  }
+  
+  /* Switched (Right) Sidebar Position */
+  .right-sidebar {
+	display: flex;
+	flex-direction: row-reverse;
+  }
+  
+  /* Add any other styles you need for your sidebar */
+  

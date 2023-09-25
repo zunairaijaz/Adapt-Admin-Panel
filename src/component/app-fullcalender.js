@@ -10,8 +10,8 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-import { toast } from 'react-toastify';
-
+import { toast, ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
 function FullCalendar() {
   const [data, setData] = useState([
     { day: 'Monday', start_time: '', end_time: '', set: '' },
@@ -44,9 +44,9 @@ function FullCalendar() {
       url: `${config.SERVER_URL}/admin/getTime`,
     })
       .then((response) => {
-        // console.log("response data: ", response);
+         console.log("response data: ", response);
 
-        // console.log(response.data.time._id)
+        console.log(response.data.time._id)
         // Set the Id state with a valid value here
         setId(response.data.time._id); // Assuming _id is available in the API response
         // console.log("id is --->11"
@@ -82,10 +82,9 @@ function FullCalendar() {
     console.log("Id in updateRow: ", Id); // Add this line to check the value of Id
 
     const Shr = Number(data[day].start_time.split(':')[0]) * 60;
-    const Sm = Number(data[day].start_time.split(':')[1]);
-
+    const Sm =  Number(data[day].start_time.split(':')[1]);
     const Ehr = Number(data[day].end_time.split(':')[0]) * 60;
-    const Em = Number(data[day].end_time.split(':')[1]);
+    const Em =  Number(data[day].end_time.split(':')[1]);
     if (Shr + Sm < Ehr + Em) {
       const payload = {
         day: data[day].day,
@@ -96,16 +95,24 @@ function FullCalendar() {
         },
         _id: Id, // Include the _id here
       };
-
       axios({
         method: 'post',
         url: `${config.SERVER_URL}/admin/updateTime`,
         data: payload,
       })
-        .then((response) => {
-          toast.success('Data updated successfully');
-          fetchData();
-        })
+      .then((response) => {
+        if (response.status === 200) {
+        
+          toast.success('Data updated successfully', {
+            position: 'top-right',
+            autoClose: 3000,
+            hideProgressBar: false,
+          });
+          fetchData(); // Refresh data after successful update
+        } else {
+          toast.error('Failed to update data. Please try again.');
+        }
+      })
         .catch((err) => {
           console.log('error', err);
         });
@@ -113,20 +120,16 @@ function FullCalendar() {
       toast.error('End time must be greater than Start time');
     }
   };
-
-
   const handleChange = (event, rowIndex, fieldName) => {
     const updatedData = [...data];
     updatedData[rowIndex][fieldName] = event.target.value;
     setData(updatedData);
   };
-
   const handleSelectChange = (event, rowIndex) => {
     const updatedData = [...data];
     updatedData[rowIndex].set = event.target.value;
     setData(updatedData);
   };
-
   return (
     <div className='App'>
       <Header />
@@ -148,6 +151,7 @@ function FullCalendar() {
                     </thead>
                     <tbody>
                       {data.map((row, index) => (
+                          row.day !== "_id" &&(
                         <tr key={index}>
                           <td>{row.day}</td>
                           <td>
@@ -167,20 +171,22 @@ function FullCalendar() {
                             />
                           </td>
                           <td>
-                            <FormControl fullWidth>
-                              <InputLabel id={`active-label-${index}`}>Active</InputLabel>
-                              <Select
-                                labelId={`active-label-${index}`}
-                                id={`active-${index}`}
-                                value={row.set}
-                                label="active"
-                                onChange={(event) => handleSelectChange(event, index)}
-                              >
-                                <MenuItem value="Open">Open</MenuItem>
-                                <MenuItem value="Close">Close</MenuItem>
-                              </Select>
-                            </FormControl>
-                          </td>
+  <FormControl fullWidth>
+    <InputLabel id={`active-label-${index}`}>Active</InputLabel>
+    <Select
+      labelId={`active-label-${index}`}
+      id={`active-${index}`}
+      value={row.set}
+      label="active"
+      onChange={(event) => handleSelectChange(event, index)}
+      style={{ fontSize: '12px', padding: '2px', height: '36px' }} // Decrease the height here
+    >
+      <MenuItem value="Open">Open</MenuItem>
+      <MenuItem value="Close">Close</MenuItem>
+    </Select>
+  </FormControl>
+</td>
+
                           <td>
                             <Button
                               variant="outlined"
@@ -194,7 +200,9 @@ function FullCalendar() {
                             </Button>
                           </td>
                         </tr>
+                          )
                       ))}
+                            
                     </tbody>
                   </table>
                 </div>
@@ -203,7 +211,9 @@ function FullCalendar() {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
+    
   );
 }
 
