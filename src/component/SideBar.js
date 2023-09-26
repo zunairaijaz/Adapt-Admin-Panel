@@ -35,6 +35,9 @@ function SideBar() {
     textAlign: 'center',
   };
 
+  const iconActiveClass = 'icon-active'; // CSS class for active icon color
+  const iconInactiveClass = 'icon-inactive'; // CSS class for inactive icon color
+
   const activeLinkStyle = {
     backgroundColor: 'white',
     color: 'black',
@@ -47,7 +50,9 @@ function SideBar() {
           <div className="sidebar-header">
             <div>
               {sidebarVisible && (
-                <h4 className="logo-text" style={logoTextStyle}>ADAPT-ADMIN</h4>
+                <h4 className="logo-text" style={logoTextStyle}>
+                  ADAPT-ADMIN
+                </h4>
               )}
             </div>
             <div className="toggle-button" onClick={toggleSidebar}>
@@ -58,12 +63,17 @@ function SideBar() {
               )}
             </div>
           </div>
-
           <ul className="metismenu" id="menu">
             <li>
-              <NavLink to="/news" style={linkStyle} activeStyle={activeLinkStyle}>
+              <NavLink
+                to="/news"
+                style={linkStyle}
+                activeStyle={activeLinkStyle} // Apply active styles to the NavLink
+              >
                 <div className="parent-icon">
-                  <InsertPhotoIcon style={{ color: 'white' }} />
+                  <InsertPhotoIcon
+                    className={activeLinkStyle.color === 'black' ? iconActiveClass : iconInactiveClass}
+                  />
                 </div>
                 <div className={`menu-title ${!sidebarVisible ? 'hidden' : ''}`}>
                   News
@@ -71,9 +81,15 @@ function SideBar() {
               </NavLink>
             </li>
             <li>
-              <NavLink to="/time" style={linkStyle} activeStyle={activeLinkStyle}>
+              <NavLink
+                to="/time"
+                style={linkStyle}
+                activeStyle={activeLinkStyle} // Apply active styles to the NavLink
+              >
                 <div className="parent-icon">
-                  <TimelineRoundedIcon style={{ color: 'white' }} />
+                  <TimelineRoundedIcon
+                    className={activeLinkStyle.color === 'black' ? iconActiveClass : iconInactiveClass}
+                  />
                 </div>
                 <div className={`menu-title ${!sidebarVisible ? 'hidden' : ''}`}>
                   Time
@@ -81,9 +97,15 @@ function SideBar() {
               </NavLink>
             </li>
             <li>
-              <NavLink to="/faq" style={linkStyle} activeStyle={activeLinkStyle}>
+              <NavLink
+                to="/faq"
+                style={linkStyle}
+                activeStyle={activeLinkStyle} // Apply active styles to the NavLink
+              >
                 <div className="parent-icon">
-                  <LiveHelpRoundedIcon style={{ color: 'white' }} />
+                  <LiveHelpRoundedIcon
+                    className={activeLinkStyle.color === 'black' ? iconActiveClass : iconInactiveClass}
+                  />
                 </div>
                 <div className={`menu-title ${!sidebarVisible ? 'hidden' : ''}`}>
                   FAQ
