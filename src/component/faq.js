@@ -3,9 +3,9 @@ import '../style/app.css';
 import '../style/pace.min.css';
 import '../style/bootstrap.min.css';
 import '../style/bootstrap-extended.css';
-import SideBar from '../component/SideBar';
-import Header from '../component/Header';
-import FaqTable from '../component/FaqTable';
+import SideBar from './SideBar';
+import Header from './Header';
+import FaqTable from './FaqTable';
 import '../style/icons.css';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 

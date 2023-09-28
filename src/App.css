@@ -32,10 +32,12 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
 }
+
 /* Add this to your CSS file */
 .icon-active {
   color: black;
@@ -44,12 +46,15 @@
 .icon-inactive {
   color: white;
 }
+
 /* Define a CSS animation */
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateX(-10px); /* Optional: Add a slight horizontal shift */
+    transform: translateX(-10px);
+    /* Optional: Add a slight horizontal shift */
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -61,17 +66,21 @@
     opacity: 1;
     transform: translateX(0);
   }
+
   to {
     opacity: 0;
-    transform: translateX(-10px); /* Optional: Add a slight horizontal shift */
+    transform: translateX(-10px);
+    /* Optional: Add a slight horizontal shift */
   }
 }
 
 /* Apply the animation to the sidebar */
 .sidebar-open {
-  animation: fadeIn 0.3s ease-in-out; /* Adjust the duration and easing as needed */
+  animation: fadeIn 0.3s ease-in-out;
+  /* Adjust the duration and easing as needed */
 }
 
 .sidebar-closed {
-  animation: fadeOut 0.3s ease-in-out; /* Adjust the duration and easing as needed */
+  animation: fadeOut 0.3s ease-in-out;
+  /* Adjust the duration and easing as needed */
 }

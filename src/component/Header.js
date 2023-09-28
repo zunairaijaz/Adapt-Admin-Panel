@@ -1,7 +1,7 @@
 import React from 'react';
 import PersonIcon from '@material-ui/icons/Person';
 import { Link } from 'react-router-dom'; // Import Link for navigation
-import Signout from './Auth/auth-basic-signin'; // Import the Signout component
+import Signout from './Auth/SignIn'; // Import the Signout component
 
 function Header() {
   return (

@@ -10,39 +10,32 @@ import TimelineRoundedIcon from '@material-ui/icons/TimelineRounded';
 import LiveHelpRoundedIcon from '@material-ui/icons/LiveHelpRounded';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
-
+import DescriptionIcon from '@mui/icons-material/Description';
 function SideBar() {
   const [sidebarVisible, setSidebarVisible] = useState(true);
-
   const toggleSidebar = () => {
     setSidebarVisible(!sidebarVisible);
   };
-
   const linkStyle = {
     textDecoration: 'none',
     color: 'white',
   };
-
   const sidebarStyle = {
     width: sidebarVisible ? '250px' : '70px',
     transition: 'width 0.3s ease-in-out',
     backgroundColor: 'black',
   };
-
   const logoTextStyle = {
     color: 'black',
     padding: '10px',
     textAlign: 'center',
   };
-
   const iconActiveClass = 'icon-active'; // CSS class for active icon color
   const iconInactiveClass = 'icon-inactive'; // CSS class for inactive icon color
-
   const activeLinkStyle = {
     backgroundColor: 'white',
     color: 'black',
   };
-
   return (
     <div className={`App ${sidebarVisible ? 'sidebar-open' : 'sidebar-closed'}`}>
       <div className="wrapper">
@@ -112,11 +105,26 @@ function SideBar() {
                 </div>
               </NavLink>
             </li>
+            <li>
+              <NavLink
+                to="/logs"
+                style={linkStyle}
+                activeStyle={activeLinkStyle} // Apply active styles to the NavLink
+              >
+                <div className="parent-icon">
+                  <DescriptionIcon
+                    className={activeLinkStyle.color === 'black' ? iconActiveClass : iconInactiveClass}
+                  />
+                </div>
+                <div className={`menu-title ${!sidebarVisible ? 'hidden' : ''}`}>
+                  App Logs
+                </div>
+              </NavLink>
+            </li>
           </ul>
         </div>
       </div>
     </div>
   );
 }
-
 export default SideBar;

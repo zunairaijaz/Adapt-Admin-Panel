@@ -156,77 +156,79 @@ function FaqTable() {
     <div className="App">
       <div className="page-wrapper">
         <div className="page-content">
-		<div className="container mt-3">
+        <h1 style={{ margin: '0' }}>FAQ</h1>
+          <hr style={{ borderTop: '2px solid #333' }} />
+          <div className="container mt-3">
             <div className="row justify-content-center">
               <div className="col-lg-11">
 
-                  <div className="card-body">
-                    <div className="d-lg-flex align-items-center mb-4 gap-3">
-                      <div className="ms-auto">
-					  <Button variant="primary" onClick={() => openPopupModal('Add Faq')}>
-                      <i className="bx bxs-plus-square"></i> Add FAQ
-                    </Button>
+                <div className="card-body">
+                  <div className="d-lg-flex align-items-center mb-4 gap-3">
+                    <div className="ms-auto">
+                      <Button variant="primary" onClick={() => openPopupModal('Add Faq')}>
+                        <i className="bx bxs-plus-square"></i> Add FAQ
+                      </Button>
                     </div>
-                    </div>
-                    <div class="table-responsive">
-						<table class="table mb-0">
-								<thead class="table-light">
-									<tr>
-										<th>No.</th>
-										<th>Question</th>
-										<th>Answer</th>
-										<th>Actions</th>
-									</tr>
-								</thead>
-                            <tbody>
-                                {isArray.map((faq, index) => (
-                                 <tr key={index}>
-                                 <td>{index + 1}</td>
-								 <td style={{ whiteSpace: 'normal' }}>{faq.question}</td>
-                                 <td style={{ whiteSpace: 'normal' }}>{faq.answer}</td>
-                                 <td><div class="d-flex order-actions">
-                                 <a title= "edit" href="javascript:;" onClick={() => openPopupModal('Update Faq', faq)}>
-                                 <i className='bx bxs-edit'></i>
-                                 </a>
+                  </div>
+                  <div class="table-responsive">
+                    <table class="table mb-0">
+                      <thead class="table-light">
+                        <tr>
+                          <th>No.</th>
+                          <th>Question</th>
+                          <th>Answer</th>
+                          <th>Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {isArray.map((faq, index) => (
+                          <tr key={index}>
+                            <td>{index + 1}</td>
+                            <td style={{ whiteSpace: 'normal' }}>{faq.question}</td>
+                            <td style={{ whiteSpace: 'normal' }}>{faq.answer}</td>
+                            <td><div class="d-flex order-actions">
+                              <a title="edit" href="javascript:;" onClick={() => openPopupModal('Update Faq', faq)}>
+                                <i className='bx bxs-edit'></i>
+                              </a>
 
-                                 <a title="delete" href="javascript:;" className="ms-3" onClick={() => deleteEvent(faq._id)}>
-                                 <i className="bx bxs-trash"></i></a>
-                                 </div>
-                                 </td>
-                                </tr> ))}
-                            </tbody>
-                        </table>
-				    </div>
-            
-               </div>
+                              <a title="delete" href="javascript:;" className="ms-3" onClick={() => deleteEvent(faq._id)}>
+                                <i className="bx bxs-trash"></i></a>
+                            </div>
+                            </td>
+                          </tr>))}
+                      </tbody>
+                    </table>
+                  </div>
+
+                </div>
+              </div>
             </div>
-            </div>
+          </div>
         </div>
-        </div>
-    </div>
-	<Modal show={showDeleteConfirmation} onHide={() => setShowDeleteConfirmation(false)}>
-  <Modal.Header closeButton>
-    <Modal.Title>Confirm Deletion</Modal.Title>
-  </Modal.Header>
-  <Modal.Body>
-    Are you sure you want to delete this item?
-  </Modal.Body>
-  <Modal.Footer>
-    <Button variant="secondary" onClick={() => setShowDeleteConfirmation(false)}>
-      Cancel
-    </Button>
-    <Button variant="danger" onClick={handleConfirmDelete}>
-      Delete
-    </Button>
-  </Modal.Footer>
-</Modal>
+      </div>
+      <Modal show={showDeleteConfirmation} onHide={() => setShowDeleteConfirmation(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Deletion</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to delete this item?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowDeleteConfirmation(false)}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={handleConfirmDelete}>
+            Delete
+          </Button>
+        </Modal.Footer>
+      </Modal>
       {/* Modal */}
-	  <Modal show={showModal} onHide={closePopupModal} dialogClassName="custom-modal-width">
+      <Modal show={showModal} onHide={closePopupModal} dialogClassName="custom-modal-width">
         <Modal.Header closeButton>
           <Modal.Title>{modalTitle}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-		<form onSubmit={modalTitle === 'Add Faq' ? addFAQ : editFAQ}>
+          <form onSubmit={modalTitle === 'Add Faq' ? addFAQ : editFAQ}>
             <div className="modal-body">
               <div className="row mb-3">
                 <div className="col-md-8 mx-auto">
@@ -257,18 +259,18 @@ function FaqTable() {
                   ></textarea>
                 </div>
               </div>
-             </div>
-        
+            </div>
+
             <div className="modal-footer">
-		      	<button type="submit" className="btn btn-primary custom-submit-button">
-            {modalTitle === 'Add Faq' ? 'Submit' : 'Update'}
-            </button>
+              <button type="submit" className="btn btn-primary custom-submit-button">
+                {modalTitle === 'Add Faq' ? 'Submit' : 'Update'}
+              </button>
 
             </div>
           </form>
         </Modal.Body>
       </Modal>
-	  <ToastContainer />
+      <ToastContainer />
     </div>
   );
 }
