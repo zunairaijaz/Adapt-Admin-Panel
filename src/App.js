@@ -8,7 +8,7 @@ import SignOut from './component/Auth/SignOut';
 import ForgotPassword from './component/Auth/ForgotPassword';
 import ResetPassword from './component/Auth/ResetPassword';
 import Logs from './component/Logs'; // Import your FAQ component
-
+import Gui from './component/Gui';
 function App() {
   return (
     <Router basename="/">
@@ -22,6 +22,8 @@ function App() {
           <Route exact path="/time" component={Time} />
           <Route exact path="/faq" component={FAQ} />
           <Route exact path="/logs" component={Logs} />
+          <Route exact path="/gui" component={Gui} />
+
         </Switch>
       </div>
     </Router>

@@ -11,6 +11,7 @@ import LiveHelpRoundedIcon from '@material-ui/icons/LiveHelpRounded';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import DescriptionIcon from '@mui/icons-material/Description';
+import GradingIcon from '@mui/icons-material/Grading';
 function SideBar() {
   const [sidebarVisible, setSidebarVisible] = useState(true);
   const toggleSidebar = () => {
@@ -118,6 +119,24 @@ function SideBar() {
                 </div>
                 <div className={`menu-title ${!sidebarVisible ? 'hidden' : ''}`}>
                   App Logs
+                </div>
+              </NavLink>
+             
+              
+            </li>
+            <li>
+              <NavLink
+                to="/gui"
+                style={linkStyle}
+                activeStyle={activeLinkStyle} // Apply active styles to the NavLink
+              >
+                <div className="parent-icon">
+                  <GradingIcon
+                    className={activeLinkStyle.color === 'black' ? iconActiveClass : iconInactiveClass}
+                  />
+                </div>
+                <div className={`menu-title ${!sidebarVisible ? 'hidden' : ''}`}>
+                  Logger GUI
                 </div>
               </NavLink>
             </li>

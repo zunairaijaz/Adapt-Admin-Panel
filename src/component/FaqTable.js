@@ -9,6 +9,8 @@ import 'react-toastify/dist/ReactToastify.min.css';
 import '../style/app.css';
 import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles'; // Add this import
+import FaqRowsLoader from './FaqRowsLoader'; // Make sure to use the correct p
+import { Box, Skeleton } from '@mui/material';
 
 const useStyles = makeStyles((theme) => ({
   // Define your styles here
@@ -21,7 +23,7 @@ function FaqTable() {
   if (!localStorage.getItem('admin')) {
     history.push('/');
   }
-
+  const [loading, setLoading] = useState(true);
   const [isArray, setIsArray] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [modalTitle, setModalTitle] = useState('Add Faq');
@@ -40,17 +42,21 @@ function FaqTable() {
   const { question, answer } = values;
 
   const fetchData = () => {
+    setLoading(true); // Set loading to true when data fetching starts
     axios({
       method: 'POST',
       url: `${config.SERVER_URL}/admin/all_faq`,
     })
       .then((response) => {
         setIsArray(response.data);
+        setLoading(false); // Set loading to false when data is fetched
       })
       .catch((err) => {
         toast.error('Error getting data. Please try again.');
+        setLoading(false); // Set loading to false in case of an error
       });
   };
+  
 
   const openPopupModal = (title, faq) => {
     setShowModal(true);
@@ -181,21 +187,28 @@ function FaqTable() {
                         </tr>
                       </thead>
                       <tbody>
-                        {isArray.map((faq, index) => (
-                          <tr key={index}>
-                            <td>{index + 1}</td>
-                            <td style={{ whiteSpace: 'normal' }}>{faq.question}</td>
-                            <td style={{ whiteSpace: 'normal' }}>{faq.answer}</td>
-                            <td><div class="d-flex order-actions">
-                              <a title="edit" href="javascript:;" onClick={() => openPopupModal('Update Faq', faq)}>
-                                <i className='bx bxs-edit'></i>
-                              </a>
-
-                              <a title="delete" href="javascript:;" className="ms-3" onClick={() => deleteEvent(faq._id)}>
-                                <i className="bx bxs-trash"></i></a>
-                            </div>
-                            </td>
-                          </tr>))}
+                        
+                      {loading ? (
+              <FaqRowsLoader rowsNum={isArray.length} /> // Render skeleton rows
+            ) : (
+                          isArray.map((faq, index) => (
+                            <tr key={index}>
+                              <td>{index + 1}</td>
+                              <td style={{ whiteSpace: 'normal' }}>{faq.question}</td>
+                              <td style={{ whiteSpace: 'normal' }}>{faq.answer}</td>
+                              <td>
+                                <div class="d-flex order-actions">
+                                  <a title="edit" href="javascript:;" onClick={() => openPopupModal('Update Faq', faq)}>
+                                    <i className='bx bxs-edit'></i>
+                                  </a>
+                                  <a title="delete" href="javascript:;" className="ms-3" onClick={() => deleteEvent(faq._id)}>
+                                    <i className="bx bxs-trash"></i>
+                                  </a>
+                                </div>
+                              </td>
+                            </tr>
+                          ))
+                        )}
                       </tbody>
                     </table>
                   </div>

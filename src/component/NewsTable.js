@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
@@ -7,12 +7,11 @@ import config from '../config';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 import '../style/app.css';
-
+import { Box, Skeleton } from '@mui/material';
+import TableRowsLoader from './TableRowsLoader'; // Make sure to use the correct p
+import { FaTimes } from 'react-icons/fa'; // Import the close (times) icon
 function NewsTable() {
-  const [newsData, setNewsData] = useState([]); // To store news data
-
-  const [videoLink, setVideoLink] = useState('');
-  const [imageFile, setImageFile] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [modalTitle, setModalTitle] = useState('Add News');
   const [editOpen, setEditOpen] = useState(false);
@@ -20,6 +19,7 @@ function NewsTable() {
   const [addOpen, setAddOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const imageInputRef = useRef(null); // Add this ref variable
 
   ///--------->
   const [values, setValues] = useState({
@@ -31,35 +31,62 @@ function NewsTable() {
   const [isImageSelected, setImageSelected] = useState(null);
   const [showImage, setShowImage] = useState(null);
   const [newsId, setNewsId] = useState('');
+  const [isImageRemoved, setImageRemoved] = useState(false); // Add this state variable
+
   useEffect(() => {
+    setLoading(true); // Make sure this line is present
     fetchData();
   }, []);
   const fetchData = () => {
+    setLoading(true);
     axios({
       method: 'POST',
       url: `${config.SERVER_URL}/admin/allNews`,
     })
       .then((response) => {
+        console.log("im calllled--------->", response.data);
         setisArray(response.data);
+        setLoading(false); // Set loading to false when data is fetched
       })
       .catch((err) => {
         console.log('error', err);
+        setLoading(false); // Set loading to false even in case of an error
       });
   };
+  const removeImage = () => {
+    console.log('Remove image called');
+    setImageSelected(null);
+    setShowImage(null);
+    setImageRemoved(true);
+
+    // Clear the image URL in values.newsImage
+    setValues({ ...values, newsImage: '' });
+
+    // Clear the file input field using the ref
+    if (imageInputRef.current) {
+      imageInputRef.current.value = null; // Clear the file input value
+    }
+  };
+
   const openPopupModal = (title, news) => {
     console.log("openPopupModal called");
+
     setShowModal(true);
     setModalTitle(title);
+
     if (news) {
+      console.log("Received news data:", news); // Log the received news object
       console.log("newsImage value:", news.newsImage); // Log the value of newsImage
+
       setValues({
         title: news.title || '',
         description: news.description || '',
         newsVideoLink: news.newsVideoLink || '',
         newsImage: news.newsImage || '', // Set the image URL if it exists
       });
+
       setNewsId(news._id || '');
-            // If there's an image URL, you can set it to display in the modal
+      // If there's an image URL, you can set it to display in the modal
       if (news.newsImage) {
         setShowImage(news.newsImage);
       } else {
@@ -176,6 +203,9 @@ function NewsTable() {
     ) {
       toast.error('Please select Image or Video Link');
     } else {
+      // Set isImageRemoved to false before making the API call
+      setImageRemoved(false);
+
       if (values.newsVideoLink !== '') {
         formData.append('newsVideoLink', values.newsVideoLink);
         formData.append('newsImage', isImageSelected);
@@ -187,9 +217,9 @@ function NewsTable() {
         })
           .then((response) => {
             toast.success('News Updated successfully.', {
-              position: 'top-right', // You can change the position as needed
-              autoClose: 3000, // Close the notification after 3 seconds (adjust as needed)
-              hideProgressBar: false, // Show the progress bar
+              position: 'top-right',
+              autoClose: 3000,
+              hideProgressBar: false,
             });
             closePopupModal();
             handleCloseEditNews();
@@ -209,9 +239,9 @@ function NewsTable() {
         })
           .then((response) => {
             toast.success('News Updated successfully.', {
-              position: 'top-right', // You can change the position as needed
-              autoClose: 3000, // Close the notification after 3 seconds (adjust as needed)
-              hideProgressBar: false, // Show the progress bar
+              position: 'top-right',
+              autoClose: 3000,
+              hideProgressBar: false,
             });
             closePopupModal();
             handleCloseEditNews();
@@ -230,7 +260,6 @@ function NewsTable() {
 
     setShowDeleteConfirmation(true);
   };
-
   const handleConfirmDelete = () => {
     // Close the delete confirmation modal
     setShowDeleteConfirmation(false);
@@ -281,33 +310,37 @@ function NewsTable() {
                         </tr>
                       </thead>
                       <tbody>
-                        {isArray.map((news, index) => (
-                          <tr key={index}>
-                            <td>{index + 1}</td>
-                            <td style={{ whiteSpace: 'normal' }}>{news.title}</td>
-                            <td style={{ whiteSpace: 'normal' }}>{news.description}</td>
-                            <td>{news.newsImage ? (<img src={news.newsImage}
-                              alt={news.title} width="50" height="50" />) : null}</td>
-                            <td style={{ whiteSpace: 'normal' }}>
-                              {news.newsVideoLink ? (
-                                <a href={news.newsVideoLink} target="_blank" rel="noopener noreferrer">
-                                  {news.newsVideoLink}
-                                </a>
-                              ) : null}
-                            </td>
-                            <td><div class="d-flex order-actions">
-                              <a title="edit" href="javascript:;" onClick={() => openPopupModal('Update News', news)}>
-                                <i className='bx bxs-edit'></i>
-                              </a>
-
-                              <a title="delete" href="javascript:;" className="ms-3" onClick={() => deleteEvent(news._id)}>
-                                <i className="bx bxs-trash"></i></a>
-                            </div>
-                            </td>
-                          </tr>))}
+                        {loading ? (
+                          <TableRowsLoader rowsNum={isArray.length} />
+                        ) : (
+                          isArray.map((news, index) => (
+                            <tr key={index}>
+                              <td>{index + 1}</td>
+                              <td style={{ whiteSpace: 'normal' }}>{news.title}</td>
+                              <td style={{ whiteSpace: 'normal' }}>{news.description}</td>
+                              <td>{news.newsImage ? (<img src={news.newsImage} alt={news.title} width="50" height="50" />) : null}</td>
+                              <td style={{ whiteSpace: 'normal' }}>
+                                {news.newsVideoLink ? (
+                                  <a href={news.newsVideoLink} target="_blank" rel="noopener noreferrer">
+                                    {news.newsVideoLink}
+                                  </a>
+                                ) : null}
+                              </td>
+                              <td>
+                                <div class="d-flex order-actions">
+                                  <a title="edit" href="javascript:;" onClick={() => openPopupModal('Update News', news)}>
+                                    <i className='bx bxs-edit'></i>
+                                  </a>
+                                  <a title="delete" href="javascript:;" className="ms-3" onClick={() => deleteEvent(news._id)}>
+                                    <i className="bx bxs-trash"></i>
+                                  </a>
+                                </div>
+                              </td>
+                            </tr>
+                          ))
+                        )}
                       </tbody>
                     </table>
-
                   </div>
                 </div>
               </div>
@@ -341,7 +374,9 @@ function NewsTable() {
             <div className="modal-body">
               <div className="row mb-3">
                 <div className="col-md-8 mx-auto">
-                  <label htmlFor="title" className="form-label">Title</label>
+                  <label htmlFor="title" className="form-label">
+                    Title
+                  </label>
                   <input
                     type="text"
                     className="form-control"
@@ -356,7 +391,9 @@ function NewsTable() {
 
               <div className="row mb-3">
                 <div className="col-md-8 mx-auto">
-                  <label htmlFor="description" className="form-label">Description</label>
+                  <label htmlFor="description" className="form-label">
+                    Description
+                  </label>
                   <textarea
                     className="form-control"
                     id="description"
@@ -370,7 +407,9 @@ function NewsTable() {
               </div>
               <div className="row mb-3">
                 <div className="col-md-8 mx-auto">
-                  <label htmlFor="videoLink" className="form-label">Video Link</label>
+                  <label htmlFor="videoLink" className="form-label">
+                    Video Link
+                  </label>
                   <input
                     type="url"
                     className="form-control"
@@ -383,23 +422,68 @@ function NewsTable() {
               </div>
               <div className="row mb-3">
                 <div className="col-md-8 mx-auto">
-                  <label htmlFor="image" className="form-label">Image</label>
-                  <input
-                    type="file"
-                    className="form-control"
-                    id="image"
-                    name="image"
-                    accept="image/*"
-                    onChange={(e) => {
-                      setImageSelected(e.target.files[0]);
-                      setValues({ ...values, newsImage: URL.createObjectURL(e.target.files[0]) });
-                    }} />
-                  {modalTitle === 'Update News' ? (
-                    <img
-                      src={values.newsImage}
-                      alt="News Image"
-                      style={{ width: '200px', height: '150px' }} // Adjust the width and height here
-                    />) : null}
+                  <label htmlFor="image" className="form-label">
+                    Image
+                  </label>
+                  {values.newsImage ? (
+                    <div>
+                      <input
+                        type="file"
+                        className="form-control"
+                        id="image"
+                        name="image"
+                        accept="image/*"
+                        onChange={(e) => {
+                          const selectedImage = e.target.files[0];
+
+                          if (selectedImage) {
+                            setImageSelected(selectedImage);
+                            setValues({ ...values, newsImage: URL.createObjectURL(selectedImage) });
+                          } else {
+                            // Handle the case when the user clears the file input
+                            setImageSelected(null);
+                            setValues({ ...values, newsImage: '' });
+                          }
+                        }}
+                      />
+                      <img
+                        src={values.newsImage}
+                        alt="News Image"
+                        style={{ width: '200px', height: '150px' }}
+                      />
+                      <button
+                        type="button"
+                        className="btn btn-danger btn-sm mt-2"
+                        onClick={() => {
+                          // Reset both image-related states when the close icon is clicked
+                          setImageSelected(null); // Update isImageSelected to null
+                          setValues({ ...values, newsImage: '' }); // Update newsImage to an empty string
+                        }}
+                      >
+                        <FaTimes />
+                      </button>
+                    </div>
+                  ) : (
+                    <input
+                      type="file"
+                      className="form-control"
+                      id="image"
+                      name="image"
+                      accept="image/*"
+                      onChange={(e) => {
+                        const selectedImage = e.target.files[0];
+                        if (selectedImage) {
+                          setImageSelected(selectedImage);
+                          setValues({ ...values, newsImage: URL.createObjectURL(selectedImage) });
+                        } else {
+                          // Handle the case when the user clears the file input
+                          setImageSelected(null);
+                          setValues({ ...values, newsImage: '' });
+                        }
+                      }}
+                      ref={imageInputRef} // Add this ref
+                    />
+                  )}
                 </div>
               </div>
             </div>
@@ -407,7 +491,6 @@ function NewsTable() {
               <button type="submit" className="btn btn-primary custom-submit-button">
                 {modalTitle === 'Add News' ? 'Submit' : 'Update'}
               </button>
-
             </div>
           </form>
         </Modal.Body>
@@ -416,5 +499,4 @@ function NewsTable() {
     </div>
   );
 }
-
 export default NewsTable;
