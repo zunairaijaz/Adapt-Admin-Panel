@@ -56,7 +56,7 @@ function ForgotPassword() {
                   <button type="button" className="btn btn-primary" onClick={clickSubmit}>
                     {buttonText}
                   </button>
-                  <a href="/signin" className="btn btn-light"><i className='bx bx-arrow-back me-1'></i>Back to Login</a>
+                  <a href="/" className="btn btn-light"><i className='bx bx-arrow-back me-1'></i>Back to Login</a>
                 </div>
               </div>
             </div>
