@@ -279,11 +279,11 @@ function NewsTable({ sidebarVisible }) {
     <div className="App">
       <div className="page-wrapper">
         <div className={`page-content ${sidebarVisible ? 'content-moved-left' : 'content-moved-right'}`}>
-          <h1 style={{ margin: '0', marginLeft: sidebarVisible ? '0' : '70px' }}>News</h1>
-          <hr style={{ borderTop: '2px solid #333', marginLeft: sidebarVisible ? '0' : '70px' }} />
+          <h1 style={{ margin: '0', marginLeft: sidebarVisible ? '0' : '30px' }}>News</h1>
+          <hr style={{ borderTop: '2px solid #333', marginLeft: sidebarVisible ? '0' : '30px' }} />
           <div className="container mt-3">
             <div className="row justify-content-center">
-              <div className="col-lg-11">
+              <div className="col-lg-15">
                 <div className="card-body">
                   <div className="d-lg-flex align-items-center mb-4 gap-3">
                     <div className="ms-auto">
@@ -309,7 +309,7 @@ function NewsTable({ sidebarVisible }) {
                           <tr>
                             <td colSpan="6" style={{ textAlign: 'center' }}>
                               <div style={{ display: 'inline-block' }}>
-                                <p>News not available.</p>
+                                <p>No Data available.</p>
                               </div>
                             </td>
                           </tr>

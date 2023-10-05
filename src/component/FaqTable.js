@@ -162,11 +162,11 @@ function FaqTable({sidebarVisible}) {
     <div className="App">
       <div className="page-wrapper">
       <div className={`page-content ${sidebarVisible ? 'content-moved-left' : 'content-moved-right'}`}>
-        <h1 style={{ margin: '0', marginLeft: sidebarVisible ? '0' : '70px' }}>FAQ</h1>
-          <hr style={{ borderTop: '2px solid #333',marginLeft: sidebarVisible ? '0' : '70px' }} />
+        <h1 style={{ margin: '0', marginLeft: sidebarVisible ? '0' : '30px' }}>FAQ</h1>
+          <hr style={{ borderTop: '2px solid #333',marginLeft: sidebarVisible ? '0' : '30px' }} />
           <div className="container mt-3">
             <div className="row justify-content-center">
-              <div className="col-lg-11">
+              <div className="col-lg-15">
 
                 <div className="card-body">
                   <div className="d-lg-flex align-items-center mb-4 gap-3">

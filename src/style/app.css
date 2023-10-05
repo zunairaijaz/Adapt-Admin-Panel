@@ -808,8 +808,8 @@ a {
 
 	background: #eee;
 
-	border-bottom: 1px solid #fff
-
+	border-bottom: 1px solid #fff;
+width: 100px;
 }
 
 
@@ -820,7 +820,8 @@ a {
 
 	font-weight: 400;
 
-	font-size: 16px
+	font-size: 16px;
+	width: 100px;
 
 }
 
@@ -3112,21 +3113,17 @@ a {
 	display: flex;
 	flex-direction: row-reverse;
   }
-
-  
  
   /* Styles for content when the sidebar is closed */
   .content-moved-right {
-	margin-left: 0px; /* Adjust this value according to your sidebar width */
+	margin-left: 30px; /* Adjust this value according to your sidebar width */
   }
   /* Other styles for your page */
   /* Add your other CSS rules here */
   .content-moved-left {
-	margin-left: 250px; /* Adjust this value according to your sidebar width */
+	margin-left: 240px; /* Adjust this value according to your sidebar width */
   }
- 
-  
-  tr.expanded {
-	height: 500px !important;
-	transition: height 0.3s; /* Add smooth transition when expanding the row */
-  }
+
+
+
+	

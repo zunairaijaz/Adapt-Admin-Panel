@@ -22,6 +22,7 @@ function GuiTable({ sidebarVisible }) {
   const [employeeIdFilter, setEmployeeIdFilter] = useState('');
   const newSearchTermLowerCase = newSearchTerm;
   const newSearchTermCompanyLowerCase = newSearchTermCompany;
+  const [expandedRowIndex, setExpandedRowIndex] = useState(-1);
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
@@ -100,6 +101,15 @@ function GuiTable({ sidebarVisible }) {
     setSearchField(event.target.value);
     setSearchTerm('');
   };
+  const handleRowClick = (index) => {
+    if (index === expandedRowIndex) {
+      // If the clicked row is already expanded, collapse it
+      setExpandedRowIndex(-1);
+    } else {
+      // Expand the clicked row
+      setExpandedRowIndex(index);
+    }
+  };
 
   const filteredData = filterData(logData);
 
@@ -108,13 +118,13 @@ function GuiTable({ sidebarVisible }) {
   return (
     <div className="App">
       <div className={`page-wrapper `}>
-      <div className={`page-content ${sidebarVisible ? 'content-moved-left' : 'content-moved-right'}`}>
-      <h1 style={{ margin: '0', marginLeft: sidebarVisible ? '0' : '70px' }}>Logger Gui</h1>
-          <hr style={{ borderTop: '2px solid #333',marginLeft: sidebarVisible ? '0' : '70px' }} />
+        <div className={`page-content ${sidebarVisible ? 'content-moved-left' : 'content-moved-right'}`}>
+          <h1 style={{ margin: '0', marginLeft: sidebarVisible ? '0' : '30px' }}>Logger Gui</h1>
+          <hr style={{ borderTop: '2px solid #333', marginLeft: sidebarVisible ? '0' : '30px' }} />
           <div className={`container mt-3`}>
             <div className="row justify-content-center">
-              <div className="col-lg-11">
-                <div className="mb-3" style={{ display: 'flex', alignItems: 'center' }}>
+              <div className="col-lg-15">
+                <div className="mb-3" style={{ display: 'flex', alignItems: 'center',marginLeft:'30px' }}>
                   <label htmlFor="search" style={{ marginRight: '10px' }}>
                     Search:{' '}
                   </label>
@@ -182,9 +192,9 @@ function GuiTable({ sidebarVisible }) {
                 <div className="card-body">
                   <div className="table-responsive">
                     {filteredData.length > 0 ? (
-                      <table className={`table mb-0 ${sidebarVisible ? '' : 'content-moved-right'}`}>
+                      <table  className={` table mb-0  ${sidebarVisible ? '' : 'content-moved-right' }`}>
                         <thead className="table-light">
-                          <tr>
+                          <tr >
                             <th>Level</th>
                             <th>Date</th>
                             <th>Api Request</th>
@@ -197,21 +207,91 @@ function GuiTable({ sidebarVisible }) {
                         </thead>
                         <tbody>
                           {filteredData.map((logData, index) => (
-                            <tr key={index}>
-                              <td>{logData[0]} </td>
-                              <td>{logData[1]}</td>
-                              <td style={{ whiteSpace: 'normal' }}>{logData[2]}</td>
-                              <td style={{ whiteSpace: 'normal' }}>{logData[3]}</td>
-                              <td style={{ whiteSpace: 'normal' }}>{logData[4]}</td>
-                              <td style={{ whiteSpace: 'normal' }}>{logData[5]}</td>
-                              <td style={{ whiteSpace: 'normal' }}>{logData[6]}</td>
-                              <td style={{ whiteSpace: 'normal' }}>{logData[7]}</td>
+                            <tr
+                              key={index}
+                              onClick={() => handleRowClick(index)}
+                              style={{
+                                height: expandedRowIndex === index ? 'auto' : '50px',
+                                whiteSpace: expandedRowIndex === index ? 'break-spaces' : 'nowrap',
+                                // overflow: expandedRowIndex===index? 'inherit':'hidden',
+                                textOverflow: expandedRowIndex === index ? 'inherit' : 'ellipsis',
+                                wordBreak: expandedRowIndex === index ? 'break-all' : 'inherit'
+
+                              }}
+                            >
+                              <td title={logData[0]}
+                                style={{
+                                  columnWidth: '50px',
+                                  whiteSpace: 'nowrap'
+
+                                }}
+                              >
+                                {logData[0]}
+                              </td>
+                              <td title={logData[1]}
+                                style={{
+                                  columnWidth: '200px',
+                                  whiteSpace: 'nowrap'
+
+                                  //overflow: expandedRowIndex === index ? 'auto' : 'hidden',
+                                }}
+                              >
+                                {logData[1]}
+                              </td>
+                              <td title={logData[2]}
+                                style={{
+                                  columnWidth: '352px',
+                                  overflow: expandedRowIndex === index ? 'auto' : 'hidden',
+                                }}
+                              >
+                                {logData[2]}
+                              </td>
+                              <td title= {logData[3]}
+                                style={{
+                                  columnWidth: '300px',
+                                  overflow: expandedRowIndex === index ? 'auto' : 'hidden',
+                                }}
+                              >
+                                {logData[3]}
+                              </td>
+                              <td title={logData[4]}
+                                style={{
+                                  columnWidth: '300px',
+                                  overflow: expandedRowIndex === index ? 'auto' : 'hidden',
+                                }}
+                              >
+                                {logData[4]}
+                              </td>
+                              <td title={logData[5]}
+                                style={{
+                                  columnWidth: '300px',
+                                  overflow: expandedRowIndex === index ? 'auto' : 'hidden',
+                                }}
+                              >
+                                {logData[5]}
+                              </td>
+                              <td title={logData[6]}
+                                style={{
+                                  columnWidth: '200px',
+                                  overflow: expandedRowIndex === index ? 'auto' : 'hidden',
+                                }}
+                              >
+                                {logData[6]}
+                              </td>
+                              <td title={logData[7]}
+                                style={{
+                                  columnWidth: '300px',
+                                  overflow: expandedRowIndex === index ? 'auto' : 'hidden',
+                                }}
+                              >
+                                {logData[7]}
+                              </td>
                             </tr>
                           ))}
                         </tbody>
                       </table>
                     ) : (
-                      <div>Loading data...</div>
+                                <p>Loading Data...</p>
                     )}
                   </div>
                 </div>

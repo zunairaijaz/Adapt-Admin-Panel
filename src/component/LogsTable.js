@@ -13,7 +13,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 
-function LogsTable({sidebarVisible}) {
+function LogsTable({ sidebarVisible }) {
     const [logData, setLogData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -21,6 +21,8 @@ function LogsTable({sidebarVisible}) {
     const [selectedDeviceId, setSelectedDeviceId] = useState('');
     const [deviceIds, setDeviceIds] = useState([]);
     const [selectedDeviceLogData, setSelectedDeviceLogData] = useState([]);
+    const [expandedRowIndex, setExpandedRowIndex] = useState(-1);
+
     const history = useHistory();
 
     useEffect(() => {
@@ -55,7 +57,7 @@ function LogsTable({sidebarVisible}) {
                     console.log(response);
                     setSelectedDeviceLogData(response.data);
                     //toast.success('Data fetched successfully!');
-                } 
+                }
             })
             .catch((error) => {
                 console.error('Error fetching data by device ID:', error);
@@ -94,40 +96,48 @@ function LogsTable({sidebarVisible}) {
     };
     const handleDeviceIdChange = (newDeviceId) => {
         if (newDeviceId === "") {
-          // When "All Devices" is selected, fetch all data
-          setSelectedDeviceId(""); // Set the selectedDeviceId to an empty string
-          fetchData();
+            // When "All Devices" is selected, fetch all data
+            setSelectedDeviceId(""); // Set the selectedDeviceId to an empty string
+            fetchData();
         } else {
-          // When a specific device ID is selected, fetch data by ID
-          setSelectedDeviceId(newDeviceId);
-          fetchDataById(newDeviceId);
+            // When a specific device ID is selected, fetch data by ID
+            setSelectedDeviceId(newDeviceId);
+            fetchDataById(newDeviceId);
         }
-      };
-      
+    };
+    const handleRowClick = (index) => {
+        if (index === expandedRowIndex) {
+            // If the clicked row is already expanded, collapse it
+            setExpandedRowIndex(-1);
+        } else {
+            // Expand the clicked row
+            setExpandedRowIndex(index);
+        }
+    };
     return (
         <div className="App">
             <div className="page-wrapper">
-            <div className={`page-content ${sidebarVisible ? 'content-moved-left' : 'content-moved-right'}`}>
-            <h1 style={{ margin: '0', marginLeft: sidebarVisible ? '0' : '70px' }}>App Logs</h1>
-          <hr style={{ borderTop: '2px solid #333',marginLeft: sidebarVisible ? '0' : '70px' }} />
+                <div className={`page-content ${sidebarVisible ? 'content-moved-left' : 'content-moved-right'}`}>
+                    <h1 style={{ margin: '0', marginLeft: sidebarVisible ? '0' : '30px' }}>App Logs</h1>
+                    <hr style={{ borderTop: '2px solid #333', marginLeft: sidebarVisible ? '0' : '30px' }} />
                     <div className="container mt-3">
                         <div className="row justify-content-center">
-                            <div className="col-lg-11">
-                            <FormControl variant="outlined" style={{ marginBottom: '20px', width: '200px' }}>
-  <InputLabel>{selectedDeviceId === "" ? "All Devices" : "Device Id"}</InputLabel>
-  <Select
-    value={selectedDeviceId}
-    onChange={(e) => handleDeviceIdChange(e.target.value)}
-    label={selectedDeviceId === "" ? "All Devices" : "DeviceId"}
-  >
-    <MenuItem value="">All Devices</MenuItem>
-    {deviceIds.map((deviceId) => (
-      <MenuItem key={deviceId} value={deviceId}>
-        {deviceId}
-      </MenuItem>
-    ))}
-  </Select>
-</FormControl>
+                            <div className="col-lg-15">
+                                <FormControl variant="outlined" style={{ marginBottom: '20px', width: '200px' }}>
+                                    <InputLabel>{selectedDeviceId === "" ? "All Devices" : "Device Id"}</InputLabel>
+                                    <Select
+                                        value={selectedDeviceId}
+                                        onChange={(e) => handleDeviceIdChange(e.target.value)}
+                                        label={selectedDeviceId === "" ? "All Devices" : "DeviceId"}
+                                    >
+                                        <MenuItem value="">All Devices</MenuItem>
+                                        {deviceIds.map((deviceId) => (
+                                            <MenuItem key={deviceId} value={deviceId}>
+                                                {deviceId}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
 
                                 <div className="card-body">
                                     <div className="table-responsive">
@@ -142,26 +152,94 @@ function LogsTable({sidebarVisible}) {
                                             <tbody>
                                                 {selectedDeviceId !== ''
                                                     ? selectedDeviceLogData.map((log, index) => (
-                                                        <tr key={index}>
-                                                            <td>{log.deviceId}</td>
-                                                            <td>{log.dateTime}</td>
-                                                            <td style={{ whiteSpace: 'normal' }}>{log.logString}</td>
+                                                        <tr
+                                                            key={index}
+                                                            onClick={() => handleRowClick(index)}
+                                                            style={{
+                                                                height: expandedRowIndex === index ? 'auto' : '50px',
+                                                                whiteSpace: expandedRowIndex === index ? 'break-spaces' : 'nowrap',
+                                                                textOverflow: expandedRowIndex === index ? 'inherit' : 'ellipsis',
+                                                            }}
+                                                        >
+                                                            <td title={log.deviceId}
+                                                                style={{
+                                                                    columnWidth: '350px',
+                                                                    overflow: expandedRowIndex === index ? 'auto' : 'hidden ',
+                                                                    paddingRight: '20px'
+                                                                }}
+                                                            >
+                                                                {log.deviceId}
+                                                            </td>
+                                                            <td  title={log.dateTime}
+                                                                style={{
+                                                                    columnWidth: '300px',
+                                                                    overflow: expandedRowIndex === index ? 'auto' : 'hidden ',
+                                                                    paddingRight: '10px'
+                                                                }}
+                                                            >
+                                                                {log.dateTime}
+                                                            </td>
+                                                            <td title={log.logString}
+                                                                style={{
+                                                                    columnWidth: '200px',
+                                                                    overflow: expandedRowIndex === index ? 'auto' : 'hidden',
+                                                                }}
+                                                            >
+                                                                {log.logString}
+                                                            </td>
                                                         </tr>
                                                     ))
                                                     : currentItems.length > 0
                                                         ? currentItems.map((log, index) => (
-                                                            <tr key={index}>
-                                                                <td>{log.deviceId}</td>
-                                                                <td>{log.dateTime}</td>
-                                                                <td style={{ whiteSpace: 'normal' }}>{log.logString}</td>
+                                                            <tr
+                                                                key={index}
+                                                                onClick={() => handleRowClick(index)}
+                                                                style={{
+                                                                    height: expandedRowIndex === index ? 'auto' : '50px',
+                                                                    whiteSpace: expandedRowIndex === index ? 'break-spaces' : 'nowrap',
+                                                                    textOverflow: expandedRowIndex === index ? 'inherit' : 'ellipsis',
+                                                                }}
+                                                            >
+                                                                <td  title={log.deviceId}
+                                                                    style={{
+                                                                        columnWidth: ' 350px',
+                                                                        overflow: expandedRowIndex === index ? 'auto' : 'hidden ',
+                                                                        paddingRight: '20px'
+
+                                                                    }}
+                                                                >
+                                                                    {log.deviceId}
+                                                                </td>
+                                                                <td  title={log.dateTime}
+                                                                    style={{
+                                                                        columnWidth: '300px',
+                                                                        overflow: expandedRowIndex === index ? 'auto' : 'hidden',
+                                                                        paddingRight: '10px'
+
+                                                                    }}
+                                                                >
+                                                                    {log.dateTime}
+                                                                </td>
+                                                                <td  title={log.logString}
+                                                                    style={{
+                                                                        columnWidth: '200px',
+                                                                        overflow: expandedRowIndex === index ? 'auto' : 'hidden',
+                                                                    }}
+                                                                >
+                                                                    {log.logString}
+                                                                </td>
                                                             </tr>
                                                         ))
                                                         : (
                                                             <tr>
-                                                                <td colSpan="3">No data available</td>
-                                                            </tr>
+<td colSpan="6" style={{ textAlign: 'center' }}>
+                              <div style={{ display: 'inline-block' }}>
+                                <p>No Data available.</p>
+                              </div>
+                            </td>                                                            </tr>
                                                         )}
                                             </tbody>
+
                                         </table>
                                     </div>
                                 </div>
