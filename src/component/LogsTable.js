@@ -13,7 +13,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 
-function LogsTable() {
+function LogsTable({sidebarVisible}) {
     const [logData, setLogData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -93,41 +93,42 @@ function LogsTable() {
         setCurrentPage(1);
     };
     const handleDeviceIdChange = (newDeviceId) => {
-        setSelectedDeviceId(newDeviceId);
-    
         if (newDeviceId === "") {
-            // When "All Devices" is selected, fetch all data
-            fetchData();
+          // When "All Devices" is selected, fetch all data
+          setSelectedDeviceId(""); // Set the selectedDeviceId to an empty string
+          fetchData();
         } else {
-            // When a specific device ID is selected, fetch data by ID
-            fetchDataById(newDeviceId);
+          // When a specific device ID is selected, fetch data by ID
+          setSelectedDeviceId(newDeviceId);
+          fetchDataById(newDeviceId);
         }
-    };
-    
+      };
+      
     return (
         <div className="App">
             <div className="page-wrapper">
-                <div className="page-content">
-                    <h1 style={{ margin: '0' }}> Logs</h1>
-                    <hr style={{ borderTop: '2px solid #333' }} />
+            <div className={`page-content ${sidebarVisible ? 'content-moved-left' : 'content-moved-right'}`}>
+            <h1 style={{ margin: '0', marginLeft: sidebarVisible ? '0' : '70px' }}>App Logs</h1>
+          <hr style={{ borderTop: '2px solid #333',marginLeft: sidebarVisible ? '0' : '70px' }} />
                     <div className="container mt-3">
                         <div className="row justify-content-center">
                             <div className="col-lg-11">
-                                <FormControl variant="outlined" style={{ marginBottom: '20px', width: '200px' }}>
-                                    <InputLabel>Device Id</InputLabel>
-                                    <Select
-                                        value={selectedDeviceId}
-                                        onChange={(e) => handleDeviceIdChange(e.target.value)}
-                                        label="DeviceId"
-                                    >
-                                        <MenuItem value="">All Devices</MenuItem>
-                                        {deviceIds.map((deviceId) => (
-                                            <MenuItem key={deviceId} value={deviceId}>
-                                                {deviceId}
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
+                            <FormControl variant="outlined" style={{ marginBottom: '20px', width: '200px' }}>
+  <InputLabel>{selectedDeviceId === "" ? "All Devices" : "Device Id"}</InputLabel>
+  <Select
+    value={selectedDeviceId}
+    onChange={(e) => handleDeviceIdChange(e.target.value)}
+    label={selectedDeviceId === "" ? "All Devices" : "DeviceId"}
+  >
+    <MenuItem value="">All Devices</MenuItem>
+    {deviceIds.map((deviceId) => (
+      <MenuItem key={deviceId} value={deviceId}>
+        {deviceId}
+      </MenuItem>
+    ))}
+  </Select>
+</FormControl>
+
                                 <div className="card-body">
                                     <div className="table-responsive">
                                         <table className="table mb-0">

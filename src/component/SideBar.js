@@ -12,31 +12,32 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import DescriptionIcon from '@mui/icons-material/Description';
 import GradingIcon from '@mui/icons-material/Grading';
-function SideBar() {
-  const [sidebarVisible, setSidebarVisible] = useState(true);
-  const toggleSidebar = () => {
-    setSidebarVisible(!sidebarVisible);
-  };
+
+function SideBar({ sidebarVisible, toggleSidebar }) {
   const linkStyle = {
     textDecoration: 'none',
     color: 'white',
   };
+
   const sidebarStyle = {
     width: sidebarVisible ? '250px' : '70px',
     transition: 'width 0.3s ease-in-out',
     backgroundColor: 'black',
   };
+
   const logoTextStyle = {
-    color: 'black',
+    color: 'black', // Changed the logo text color to white
     padding: '10px',
     textAlign: 'center',
   };
+
   const iconActiveClass = 'icon-active'; // CSS class for active icon color
   const iconInactiveClass = 'icon-inactive'; // CSS class for inactive icon color
   const activeLinkStyle = {
     backgroundColor: 'white',
     color: 'black',
   };
+
   return (
     <div className={`App ${sidebarVisible ? 'sidebar-open' : 'sidebar-closed'}`}>
       <div className="wrapper">
@@ -121,8 +122,6 @@ function SideBar() {
                   App Logs
                 </div>
               </NavLink>
-             
-              
             </li>
             <li>
               <NavLink
@@ -146,4 +145,5 @@ function SideBar() {
     </div>
   );
 }
+
 export default SideBar;

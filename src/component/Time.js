@@ -12,7 +12,7 @@ import InputLabel from "@mui/material/InputLabel";
 import Button from "@mui/material/Button";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
-function Time() {
+function Time({ sidebarVisible }) {
   const [data, setData] = useState([
     { day: "Monday", start_time: "", end_time: "", set: "" },
     { day: "Tuesday", start_time: "", end_time: "", set: "" },
@@ -125,12 +125,10 @@ function Time() {
   };
   return (
     <div className="App">
-      <Header />
-      <SideBar />
       <div className="page-wrapper">
-        <div className="page-content">
-        <h1 style={{ margin: '0' }}>Time</h1>
-          <hr style={{ borderTop: '2px solid #333' }} />
+      <div className={`page-content ${sidebarVisible ? 'content-moved-left' : 'content-moved-right'}`}>
+      <h1 style={{ margin: '0', marginLeft: sidebarVisible ? '0' : '70px' }}>Time</h1>
+          <hr style={{ borderTop: '2px solid #333',marginLeft: sidebarVisible ? '0' : '70px' }} />
           <div className="container mt-3">
             <div className="row justify-content-center">
               <div className="col-lg-11">

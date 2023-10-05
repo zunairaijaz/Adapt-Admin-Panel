@@ -1,32 +1,83 @@
-import React from 'react';
-import { HashRouter as Router, Route, Switch } from 'react-router-dom';
-import News from './component/News'; // Import your News component
-import Time from './component/Time'; // Import your Time component
-import FAQ from './component/Faq'; // Import your FAQ component
+import React, { useState, useEffect } from 'react';
+import { HashRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
+import News from './component/News';
+import Time from './component/Time';
+import FAQ from './component/Faq';
 import SignIn from './component/Auth/SignIn';
 import SignOut from './component/Auth/SignOut';
 import ForgotPassword from './component/Auth/ForgotPassword';
 import ResetPassword from './component/Auth/ResetPassword';
-import Logs from './component/Logs'; // Import your FAQ component
+import Logs from './component/Logs';
 import Gui from './component/Gui';
-function App() {
-  return (
-    <Router basename="/">
-      <div className="App">
-        <Switch>
-          <Route exact path="/" component={SignIn} />
-          <Route exact path="/forgotpass" component={ForgotPassword} />
-          <Route exact path="/signout" component={SignOut} />
-          <Route exact path="/resetpass" component={ResetPassword} />
-          <Route exact path="/news" component={News} />
-          <Route exact path="/time" component={Time} />
-          <Route exact path="/faq" component={FAQ} />
-          <Route exact path="/logs" component={Logs} />
-          <Route exact path="/gui" component={Gui} />
+import SideBar from './component/SideBar';
+import GuiTable from './component/GuiTable';
+import Header from './component/Header';
 
+function App() {
+  const [sidebarVisible, setSidebarVisible] = useState(true);
+  const [token, setToken] = useState(null);
+
+  // Function to toggle the sidebar visibility
+  const toggleSidebar = () => {
+    setSidebarVisible(!sidebarVisible);
+  };
+
+  useEffect(() => {
+    // Get the token from localStorage when the component mounts
+    const storedToken = localStorage.getItem('admin');
+    setToken(storedToken);
+  }, []);
+
+  return (
+    <Router >
+      <div className="App">
+        {/* Render the Header and Sidebar */}
+        
+
+        <Switch>
+          <Route exact path="/">
+            <Redirect to="/" /> : <SignIn />
+          </Route>
+          <Route exact path="/forgotpass">
+           <Redirect to="/" /> : <ForgotPassword />
+          </Route>
+          <Route exact path="/resetpass">
+           <Redirect to="/" /> : <ResetPassword />
+          </Route>
+          <Route exact path="/signout">
+            <SignOut />
+          </Route>
+          {token && (
+          <>
+            <Header />
+            <SideBar
+              sidebarVisible={sidebarVisible}
+              toggleSidebar={toggleSidebar}
+            />
+             <Route exact path="/news">
+            <News sidebarVisible={sidebarVisible} />
+          </Route>
+          <Route exact path="/time">
+            <Time sidebarVisible={sidebarVisible} />
+          </Route>
+          <Route exact path="/faq">
+            <FAQ sidebarVisible={sidebarVisible} />
+          </Route>
+          <Route exact path="/logs">
+            <Logs sidebarVisible={sidebarVisible} />
+          </Route>
+          <Route exact path="/gui">
+            <Gui sidebarVisible={sidebarVisible} />
+          </Route>
+          </>
+        )}
+     
+         
+       
         </Switch>
       </div>
     </Router>
   );
 }
+
 export default App;

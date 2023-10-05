@@ -185,8 +185,7 @@ a {
 
 	margin-bottom: 30px;
 
-	margin-left: 250px
-	
+	margin-left:auto;
 
 }
 
@@ -194,7 +193,7 @@ a {
 
 .page-content {
 
-	padding: 1.5rem 1.5rem 0.7rem 1.5rem
+	padding: 1.5rem 1.5rem 0.7rem 1.5rem;
 
 }
 
@@ -3113,6 +3112,21 @@ a {
 	display: flex;
 	flex-direction: row-reverse;
   }
+
   
-  /* Add any other styles you need for your sidebar */
+ 
+  /* Styles for content when the sidebar is closed */
+  .content-moved-right {
+	margin-left: 0px; /* Adjust this value according to your sidebar width */
+  }
+  /* Other styles for your page */
+  /* Add your other CSS rules here */
+  .content-moved-left {
+	margin-left: 250px; /* Adjust this value according to your sidebar width */
+  }
+ 
   
+  tr.expanded {
+	height: 500px !important;
+	transition: height 0.3s; /* Add smooth transition when expanding the row */
+  }

@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
   // Define your styles here
 }));
 
-function FaqTable() {
+function FaqTable({sidebarVisible}) {
   const classes = useStyles();
   const history = useHistory();
 
@@ -161,9 +161,9 @@ function FaqTable() {
   return (
     <div className="App">
       <div className="page-wrapper">
-        <div className="page-content">
-        <h1 style={{ margin: '0' }}>FAQ</h1>
-          <hr style={{ borderTop: '2px solid #333' }} />
+      <div className={`page-content ${sidebarVisible ? 'content-moved-left' : 'content-moved-right'}`}>
+        <h1 style={{ margin: '0', marginLeft: sidebarVisible ? '0' : '70px' }}>FAQ</h1>
+          <hr style={{ borderTop: '2px solid #333',marginLeft: sidebarVisible ? '0' : '70px' }} />
           <div className="container mt-3">
             <div className="row justify-content-center">
               <div className="col-lg-11">

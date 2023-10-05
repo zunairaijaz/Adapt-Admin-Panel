@@ -10,7 +10,7 @@ import '../style/app.css';
 import { Box, Skeleton } from '@mui/material';
 import TableRowsLoader from './TableRowsLoader'; // Make sure to use the correct p
 import { FaTimes } from 'react-icons/fa'; // Import the close (times) icon
-function NewsTable() {
+function NewsTable({ sidebarVisible }) {
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [modalTitle, setModalTitle] = useState('Add News');
@@ -20,7 +20,6 @@ function NewsTable() {
   const [itemToDelete, setItemToDelete] = useState(null);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const imageInputRef = useRef(null); // Add this ref variable
-
   ///--------->
   const [values, setValues] = useState({
     title: '',
@@ -32,7 +31,6 @@ function NewsTable() {
   const [showImage, setShowImage] = useState(null);
   const [newsId, setNewsId] = useState('');
   const [isImageRemoved, setImageRemoved] = useState(false); // Add this state variable
-
   useEffect(() => {
     setLoading(true); // Make sure this line is present
     fetchData();
@@ -58,16 +56,13 @@ function NewsTable() {
     setImageSelected(null);
     setShowImage(null);
     setImageRemoved(true);
-
     // Clear the image URL in values.newsImage
     setValues({ ...values, newsImage: '' });
-
     // Clear the file input field using the ref
     if (imageInputRef.current) {
       imageInputRef.current.value = null; // Clear the file input value
     }
   };
-
   const openPopupModal = (title, news) => {
     console.log("openPopupModal called");
 
@@ -283,9 +278,9 @@ function NewsTable() {
   return (
     <div className="App">
       <div className="page-wrapper">
-        <div className="page-content">
-          <h1 style={{ margin: '0' }}>News</h1>
-          <hr style={{ borderTop: '2px solid #333' }} />
+        <div className={`page-content ${sidebarVisible ? 'content-moved-left' : 'content-moved-right'}`}>
+          <h1 style={{ margin: '0', marginLeft: sidebarVisible ? '0' : '70px' }}>News</h1>
+          <hr style={{ borderTop: '2px solid #333', marginLeft: sidebarVisible ? '0' : '70px' }} />
           <div className="container mt-3">
             <div className="row justify-content-center">
               <div className="col-lg-11">
@@ -309,37 +304,49 @@ function NewsTable() {
                           <th>Actions</th>
                         </tr>
                       </thead>
-                      <tbody>
-                        {loading ? (
-                          <TableRowsLoader rowsNum={isArray.length} />
-                        ) : (
-                          isArray.map((news, index) => (
-                            <tr key={index}>
-                              <td>{index + 1}</td>
-                              <td style={{ whiteSpace: 'normal' }}>{news.title}</td>
-                              <td style={{ whiteSpace: 'normal' }}>{news.description}</td>
-                              <td>{news.newsImage ? (<img src={news.newsImage} alt={news.title} width="50" height="50" />) : null}</td>
-                              <td style={{ whiteSpace: 'normal' }}>
-                                {news.newsVideoLink ? (
-                                  <a href={news.newsVideoLink} target="_blank" rel="noopener noreferrer">
-                                    {news.newsVideoLink}
-                                  </a>
-                                ) : null}
-                              </td>
-                              <td>
-                                <div class="d-flex order-actions">
-                                  <a title="edit" href="javascript:;" onClick={() => openPopupModal('Update News', news)}>
-                                    <i className='bx bxs-edit'></i>
-                                  </a>
-                                  <a title="delete" href="javascript:;" className="ms-3" onClick={() => deleteEvent(news._id)}>
-                                    <i className="bx bxs-trash"></i>
-                                  </a>
-                                </div>
-                              </td>
-                            </tr>
-                          ))
-                        )}
-                      </tbody>
+                      {isArray.length === 0 ? (
+                        <tbody>
+                          <tr>
+                            <td colSpan="6" style={{ textAlign: 'center' }}>
+                              <div style={{ display: 'inline-block' }}>
+                                <p>News not available.</p>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      ) : (
+                        <tbody>
+                          {loading ? (
+                            <TableRowsLoader rowsNum={isArray.length} />
+                          ) : (
+                            isArray.map((news, index) => (
+                              <tr key={index}>
+                                <td>{index + 1}</td>
+                                <td style={{ whiteSpace: 'normal' }}>{news.title}</td>
+                                <td style={{ whiteSpace: 'normal' }}>{news.description}</td>
+                                <td>{news.newsImage ? (<img src={news.newsImage} alt={news.title} width="50" height="50" />) : null}</td>
+                                <td style={{ whiteSpace: 'normal' }}>
+                                  {news.newsVideoLink ? (
+                                    <a href={news.newsVideoLink} target="_blank" rel="noopener noreferrer">
+                                      {news.newsVideoLink}
+                                    </a>
+                                  ) : null}
+                                </td>
+                                <td>
+                                  <div class="d-flex order-actions">
+                                    <a title="edit" href="javascript:;" onClick={() => openPopupModal('Update News', news)}>
+                                      <i className='bx bxs-edit'></i>
+                                    </a>
+                                    <a title="delete" href="javascript:;" className="ms-3" onClick={() => deleteEvent(news._id)}>
+                                      <i className="bx bxs-trash"></i>
+                                    </a>
+                                  </div>
+                                </td>
+                              </tr>
+                            ))
+                          )}
+                        </tbody>
+                      )}
                     </table>
                   </div>
                 </div>
@@ -435,7 +442,6 @@ function NewsTable() {
                         accept="image/*"
                         onChange={(e) => {
                           const selectedImage = e.target.files[0];
-
                           if (selectedImage) {
                             setImageSelected(selectedImage);
                             setValues({ ...values, newsImage: URL.createObjectURL(selectedImage) });

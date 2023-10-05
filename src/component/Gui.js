@@ -8,14 +8,13 @@ import Header from './Header';
 import GuiTable from './GuiTable';
 import '../style/icons.css';
 
-function Gui() {
+function Gui({ sidebarVisible }) {
   return (
-    <div className="App">
-      <Header /> {/* Include the Header component */}
-      <SideBar /> {/* Include the SideBar component */}
-      <GuiTable />  
+    <div className={`App ${sidebarVisible ? 'sidebar-open' : 'sidebar-closed'}`}>
+      <GuiTable sidebarVisible={sidebarVisible} /> {/* Pass sidebarVisible as a prop to GuiTable */}
     </div>
   );
 }
+
 
 export default Gui;

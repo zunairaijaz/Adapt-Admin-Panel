@@ -9,13 +9,12 @@ import NewsTable from './NewsTable';
 import '../style/icons.css';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
-function News() {
+function News({ sidebarVisible }) {
   return (
-    <div className="App">
-      <Header /> {/* Include the Header component */}
-      <SideBar /> {/* Include the SideBar component */}
-    <NewsTable/>
+    <div className={`App ${sidebarVisible ? 'sidebar-open' : 'sidebar-closed'}`}>
+    <NewsTable sidebarVisible={sidebarVisible}/>
     </div>
+   
   );
 }
 

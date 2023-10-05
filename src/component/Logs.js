@@ -8,13 +8,12 @@ import Header from './Header';
 import LogsTable from './LogsTable';
 import '../style/icons.css';
 
-function Logs() {
+function Logs({ sidebarVisible }) {
   return (
-    <div className="App">
-      <Header /> {/* Include the Header component */}
-      <SideBar /> {/* Include the SideBar component */}
-      <LogsTable />  
+    <div className={`App ${sidebarVisible ? 'sidebar-open' : 'sidebar-closed'}`}>
+    <LogsTable sidebarVisible={sidebarVisible}/>
     </div>
+   
   );
 }
 
