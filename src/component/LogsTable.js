@@ -12,25 +12,41 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
+import LogsLoader from './LogsLoader';
 
 function LogsTable({ sidebarVisible }) {
     const [logData, setLogData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(10);
-    const [selectedItemsPerPage, setSelectedItemsPerPage] = useState(10);
     const [selectedDeviceId, setSelectedDeviceId] = useState('');
     const [deviceIds, setDeviceIds] = useState([]);
     const [selectedDeviceLogData, setSelectedDeviceLogData] = useState([]);
     const [expandedRowIndex, setExpandedRowIndex] = useState(-1);
+    const [loading, setLoading] = useState(true);
+    const [selectedDeviceCurrentPage, setSelectedDeviceCurrentPage] = useState(1);
+    const [selectedDeviceItemsPerPage, setSelectedDeviceItemsPerPage] = useState(10);
 
     const history = useHistory();
 
     useEffect(() => {
-        fetchData(); // Fetch the log data
-        fetchDeviceIds(); // Fetch the device IDs
+        fetchData();
+        fetchDeviceIds();
     }, []);
 
+    useEffect(() => {
+        if (selectedDeviceId === "") {
+            setSelectedDeviceLogData([]); // Reset selected device log data when no device is selected
+        }
+    }, [selectedDeviceId]);
+
+    useEffect(() => {
+        // Reset the current page for selected device logs when items per page changes
+        setSelectedDeviceCurrentPage(1);
+    }, [selectedDeviceItemsPerPage]);
+
     const fetchData = () => {
+        setLoading(true);
+
         axios({
             method: 'GET',
             url: `${config.SERVER_URL}/getVehicleLogData`,
@@ -39,15 +55,19 @@ function LogsTable({ sidebarVisible }) {
                 if (response.data) {
                     console.log(response);
                     setLogData(response.data);
-                    //toast.success('Data fetched successfully!');
+                    setLoading(false);
                 }
             })
             .catch((error) => {
                 console.error('Error fetching data:', error);
                 toast.error('Error fetching data: ' + error.message);
+                setLoading(false);
             });
     };
+
     const fetchDataById = (deviceId) => {
+        setLoading(true);
+
         axios({
             method: 'GET',
             url: `${config.SERVER_URL}/getVehicleLogDataById/${deviceId}`,
@@ -56,14 +76,18 @@ function LogsTable({ sidebarVisible }) {
                 if (response.data) {
                     console.log(response);
                     setSelectedDeviceLogData(response.data);
-                    //toast.success('Data fetched successfully!');
+                    setSelectedDeviceCurrentPage(1); // Reset pagination to the first page
                 }
             })
             .catch((error) => {
                 console.error('Error fetching data by device ID:', error);
                 toast.error('Error fetching data: ' + error.message);
+            })
+            .finally(() => {
+                setLoading(false);
             });
     };
+
     const fetchDeviceIds = () => {
         axios({
             method: 'GET',
@@ -71,56 +95,72 @@ function LogsTable({ sidebarVisible }) {
         })
             .then((response) => {
                 if (Array.isArray(response.data.deviceIds)) {
-                    setDeviceIds(response.data.deviceIds); // Set the fetched device IDs in state
+                    setDeviceIds(response.data.deviceIds);
                 } else {
                     console.error('Device IDs data is not an array:', response.data.deviceIds);
-                    setDeviceIds([]); // Initialize as an empty array
+                    setDeviceIds([]);
                 }
             })
             .catch((error) => {
                 console.error('Error fetching device IDs:', error);
-                setDeviceIds([]); // Initialize as an empty array
+                setDeviceIds([]);
             });
     };
+
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentItems = logData.slice(indexOfFirstItem, indexOfLastItem);
+
     const handlePageChange = (newPage) => {
         if (newPage >= 1 && newPage <= Math.ceil(logData.length / itemsPerPage)) {
             setCurrentPage(newPage);
         }
     };
+
     const handleItemsPerPageChange = (newItemsPerPage) => {
         setItemsPerPage(newItemsPerPage);
         setCurrentPage(1);
     };
+
     const handleDeviceIdChange = (newDeviceId) => {
         if (newDeviceId === "") {
-            // When "All Devices" is selected, fetch all data
-            setSelectedDeviceId(""); // Set the selectedDeviceId to an empty string
-            fetchData();
+            setSelectedDeviceId("");
+            setSelectedDeviceLogData([]);
+            setCurrentPage(1); // Reset main pagination when no device is selected
         } else {
-            // When a specific device ID is selected, fetch data by ID
             setSelectedDeviceId(newDeviceId);
             fetchDataById(newDeviceId);
         }
     };
+
     const handleRowClick = (index) => {
         if (index === expandedRowIndex) {
-            // If the clicked row is already expanded, collapse it
             setExpandedRowIndex(-1);
         } else {
-            // Expand the clicked row
             setExpandedRowIndex(index);
         }
     };
+
+    const indexOfLastSelectedDeviceItem = selectedDeviceCurrentPage * selectedDeviceItemsPerPage;
+    const indexOfFirstSelectedDeviceItem = indexOfLastSelectedDeviceItem - selectedDeviceItemsPerPage;
+    const currentSelectedDeviceItems = selectedDeviceLogData.slice(
+        indexOfFirstSelectedDeviceItem,
+        indexOfLastSelectedDeviceItem
+    );
+
+    const handleSelectedDevicePageChange = (newPage) => {
+        if (newPage >= 1 && newPage <= Math.ceil(selectedDeviceLogData.length / selectedDeviceItemsPerPage)) {
+            setSelectedDeviceCurrentPage(newPage);
+        }
+    };
+
     return (
         <div className="App">
             <div className="page-wrapper">
-                <div className={`page-content ${sidebarVisible ? 'content-moved-left' : 'content-moved-right'}`}>
-                    <h1 style={{ margin: '0', marginLeft: sidebarVisible ? '0' : '30px' }}>App Logs</h1>
-                    <hr style={{ borderTop: '2px solid #333', marginLeft: sidebarVisible ? '0' : '30px' }} />
-                    <div className="container mt-3">
+                <div className={`page-content ${sidebarVisible ? 'content-moved-left1' : 'content-moved-right1'}`}>
+                    <h1 style={{ margin: '0', marginLeft: sidebarVisible ? '0' : '0px' }}>App Logs</h1>
+                    <hr style={{ borderTop: '2px solid #333', marginLeft: sidebarVisible ? '0' : '0px' }} />
+                    <div className=" mt-3">
                         <div className="row justify-content-center">
                             <div className="col-lg-15">
                                 <FormControl variant="outlined" style={{ marginBottom: '20px', width: '200px' }}>
@@ -138,9 +178,8 @@ function LogsTable({ sidebarVisible }) {
                                         ))}
                                     </Select>
                                 </FormControl>
-
                                 <div className="card-body">
-                                    <div className="table-responsive">
+                                    <div className="table-responsive" style={{ maxHeight: 'calc(100vh - 200px)', overflowY: 'auto' }}>
                                         <table className="table mb-0">
                                             <thead className="table-light">
                                                 <tr>
@@ -150,47 +189,11 @@ function LogsTable({ sidebarVisible }) {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {selectedDeviceId !== ''
-                                                    ? selectedDeviceLogData.map((log, index) => (
-                                                        <tr
-                                                            key={index}
-                                                            onClick={() => handleRowClick(index)}
-                                                            style={{
-                                                                height: expandedRowIndex === index ? 'auto' : '50px',
-                                                                whiteSpace: expandedRowIndex === index ? 'break-spaces' : 'nowrap',
-                                                                textOverflow: expandedRowIndex === index ? 'inherit' : 'ellipsis',
-                                                            }}
-                                                        >
-                                                            <td title={log.deviceId}
-                                                                style={{
-                                                                    columnWidth: '350px',
-                                                                    overflow: expandedRowIndex === index ? 'auto' : 'hidden ',
-                                                                    paddingRight: '20px'
-                                                                }}
-                                                            >
-                                                                {log.deviceId}
-                                                            </td>
-                                                            <td  title={log.dateTime}
-                                                                style={{
-                                                                    columnWidth: '300px',
-                                                                    overflow: expandedRowIndex === index ? 'auto' : 'hidden ',
-                                                                    paddingRight: '10px'
-                                                                }}
-                                                            >
-                                                                {log.dateTime}
-                                                            </td>
-                                                            <td title={log.logString}
-                                                                style={{
-                                                                    columnWidth: '200px',
-                                                                    overflow: expandedRowIndex === index ? 'auto' : 'hidden',
-                                                                }}
-                                                            >
-                                                                {log.logString}
-                                                            </td>
-                                                        </tr>
-                                                    ))
-                                                    : currentItems.length > 0
-                                                        ? currentItems.map((log, index) => (
+                                                {loading ? (
+                                                    <LogsLoader rowsNum={itemsPerPage} />
+                                                ) : (
+                                                    selectedDeviceId !== ''
+                                                        ? currentSelectedDeviceItems.map((log, index) => (
                                                             <tr
                                                                 key={index}
                                                                 onClick={() => handleRowClick(index)}
@@ -200,46 +203,50 @@ function LogsTable({ sidebarVisible }) {
                                                                     textOverflow: expandedRowIndex === index ? 'inherit' : 'ellipsis',
                                                                 }}
                                                             >
-                                                                <td  title={log.deviceId}
-                                                                    style={{
-                                                                        columnWidth: ' 350px',
-                                                                        overflow: expandedRowIndex === index ? 'auto' : 'hidden ',
-                                                                        paddingRight: '20px'
-
-                                                                    }}
-                                                                >
+                                                                <td title={log.deviceId}>
                                                                     {log.deviceId}
                                                                 </td>
-                                                                <td  title={log.dateTime}
-                                                                    style={{
-                                                                        columnWidth: '300px',
-                                                                        overflow: expandedRowIndex === index ? 'auto' : 'hidden',
-                                                                        paddingRight: '10px'
-
-                                                                    }}
-                                                                >
+                                                                <td title={log.dateTime}>
                                                                     {log.dateTime}
                                                                 </td>
-                                                                <td  title={log.logString}
-                                                                    style={{
-                                                                        columnWidth: '200px',
-                                                                        overflow: expandedRowIndex === index ? 'auto' : 'hidden',
-                                                                    }}
-                                                                >
+                                                                <td title={log.logString}>
                                                                     {log.logString}
                                                                 </td>
                                                             </tr>
                                                         ))
-                                                        : (
-                                                            <tr>
-<td colSpan="6" style={{ textAlign: 'center' }}>
-                              <div style={{ display: 'inline-block' }}>
-                                <p>No Data available.</p>
-                              </div>
-                            </td>                                                            </tr>
-                                                        )}
+                                                        : currentItems.length > 0
+                                                            ? currentItems.map((log, index) => (
+                                                                <tr
+                                                                    key={index}
+                                                                    onClick={() => handleRowClick(index)}
+                                                                    style={{
+                                                                        height: expandedRowIndex === index ? 'auto' : '50px',
+                                                                        whiteSpace: expandedRowIndex === index ? 'break-spaces' : 'nowrap',
+                                                                        textOverflow: expandedRowIndex === index ? 'inherit' : 'ellipsis',
+                                                                    }}
+                                                                >
+                                                                    <td title={log.deviceId}>
+                                                                        {log.deviceId}
+                                                                    </td>
+                                                                    <td title={log.dateTime}>
+                                                                        {log.dateTime}
+                                                                    </td>
+                                                                    <td title={log.logString}>
+                                                                        {log.logString}
+                                                                    </td>
+                                                                </tr>
+                                                            ))
+                                                            : (
+                                                                <tr>
+                                                                    <td colSpan="3" style={{ textAlign: 'center' }}>
+                                                                        <div style={{ display: 'inline-block' }}>
+                                                                            <p>No Data available.</p>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            )
+                                                )}
                                             </tbody>
-
                                         </table>
                                     </div>
                                 </div>
@@ -250,12 +257,11 @@ function LogsTable({ sidebarVisible }) {
             </div>
             <div className="table-pagination">
                 <div className="pagination float-right" style={{ marginBottom: '40px', marginRight: '60px' }}>
-                    {/* Add margin-bottom to move it up slightly */}
                     <Button
                         variant="secondary"
                         size="sm"
-                        onClick={() => handlePageChange(currentPage - 1)}
-                        disabled={currentPage === 1}
+                        onClick={() => handleSelectedDevicePageChange(selectedDeviceCurrentPage - 1)}
+                        disabled={selectedDeviceCurrentPage === 1}
                         style={{ marginRight: '2px' }}
                     >
                         Previous
@@ -263,26 +269,29 @@ function LogsTable({ sidebarVisible }) {
                     <Button
                         variant="secondary"
                         size="sm"
-                        onClick={() => handlePageChange(currentPage + 1)}
-                        disabled={currentPage === Math.ceil(logData.length / itemsPerPage)}
+                        onClick={() => handleSelectedDevicePageChange(selectedDeviceCurrentPage + 1)}
+                        disabled={selectedDeviceCurrentPage === Math.ceil(selectedDeviceLogData.length / selectedDeviceItemsPerPage)}
                         style={{ marginRight: '2px' }}
                     >
                         Next
                     </Button>
                     <Dropdown>
-                        <Dropdown.Toggle variant="secondary" size="sm">
-                            Items per page: {itemsPerPage}
-                        </Dropdown.Toggle>
-                        <Dropdown.Menu>
-                            <Dropdown.Item onClick={() => handleItemsPerPageChange(5)}>5</Dropdown.Item>
-                            <Dropdown.Item onClick={() => handleItemsPerPageChange(10)}>10</Dropdown.Item>
-                            <Dropdown.Item onClick={() => handleItemsPerPageChange(20)}>20</Dropdown.Item>
-                        </Dropdown.Menu>
-                    </Dropdown>
+    <Dropdown.Toggle variant="secondary" size="sm" disabled={selectedDeviceId !== ""}>
+        {selectedDeviceId === "" ? `Items per page:${itemsPerPage}`:`Items per page: 10 `}
+    </Dropdown.Toggle>
+    <Dropdown.Menu>
+        <Dropdown.Item onClick={() => handleItemsPerPageChange(2)}>2</Dropdown.Item>
+        <Dropdown.Item onClick={() => handleItemsPerPageChange(10)}>10</Dropdown.Item>
+        <Dropdown.Item onClick={() => handleItemsPerPageChange(20)}>20</Dropdown.Item>
+    </Dropdown.Menu>
+</Dropdown>
+
+
                 </div>
             </div>
             <ToastContainer />
         </div>
     );
 }
+
 export default LogsTable;

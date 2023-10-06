@@ -278,10 +278,10 @@ function NewsTable({ sidebarVisible }) {
   return (
     <div className="App">
       <div className="page-wrapper">
-        <div className={`page-content ${sidebarVisible ? 'content-moved-left' : 'content-moved-right'}`}>
-          <h1 style={{ margin: '0', marginLeft: sidebarVisible ? '0' : '30px' }}>News</h1>
-          <hr style={{ borderTop: '2px solid #333', marginLeft: sidebarVisible ? '0' : '30px' }} />
-          <div className="container mt-3">
+        <div className={`page-content ${sidebarVisible ? 'content-moved-left1' : 'content-moved-right1'}`}>
+          <h1 style={{ margin: '0', marginLeft: sidebarVisible ? '0' : '0px' }}>News</h1>
+          <hr style={{ borderTop: '2px solid #333', marginLeft: sidebarVisible ? '0' : '0px' }} />
+          <div className=" mt-3">
             <div className="row justify-content-center">
               <div className="col-lg-15">
                 <div className="card-body">

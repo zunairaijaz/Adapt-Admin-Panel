@@ -10,6 +10,7 @@ import config from '../../config'; // Import or define 'config' here
 import { Link } from 'react-router-dom';
 
 function SignIn() {
+  console.log("Signin Rendered");
   const [values, setValues] = useState({
     email: '',
     password: '',

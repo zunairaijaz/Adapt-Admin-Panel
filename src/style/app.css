@@ -3115,15 +3115,29 @@ width: 100px;
   }
  
   /* Styles for content when the sidebar is closed */
-  .content-moved-right {
-	margin-left: 30px; /* Adjust this value according to your sidebar width */
-  }
-  /* Other styles for your page */
+  /* .content-moved-right {
+	margin-left: 50px; 
+	/* Adjust this value according to your sidebar width */
+  /*} */
+   /* Other styles for your page */
   /* Add your other CSS rules here */
-  .content-moved-left {
+  /* .content-moved-left {
 	margin-left: 240px; /* Adjust this value according to your sidebar width */
-  }
+  /*} */
 
-
+  .content-moved-right1 {
+	margin-top: 10px;
+	margin-left: 100px;/* Adjust this value according to your sidebar width */
+margin-right: 40px;
+	
+}
+.content-moved-left1 {
+	margin-top: 10px;
+	margin-left: 280px;/* Adjust this value according to your sidebar width */
+margin-right: 50px;
+	
+}
+ 
+ 
 
 	

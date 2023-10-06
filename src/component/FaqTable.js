@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
   // Define your styles here
 }));
 
-function FaqTable({sidebarVisible}) {
+function FaqTable({ sidebarVisible }) {
   const classes = useStyles();
   const history = useHistory();
 
@@ -36,13 +36,14 @@ function FaqTable({sidebarVisible}) {
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 
   useEffect(() => {
+    setLoading(true); // Set loading to true when data fetching starts
     fetchData();
   }, []);
 
   const { question, answer } = values;
 
   const fetchData = () => {
-    setLoading(true); // Set loading to true when data fetching starts
+    setLoading(true);
     axios({
       method: 'POST',
       url: `${config.SERVER_URL}/admin/all_faq`,
@@ -56,7 +57,7 @@ function FaqTable({sidebarVisible}) {
         setLoading(false); // Set loading to false in case of an error
       });
   };
-  
+
 
   const openPopupModal = (title, faq) => {
     setShowModal(true);
@@ -161,10 +162,10 @@ function FaqTable({sidebarVisible}) {
   return (
     <div className="App">
       <div className="page-wrapper">
-      <div className={`page-content ${sidebarVisible ? 'content-moved-left' : 'content-moved-right'}`}>
-        <h1 style={{ margin: '0', marginLeft: sidebarVisible ? '0' : '30px' }}>FAQ</h1>
-          <hr style={{ borderTop: '2px solid #333',marginLeft: sidebarVisible ? '0' : '30px' }} />
-          <div className="container mt-3">
+        <div className={`page-content ${sidebarVisible ? 'content-moved-left1' : 'content-moved-right1'}`}>
+          <h1 style={{ margin: '0', marginLeft: sidebarVisible ? '0' : '0px' }}>FAQ</h1>
+          <hr style={{ borderTop: '2px solid #333', marginLeft: sidebarVisible ? '0' : '0px' }} />
+          <div className=" mt-3">
             <div className="row justify-content-center">
               <div className="col-lg-15">
 
@@ -187,10 +188,9 @@ function FaqTable({sidebarVisible}) {
                         </tr>
                       </thead>
                       <tbody>
-                        
-                      {loading ? (
-              <FaqRowsLoader rowsNum={isArray.length} /> // Render skeleton rows
-            ) : (
+                        {loading ? (
+                          <FaqRowsLoader rowsNum={isArray.length} /> // Render skeleton rows
+                        ) : isArray.length > 0 ? (
                           isArray.map((faq, index) => (
                             <tr key={index}>
                               <td>{index + 1}</td>
@@ -208,6 +208,14 @@ function FaqTable({sidebarVisible}) {
                               </td>
                             </tr>
                           ))
+                        ) : (
+                          <tr>
+                            <td colSpan="4" style={{ textAlign: 'center' }}>
+                              <div style={{ display: 'inline-block' }}>
+                                <p>No Data available.</p>
+                              </div>
+                            </td>
+                          </tr>
                         )}
                       </tbody>
                     </table>

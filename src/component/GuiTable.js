@@ -10,7 +10,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
 import config from '../config';
 import '../style/app.css';
-import Gui from './Gui';
+import GuiLoader from './GuiLoader'; // Import the GuiLoader component
 
 function GuiTable({ sidebarVisible }) {
   const [logData, setLogData] = useState([]);
@@ -23,23 +23,27 @@ function GuiTable({ sidebarVisible }) {
   const newSearchTermLowerCase = newSearchTerm;
   const newSearchTermCompanyLowerCase = newSearchTermCompany;
   const [expandedRowIndex, setExpandedRowIndex] = useState(-1);
+  const [loading, setLoading] = useState(true); // Loading state
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
   };
 
   useEffect(() => {
+    setLoading(true); // Set loading to true initially
     // Fetch data from the API when the component mounts
     axios
       .get(`${config.SERVER_URL}/get_logger_gui`)
       .then((response) => {
         setLogData(response.data.array);
+        setLoading(false); // Set loading to false when data is fetched
         console.log(response);
       })
       .catch((error) => {
+        setLoading(false); // Set loading to false on error
         console.log(error);
       });
-  }, []); // Empty dependency array ensures this effect runs only once on mount
+  }, []);
 
   const filterData = (data) => {
     if (!Array.isArray(data)) {
@@ -48,14 +52,14 @@ function GuiTable({ sidebarVisible }) {
     }
 
     return data.filter((log) => {
-      const level = (log[0] || '').toLowerCase();
+      const level = (log[0] || '').toLowerCase(); // Convert level to lowercase
       const logDate = new Date(log[1]);
-      const apiRequest = log[2];
-      const apiResponse = log[3];
-      const co2Request = log[4];
-      const co2Response = log[5];
-      const adaptRequest = log[6];
-      const adaptResponse = log[7];
+      const apiRequest = (log[2] || '').toLowerCase(); // Convert apiRequest to lowercase
+      const apiResponse = (log[3] || '').toLowerCase(); // Convert apiResponse to lowercase
+      const co2Request = (log[4] || '').toLowerCase(); // Convert co2Request to lowercase
+      const co2Response = (log[5] || '').toLowerCase(); // Convert co2Response to lowercase
+      const adaptRequest = (log[6] || '').toLowerCase(); // Convert adaptRequest to lowercase
+      const adaptResponse = (log[7] || '').toLowerCase();
 
       const selectedDateStart = new Date(selectedDate);
       selectedDateStart.setHours(0, 0, 0, 0);
@@ -82,6 +86,7 @@ function GuiTable({ sidebarVisible }) {
         (newSearchTermCompany === '' || companyCodeMatch) && // Check if company code matches
         dateMatches
       );
+
     });
   };
 
@@ -90,17 +95,19 @@ function GuiTable({ sidebarVisible }) {
   };
 
   const handleNewSearchChange = (event) => {
-    setNewSearchTerm(event.target.value);
+    const searchTerm = event.target.value.toLowerCase(); // Convert the search term to lowercase
+    setNewSearchTerm(searchTerm);
   };
-
+  
   const handleNew1SearchChange = (event) => {
-    setNewSearchTermCompany(event.target.value);
+    const searchTermCompany = event.target.value.toLowerCase(); // Convert the search term to lowercase
+    setNewSearchTermCompany(searchTermCompany);
   };
-
   const handleSearchFieldChange = (event) => {
     setSearchField(event.target.value);
     setSearchTerm('');
   };
+
   const handleRowClick = (index) => {
     if (index === expandedRowIndex) {
       // If the clicked row is already expanded, collapse it
@@ -118,13 +125,13 @@ function GuiTable({ sidebarVisible }) {
   return (
     <div className="App">
       <div className={`page-wrapper `}>
-        <div className={`page-content ${sidebarVisible ? 'content-moved-left' : 'content-moved-right'}`}>
-          <h1 style={{ margin: '0', marginLeft: sidebarVisible ? '0' : '30px' }}>Logger Gui</h1>
-          <hr style={{ borderTop: '2px solid #333', marginLeft: sidebarVisible ? '0' : '30px' }} />
-          <div className={`container mt-3`}>
+        <div className={`page-content ${sidebarVisible ? 'content-moved-left1' : 'content-moved-right1'}`}>
+          <h1 style={{ margin: '0', marginLeft: sidebarVisible ? '0' : '0px' }}>Logger Gui</h1>
+          <hr style={{ borderTop: '2px solid #333', marginLeft: sidebarVisible ? '0' : '0px' }} />
+          <div className={` mt-3`}>
             <div className="row justify-content-center">
               <div className="col-lg-15">
-                <div className="mb-3" style={{ display: 'flex', alignItems: 'center',marginLeft:'30px' }}>
+                <div className="mb-3" style={{ display: 'flex', alignItems: 'center' }}>
                   <label htmlFor="search" style={{ marginRight: '10px' }}>
                     Search:{' '}
                   </label>
@@ -190,23 +197,25 @@ function GuiTable({ sidebarVisible }) {
                   </div>
                 </div>
                 <div className="card-body">
-                  <div className="table-responsive">
-                    {filteredData.length > 0 ? (
-                      <table  className={` table mb-0  ${sidebarVisible ? '' : 'content-moved-right' }`}>
-                        <thead className="table-light">
-                          <tr >
-                            <th>Level</th>
-                            <th>Date</th>
-                            <th>Api Request</th>
-                            <th>Api Response</th>
-                            <th>Co2 Request</th>
-                            <th>Co2 Response</th>
-                            <th>Adapt Request</th>
-                            <th>Adapt Response</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {filteredData.map((logData, index) => (
+                <div className="table-responsive" style={{ maxHeight: 'calc(100vh - 200px)', overflowY: 'auto' }}>
+                    <table className={`table mb-0`}>
+                      <thead className="table-light">
+                        <tr>
+                          <th>Level</th>
+                          <th>Date</th>
+                          <th>Api Request</th>
+                          <th>Api Response</th>
+                          <th>Co2 Request</th>
+                          <th>Co2 Response</th>
+                          <th>Adapt Request</th>
+                          <th>Adapt Response</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {loading ? (
+                          <GuiLoader rowsNum={10} /> 
+                        ) : filteredData.length > 0 ? (
+                          filteredData.map((logData, index) => (
                             <tr
                               key={index}
                               onClick={() => handleRowClick(index)}
@@ -215,15 +224,13 @@ function GuiTable({ sidebarVisible }) {
                                 whiteSpace: expandedRowIndex === index ? 'break-spaces' : 'nowrap',
                                 // overflow: expandedRowIndex===index? 'inherit':'hidden',
                                 textOverflow: expandedRowIndex === index ? 'inherit' : 'ellipsis',
-                                wordBreak: expandedRowIndex === index ? 'break-all' : 'inherit'
-
+                                wordBreak: expandedRowIndex === index ? 'break-all' : 'inherit',
                               }}
                             >
                               <td title={logData[0]}
                                 style={{
                                   columnWidth: '50px',
-                                  whiteSpace: 'nowrap'
-
+                                  whiteSpace: 'nowrap',
                                 }}
                               >
                                 {logData[0]}
@@ -231,8 +238,7 @@ function GuiTable({ sidebarVisible }) {
                               <td title={logData[1]}
                                 style={{
                                   columnWidth: '200px',
-                                  whiteSpace: 'nowrap'
-
+                                  whiteSpace: 'nowrap',
                                   //overflow: expandedRowIndex === index ? 'auto' : 'hidden',
                                 }}
                               >
@@ -246,7 +252,7 @@ function GuiTable({ sidebarVisible }) {
                               >
                                 {logData[2]}
                               </td>
-                              <td title= {logData[3]}
+                              <td title={logData[3]}
                                 style={{
                                   columnWidth: '300px',
                                   overflow: expandedRowIndex === index ? 'auto' : 'hidden',
@@ -287,12 +293,18 @@ function GuiTable({ sidebarVisible }) {
                                 {logData[7]}
                               </td>
                             </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    ) : (
-                                <p>Loading Data...</p>
-                    )}
+                          ))
+                          
+                          ) : (
+                            <tr>
+                              <td colSpan="20" style={{ textAlign: 'center' }}>
+                                <div style={{ display: 'inline-block' }}>
+                                  <p>No Data available.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          )}                      </tbody>
+                    </table>
                   </div>
                 </div>
               </div>

@@ -13,7 +13,7 @@ import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import DescriptionIcon from '@mui/icons-material/Description';
 import GradingIcon from '@mui/icons-material/Grading';
 
-function SideBar({ sidebarVisible, toggleSidebar }) {
+function SideBar({ sidebarVisible, toggleSidebar, onLinkClick }) {
   const linkStyle = {
     textDecoration: 'none',
     color: 'white',
@@ -64,7 +64,9 @@ function SideBar({ sidebarVisible, toggleSidebar }) {
                 to="/news"
                 style={linkStyle}
                 activeStyle={activeLinkStyle} // Apply active styles to the NavLink
-              >
+                onClick={onLinkClick} // Close sidebar on link click
+
+             >
                 <div className="parent-icon">
                   <InsertPhotoIcon
                     className={activeLinkStyle.color === 'black' ? iconActiveClass : iconInactiveClass}
@@ -80,6 +82,8 @@ function SideBar({ sidebarVisible, toggleSidebar }) {
                 to="/time"
                 style={linkStyle}
                 activeStyle={activeLinkStyle} // Apply active styles to the NavLink
+                onClick={onLinkClick} // Close sidebar on link click
+
               >
                 <div className="parent-icon">
                   <TimelineRoundedIcon
@@ -96,6 +100,8 @@ function SideBar({ sidebarVisible, toggleSidebar }) {
                 to="/faq"
                 style={linkStyle}
                 activeStyle={activeLinkStyle} // Apply active styles to the NavLink
+                onClick={onLinkClick} // Close sidebar on link click
+
               >
                 <div className="parent-icon">
                   <LiveHelpRoundedIcon
@@ -112,6 +118,8 @@ function SideBar({ sidebarVisible, toggleSidebar }) {
                 to="/logs"
                 style={linkStyle}
                 activeStyle={activeLinkStyle} // Apply active styles to the NavLink
+                onClick={onLinkClick} // Close sidebar on link click
+
               >
                 <div className="parent-icon">
                   <DescriptionIcon
@@ -128,6 +136,8 @@ function SideBar({ sidebarVisible, toggleSidebar }) {
                 to="/gui"
                 style={linkStyle}
                 activeStyle={activeLinkStyle} // Apply active styles to the NavLink
+                onClick={onLinkClick} // Close sidebar on link click
+
               >
                 <div className="parent-icon">
                   <GradingIcon

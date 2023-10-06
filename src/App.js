@@ -1,17 +1,17 @@
+// App.js
 import React, { useState, useEffect } from 'react';
 import { HashRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
-import News from './component/News';
 import Time from './component/Time';
-import FAQ from './component/Faq';
 import SignIn from './component/Auth/SignIn';
 import SignOut from './component/Auth/SignOut';
 import ForgotPassword from './component/Auth/ForgotPassword';
 import ResetPassword from './component/Auth/ResetPassword';
-import Logs from './component/Logs';
-import Gui from './component/Gui';
 import SideBar from './component/SideBar';
-import GuiTable from './component/GuiTable';
 import Header from './component/Header';
+import NewsTable from './component/NewsTable';
+import GuiTable from './component/GuiTable';
+import FaqTable from './component/FaqTable';
+import LogsTable from './component/LogsTable';
 
 function App() {
   const [sidebarVisible, setSidebarVisible] = useState(true);
@@ -29,20 +29,20 @@ function App() {
   }, []);
 
   return (
-    <Router >
+    <Router>
       <div className="App">
         {/* Render the Header and Sidebar */}
-        
+       
 
         <Switch>
           <Route exact path="/">
-            <Redirect to="/" /> : <SignIn />
+            <SignIn />
           </Route>
           <Route exact path="/forgotpass">
-           <Redirect to="/" /> : <ForgotPassword />
+          <ForgotPassword />
           </Route>
           <Route exact path="/resetpass">
-           <Redirect to="/" /> : <ResetPassword />
+          <ResetPassword />
           </Route>
           <Route exact path="/signout">
             <SignOut />
@@ -53,27 +53,26 @@ function App() {
             <SideBar
               sidebarVisible={sidebarVisible}
               toggleSidebar={toggleSidebar}
+              onLinkClick={() => setSidebarVisible(false)} // Close sidebar on link click
             />
-             <Route exact path="/news">
-            <News sidebarVisible={sidebarVisible} />
+    
+          <Route exact path="/news">
+            <NewsTable sidebarVisible={sidebarVisible} />
           </Route>
           <Route exact path="/time">
             <Time sidebarVisible={sidebarVisible} />
           </Route>
           <Route exact path="/faq">
-            <FAQ sidebarVisible={sidebarVisible} />
+            <FaqTable sidebarVisible={sidebarVisible} />
           </Route>
           <Route exact path="/logs">
-            <Logs sidebarVisible={sidebarVisible} />
+            <LogsTable sidebarVisible={sidebarVisible} />
           </Route>
           <Route exact path="/gui">
-            <Gui sidebarVisible={sidebarVisible} />
+            <GuiTable sidebarVisible={sidebarVisible} />
           </Route>
           </>
-        )}
-     
-         
-       
+    )}
         </Switch>
       </div>
     </Router>
