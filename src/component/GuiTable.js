@@ -118,7 +118,7 @@ function GuiTable({ sidebarVisible }) {
     }
   };
 
-  const filteredData = filterData(logData);
+  const filteredData = filterData(logData).reverse(); // Reverse the order
 
   // Apply a CSS class conditionally based on sidebar visibility
 
@@ -212,98 +212,128 @@ function GuiTable({ sidebarVisible }) {
                         </tr>
                       </thead>
                       <tbody>
-                        {loading ? (
-                          <GuiLoader rowsNum={10} /> 
-                        ) : filteredData.length > 0 ? (
-                          filteredData.map((logData, index) => (
-                            <tr
-                              key={index}
-                              onClick={() => handleRowClick(index)}
-                              style={{
-                                height: expandedRowIndex === index ? 'auto' : '50px',
-                                whiteSpace: expandedRowIndex === index ? 'break-spaces' : 'nowrap',
-                                // overflow: expandedRowIndex===index? 'inherit':'hidden',
-                                textOverflow: expandedRowIndex === index ? 'inherit' : 'ellipsis',
-                                wordBreak: expandedRowIndex === index ? 'break-all' : 'inherit',
-                              }}
-                            >
-                              <td title={logData[0]}
-                                style={{
-                                  columnWidth: '50px',
-                                  whiteSpace: 'nowrap',
-                                }}
-                              >
-                                {logData[0]}
-                              </td>
-                              <td title={logData[1]}
-                                style={{
-                                  columnWidth: '200px',
-                                  whiteSpace: 'nowrap',
-                                  //overflow: expandedRowIndex === index ? 'auto' : 'hidden',
-                                }}
-                              >
-                                {logData[1]}
-                              </td>
-                              <td title={logData[2]}
-                                style={{
-                                  columnWidth: '352px',
-                                  overflow: expandedRowIndex === index ? 'auto' : 'hidden',
-                                }}
-                              >
-                                {logData[2]}
-                              </td>
-                              <td title={logData[3]}
-                                style={{
-                                  columnWidth: '300px',
-                                  overflow: expandedRowIndex === index ? 'auto' : 'hidden',
-                                }}
-                              >
-                                {logData[3]}
-                              </td>
-                              <td title={logData[4]}
-                                style={{
-                                  columnWidth: '300px',
-                                  overflow: expandedRowIndex === index ? 'auto' : 'hidden',
-                                }}
-                              >
-                                {logData[4]}
-                              </td>
-                              <td title={logData[5]}
-                                style={{
-                                  columnWidth: '300px',
-                                  overflow: expandedRowIndex === index ? 'auto' : 'hidden',
-                                }}
-                              >
-                                {logData[5]}
-                              </td>
-                              <td title={logData[6]}
-                                style={{
-                                  columnWidth: '200px',
-                                  overflow: expandedRowIndex === index ? 'auto' : 'hidden',
-                                }}
-                              >
-                                {logData[6]}
-                              </td>
-                              <td title={logData[7]}
-                                style={{
-                                  columnWidth: '300px',
-                                  overflow: expandedRowIndex === index ? 'auto' : 'hidden',
-                                }}
-                              >
-                                {logData[7]}
-                              </td>
-                            </tr>
-                          ))
-                          
-                          ) : (
-                            <tr>
-                              <td colSpan="20" style={{ textAlign: 'center' }}>
-                                <div style={{ display: 'inline-block' }}>
-                                  <p>No Data available.</p>
-                                </div>
-                              </td>
-                            </tr>
-                          )}                      </tbody>
+                      {
+  loading ? (
+    <GuiLoader rowsNum={10} />
+  ) : filteredData.length > 0 ? (
+    filteredData.map((logData, index) => {
+      const level = (logData[0] || '').trim().toLowerCase(); // Use trim to remove leading/trailing spaces
+
+      // Define CSS classes based on the "Level"
+      console.log("lev:::::::::",level);
+     // const rowClass = level === 'error' ? 'error-row' : level === 'info' ? 'info-row' : '';
+      const backgroundColor = level === 'error' ? 'tomato': level === 'info' ? '#E8E8E8' : 'transparent';
+
+     // console.log("rowclass",rowClass);
+
+      return (
+        <tr
+          key={index}
+          onClick={() => handleRowClick(index)}
+         // className={rowClass}
+          style={{
+            height: expandedRowIndex === index ? 'auto' : '50px',
+            whiteSpace: expandedRowIndex === index ? 'break-spaces' : 'nowrap',
+            textOverflow: expandedRowIndex === index ? 'inherit' : 'ellipsis',
+            wordBreak: expandedRowIndex === index ? 'break-all' : 'inherit',
+          }}
+        >
+          <td title={logData[0]}
+           style={{ columnWidth: '50px', 
+           whiteSpace: 'nowrap', 
+           backgroundColor,
+
+            }}
+            >
+            {logData[0]}
+          </td>
+          <td
+            title={logData[1]}
+            style={{
+              columnWidth: '200px',
+              whiteSpace: 'nowrap',
+              backgroundColor,
+
+              //overflow: expandedRowIndex === index ? 'auto' : 'hidden',
+            }}
+          >
+            {logData[1]}
+          </td>
+          <td
+            title={logData[2]}
+            style={{
+              columnWidth: '352px',
+              overflow: expandedRowIndex === index ? 'auto' : 'hidden',
+              backgroundColor,
+            }}
+          >
+            {logData[2]}
+          </td>
+          <td
+            title={logData[3]}
+            style={{
+              columnWidth: '300px',
+              overflow: expandedRowIndex === index ? 'auto' : 'hidden',
+              backgroundColor,
+            }}
+          >
+            {logData[3]}
+          </td>
+          <td
+            title={logData[4]}
+            style={{
+              columnWidth: '300px',
+              overflow: expandedRowIndex === index ? 'auto' : 'hidden',
+              backgroundColor,
+            }}
+          >
+            {logData[4]}
+          </td>
+          <td
+            title={logData[5]}
+            style={{
+              columnWidth: '300px',
+              overflow: expandedRowIndex === index ? 'auto' : 'hidden',
+              backgroundColor,
+            }}
+          >
+            {logData[5]}
+          </td>
+          <td
+            title={logData[6]}
+            style={{
+              columnWidth: '200px',
+              overflow: expandedRowIndex === index ? 'auto' : 'hidden',
+              backgroundColor,
+            }}
+          >
+            {logData[6]}
+          </td>
+          <td
+            title={logData[7]}
+            style={{
+              columnWidth: '300px',
+              overflow: expandedRowIndex === index ? 'auto' : 'hidden',
+              backgroundColor,
+            }}
+          >
+            {logData[7]}
+          </td>
+        </tr>
+      );
+    })
+  ) : (
+    <tr>
+      <td colSpan="20" style={{ textAlign: 'center' }}>
+        <div style={{ display: 'inline-block' }}>
+          <p>No Data available.</p>
+        </div>
+      </td>
+    </tr>
+  )
+}
+            
+                      </tbody>
                     </table>
                   </div>
                 </div>
