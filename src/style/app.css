@@ -3140,11 +3140,11 @@ margin-right: 50px;
  
  
 
-/* .error {
+ .error {
 	background-color: red !important;
 	
   }
   .info {
 	background-color: blue !important;
-	
-  } */
+	color:lightsalmon;
+  } 

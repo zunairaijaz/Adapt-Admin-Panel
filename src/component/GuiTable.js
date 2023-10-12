@@ -222,7 +222,7 @@ function GuiTable({ sidebarVisible }) {
       // Define CSS classes based on the "Level"
       console.log("lev:::::::::",level);
      // const rowClass = level === 'error' ? 'error-row' : level === 'info' ? 'info-row' : '';
-      const backgroundColor = level === 'error' ? 'tomato': level === 'info' ? '#E8E8E8' : 'transparent';
+      const backgroundColor = level === 'error' ? '#dc3545': level === 'info' ? '#E8E8E8' : 'transparent';
 
      // console.log("rowclass",rowClass);
 
