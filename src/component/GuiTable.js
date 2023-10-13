@@ -20,8 +20,8 @@ function GuiTable({ sidebarVisible }) {
   const [newSearchTerm, setNewSearchTerm] = useState('');
   const [newSearchTermCompany, setNewSearchTermCompany] = useState('');
   const [employeeIdFilter, setEmployeeIdFilter] = useState('');
-  const newSearchTermLowerCase = newSearchTerm;
-  const newSearchTermCompanyLowerCase = newSearchTermCompany;
+  const [newSearchTermLowerCase, setNewSearchTermLowerCase] = useState('');
+  const [newSearchTermCompanyLowerCase, setNewSearchTermCompanyLowerCase] = useState('');
   const [expandedRowIndex, setExpandedRowIndex] = useState(-1);
   const [loading, setLoading] = useState(true); // Loading state
 
@@ -35,7 +35,9 @@ function GuiTable({ sidebarVisible }) {
     axios
       .get(`${config.SERVER_URL}/get_logger_gui`)
       .then((response) => {
-        setLogData(response.data.array);
+        const fetchedData = response.data.array;
+        const sortedData = fetchedData.sort((a, b) => new Date(b[1]) - new Date(a[1]));
+        setLogData(sortedData);
         setLoading(false); // Set loading to false when data is fetched
         console.log(response);
       })
@@ -118,7 +120,7 @@ function GuiTable({ sidebarVisible }) {
     }
   };
 
-  const filteredData = filterData(logData).reverse(); // Reverse the order
+  const filteredData = filterData(logData); // Reverse the order
 
   // Apply a CSS class conditionally based on sidebar visibility
 
