@@ -11,7 +11,9 @@ import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles'; // Add this import
 import FaqRowsLoader from './FaqRowsLoader'; // Make sure to use the correct p
 import { Box, Skeleton } from '@mui/material';
-
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import AddIcon from '@mui/icons-material/Add';
 const useStyles = makeStyles((theme) => ({
   // Define your styles here
 }));
@@ -173,7 +175,7 @@ function FaqTable({ sidebarVisible }) {
                   <div className="d-lg-flex align-items-center mb-4 gap-3">
                     <div className="ms-auto">
                       <Button variant="primary" onClick={() => openPopupModal('Add Faq')}>
-                        <i className="bx bxs-plus-square"></i> Add FAQ
+                        <AddIcon /> Add FAQ
                       </Button>
                     </div>
                   </div>
@@ -199,10 +201,10 @@ function FaqTable({ sidebarVisible }) {
                               <td>
                                 <div class="d-flex order-actions">
                                   <a title="edit" href="javascript:;" onClick={() => openPopupModal('Update Faq', faq)}>
-                                    <i className='bx bxs-edit'></i>
+                                    <EditIcon />
                                   </a>
                                   <a title="delete" href="javascript:;" className="ms-3" onClick={() => deleteEvent(faq._id)}>
-                                    <i className="bx bxs-trash"></i>
+                                    <DeleteIcon />
                                   </a>
                                 </div>
                               </td>

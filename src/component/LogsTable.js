@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from 'react-bootstrap/Button';
-import Dropdown from 'react-bootstrap/Dropdown';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
 import axios from 'axios';
 import config from '../config';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 import '../style/app.css';
-import { useHistory } from 'react-router-dom';
-import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
 import LogsLoader from './LogsLoader';
 
 function LogsTable({ sidebarVisible }) {
@@ -23,38 +21,37 @@ function LogsTable({ sidebarVisible }) {
     const [selectedDeviceLogData, setSelectedDeviceLogData] = useState([]);
     const [expandedRowIndex, setExpandedRowIndex] = useState(-1);
     const [loading, setLoading] = useState(true);
-    const [selectedDeviceCurrentPage, setSelectedDeviceCurrentPage] = useState(1);
-    const [selectedDeviceItemsPerPage, setSelectedDeviceItemsPerPage] = useState(10);
-
-    const history = useHistory();
+    const [totalPages, setTotalPages] = useState(1);
+    const [totalLogs, setTotalLogs] = useState(1);
 
     useEffect(() => {
-        fetchData();
+        fetchData(1, itemsPerPage);
         fetchDeviceIds();
-    }, []);
+    }, [itemsPerPage]);
 
     useEffect(() => {
         if (selectedDeviceId === "") {
-            setSelectedDeviceLogData([]); // Reset selected device log data when no device is selected
+            setSelectedDeviceLogData([]);
         }
     }, [selectedDeviceId]);
 
-    useEffect(() => {
-        // Reset the current page for selected device logs when items per page changes
-        setSelectedDeviceCurrentPage(1);
-    }, [selectedDeviceItemsPerPage]);
-
-    const fetchData = () => {
+    const fetchData = (page, perPage, deviceId=-1) => {
         setLoading(true);
-
-        axios({
-            method: 'GET',
-            url: `${config.SERVER_URL}/getVehicleLogData`,
-        })
+        const url = `${config.NEW_SERVER_URL}/getVehicleLogDatapaginated?page=${page}&perPage=${perPage}&deviceId=${-1}`;
+    
+        axios
+            .get(url)
             .then((response) => {
-                if (response.data) {
-                    console.log(response);
-                    setLogData(response.data);
+                if (response.data.success) {
+                    const sortedLogData = response.data.data.sort((a, b) => new Date(b.dateTime) - new Date(a.dateTime));
+                    setLogData(sortedLogData);                   
+                    setTotalPages(Math.ceil(response.data.totalPages));
+                    setTotalLogs(Math.ceil(response.data.totalLogs));
+
+                    setLoading(false);
+                } else {
+                    console.error('Error fetching data:', response.data.error);
+                    toast.error('Error fetching data: ' + response.data.error);
                     setLoading(false);
                 }
             })
@@ -64,35 +61,11 @@ function LogsTable({ sidebarVisible }) {
                 setLoading(false);
             });
     };
-
-    const fetchDataById = (deviceId) => {
-        setLoading(true);
-
-        axios({
-            method: 'GET',
-            url: `${config.SERVER_URL}/getVehicleLogDataById/${deviceId}`,
-        })
-            .then((response) => {
-                if (response.data) {
-                    console.log(response);
-                    setSelectedDeviceLogData(response.data);
-                    setSelectedDeviceCurrentPage(1); // Reset pagination to the first page
-                }
-            })
-            .catch((error) => {
-                console.error('Error fetching data by device ID:', error);
-                toast.error('Error fetching data: ' + error.message);
-            })
-            .finally(() => {
-                setLoading(false);
-            });
-    };
+    
+   
 
     const fetchDeviceIds = () => {
-        axios({
-            method: 'GET',
-            url: `${config.SERVER_URL}/getUniqueDeviceIds`,
-        })
+        axios.get(`${config.NEW_SERVER_URL}/getUniqueDeviceIds`)
             .then((response) => {
                 if (Array.isArray(response.data.deviceIds)) {
                     setDeviceIds(response.data.deviceIds);
@@ -107,31 +80,36 @@ function LogsTable({ sidebarVisible }) {
             });
     };
 
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = logData.slice(indexOfFirstItem, indexOfLastItem);
-
-    const handlePageChange = (newPage) => {
-        if (newPage >= 1 && newPage <= Math.ceil(logData.length / itemsPerPage)) {
+    const handleMainLogPageChange = (newPage) => {
+        if (newPage >= 1 && newPage <= totalPages) {
             setCurrentPage(newPage);
+            if (newPage > currentPage) {
+                fetchData(newPage, itemsPerPage);
+            } else if (newPage < currentPage) {
+                fetchData(newPage, itemsPerPage);
+            }
         }
     };
 
-    const handleItemsPerPageChange = (newItemsPerPage) => {
+    const handleMainLogItemsPerPageChange = (newItemsPerPage) => {
         setItemsPerPage(newItemsPerPage);
         setCurrentPage(1);
     };
 
     const handleDeviceIdChange = (newDeviceId) => {
         if (newDeviceId === "") {
+            // When "All Devices" is selected, fetch all data
             setSelectedDeviceId("");
             setSelectedDeviceLogData([]);
-            setCurrentPage(1); // Reset main pagination when no device is selected
+            fetchData(currentPage, itemsPerPage);
         } else {
+            // When a specific device is selected, fetch data for that device on the current page
             setSelectedDeviceId(newDeviceId);
-            fetchDataById(newDeviceId);
+            fetchData(currentPage, itemsPerPage, newDeviceId);
         }
     };
+    
+    
 
     const handleRowClick = (index) => {
         if (index === expandedRowIndex) {
@@ -140,18 +118,110 @@ function LogsTable({ sidebarVisible }) {
             setExpandedRowIndex(index);
         }
     };
-
-    const indexOfLastSelectedDeviceItem = selectedDeviceCurrentPage * selectedDeviceItemsPerPage;
-    const indexOfFirstSelectedDeviceItem = indexOfLastSelectedDeviceItem - selectedDeviceItemsPerPage;
-    const currentSelectedDeviceItems = selectedDeviceLogData.slice(
-        indexOfFirstSelectedDeviceItem,
-        indexOfLastSelectedDeviceItem
-    );
-
-    const handleSelectedDevicePageChange = (newPage) => {
-        if (newPage >= 1 && newPage <= Math.ceil(selectedDeviceLogData.length / selectedDeviceItemsPerPage)) {
-            setSelectedDeviceCurrentPage(newPage);
+    const renderPageNumbers = () => {
+        const pageNumbers = [];
+        const visiblePageCount = 3; // Number of visible page numbers
+    
+        const startPage = Math.max(1, currentPage - Math.floor(visiblePageCount / 2));
+        const endPage = Math.min(totalPages, startPage + visiblePageCount - 1);
+    
+        const selectedButtonStyle = {
+            background: 'blue',
+            border: '1px solid lightgrey',
+            color: 'white',
+            marginRight: '3px',
+        };
+    
+        const buttonStyle = {
+            background: 'transparent',
+            border: '1px solid lightgrey',
+            marginRight: '3px',
+        };
+    
+        if (currentPage > 1) {
+            pageNumbers.push(
+                <Button
+                    key="previous"
+                    variant=""
+                    size="sm"
+                    style={buttonStyle}
+                    onClick={() => handleMainLogPageChange(currentPage - 1)}
+                >
+                    Previous
+                </Button>
+            );
         }
+    
+        for (let i = startPage; i <= endPage; i++) {
+            const isCurrentPage = i === currentPage;
+            pageNumbers.push(
+                <Button
+                    key={i}
+                    variant=""
+                    size="sm"
+                    style={isCurrentPage ? selectedButtonStyle : buttonStyle}
+                    onClick={() => handleMainLogPageChange(i)}
+                    disabled={currentPage === i}
+                >
+                    {i}
+                </Button>
+            );
+        }
+    
+        if (currentPage < totalPages-1) {
+            pageNumbers.push(
+                <Button
+                    key="ellipsis-end"
+                    variant=""
+                    size="sm"
+                    style={buttonStyle}
+                >
+                    ...
+                </Button>
+            );
+        }
+    
+        if (currentPage < totalPages-1) {
+            pageNumbers.push(
+                <Button
+                    key="total-pages"
+                    variant=""
+                    size="sm"
+                    style={buttonStyle}
+                    onClick={() => handleMainLogPageChange(totalPages)}
+                >
+                {totalPages}
+                </Button>
+            );
+        }
+    
+        if (currentPage < totalPages) {
+            pageNumbers.push(
+                <Button
+                    key="next"
+                    variant=""
+                    size="sm"
+                    style={buttonStyle}
+                    onClick={() => handleMainLogPageChange(currentPage + 1)}
+                >
+                    Next
+                </Button>
+            );
+        }
+    
+        return pageNumbers;
+    };
+    
+    const getRangeLabel = () => {
+        if (totalLogs === 0) {
+            return '0 items';
+        }
+
+        const start = (currentPage - 1) * itemsPerPage + 1;
+        const end = Math.min(start + itemsPerPage - 1, totalLogs);
+        const total = totalLogs;
+
+        return `${start} to ${end} / ${total} items`;
     };
 
     return (
@@ -163,37 +233,53 @@ function LogsTable({ sidebarVisible }) {
                     <div className=" mt-3">
                         <div className="row justify-content-center">
                             <div className="col-lg-15">
-                                <FormControl variant="outlined" style={{ marginBottom: '20px', width: '200px' }}>
-                                    <InputLabel>{selectedDeviceId === "" ? "All Devices" : "Device Id"}</InputLabel>
-                                    <Select
-                                        value={selectedDeviceId}
-                                        onChange={(e) => handleDeviceIdChange(e.target.value)}
-                                        label={selectedDeviceId === "" ? "All Devices" : "DeviceId"}
-                                    >
-                                        <MenuItem value="">All Devices</MenuItem>
-                                        {deviceIds.map((deviceId) => (
-                                            <MenuItem key={deviceId} value={deviceId}>
-                                                {deviceId}
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                                    <FormControl variant="outlined" style={{ width: '200px' }}>
+                                        <InputLabel>{selectedDeviceId === "" ? "All Devices" : "Device Id"}</InputLabel>
+                                        <Select
+                                            value={selectedDeviceId}
+                                            onChange={(e) => handleDeviceIdChange(e.target.value)}
+                                            label={selectedDeviceId === "" ? "All Devices" : "DeviceId"}
+                                        >
+                                            <MenuItem value="">All Devices</MenuItem>
+                                            {deviceIds.map((deviceId) => (
+                                                <MenuItem key={deviceId} value={deviceId}>
+                                                    {deviceId}
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+                                    <FormControl variant="outlined" style={{ width: '200px' }}>
+                                        <InputLabel>Items per Page</InputLabel>
+                                        <Select
+                                            value={itemsPerPage}
+                                            onChange={(e) => handleMainLogItemsPerPageChange(e.target.value)}
+                                            label="Items per Page"
+                                        >
+                                            <MenuItem value={5}>5</MenuItem>
+                                            <MenuItem value={10}>10</MenuItem>
+                                            <MenuItem value={50}>50</MenuItem>
+                                            <MenuItem value={100}>100</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </div>
                                 <div className="card-body">
                                     <div className="table-responsive" style={{ maxHeight: 'calc(100vh - 200px)', overflowY: 'auto' }}>
                                         <table className="table mb-0">
                                             <thead className="table-light">
                                                 <tr>
-                                                    <th>deviceId</th>
+                                                    <th>Device ID</th>
                                                     <th>DateTime</th>
                                                     <th>Log String</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
+                                                
                                                 {loading ? (
                                                     <LogsLoader rowsNum={itemsPerPage} />
                                                 ) : (
-                                                    selectedDeviceId !== ''
-                                                        ? currentSelectedDeviceItems.map((log, index) => (
+                                                    
+                                                        logData.map((log, index) => (
                                                             <tr
                                                                 key={index}
                                                                 onClick={() => handleRowClick(index)}
@@ -214,38 +300,9 @@ function LogsTable({ sidebarVisible }) {
                                                                 </td>
                                                             </tr>
                                                         ))
-                                                        : currentItems.length > 0
-                                                            ? currentItems.map((log, index) => (
-                                                                <tr
-                                                                    key={index}
-                                                                    onClick={() => handleRowClick(index)}
-                                                                    style={{
-                                                                        height: expandedRowIndex === index ? 'auto' : '50px',
-                                                                        whiteSpace: expandedRowIndex === index ? 'break-spaces' : 'nowrap',
-                                                                        textOverflow: expandedRowIndex === index ? 'inherit' : 'ellipsis',
-                                                                    }}
-                                                                >
-                                                                    <td title={log.deviceId}>
-                                                                        {log.deviceId}
-                                                                    </td>
-                                                                    <td title={log.dateTime}>
-                                                                        {log.dateTime}
-                                                                    </td>
-                                                                    <td title={log.logString}>
-                                                                        {log.logString}
-                                                                    </td>
-                                                                </tr>
-                                                            ))
-                                                            : (
-                                                                <tr>
-                                                                    <td colSpan="3" style={{ textAlign: 'center' }}>
-                                                                        <div style={{ display: 'inline-block' }}>
-                                                                            <p>No Data available.</p>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                            )
-                                                )}
+                                                     
+                                                    )
+                                                }
                                             </tbody>
                                         </table>
                                     </div>
@@ -256,39 +313,31 @@ function LogsTable({ sidebarVisible }) {
                 </div>
             </div>
             <div className="table-pagination">
-                <div className="pagination float-right" style={{ marginBottom: '40px', marginRight: '60px' }}>
-                    <Button
-                        variant="secondary"
-                        size="sm"
-                        onClick={() => handleSelectedDevicePageChange(selectedDeviceCurrentPage - 1)}
-                        disabled={selectedDeviceCurrentPage === 1}
-                        style={{ marginRight: '2px' }}
-                    >
-                        Previous
-                    </Button>
-                    <Button
-                        variant="secondary"
-                        size="sm"
-                        onClick={() => handleSelectedDevicePageChange(selectedDeviceCurrentPage + 1)}
-                        disabled={selectedDeviceCurrentPage === Math.ceil(selectedDeviceLogData.length / selectedDeviceItemsPerPage)}
-                        style={{ marginRight: '2px' }}
-                    >
-                        Next
-                    </Button>
-                    <Dropdown>
-    <Dropdown.Toggle variant="secondary" size="sm" disabled={selectedDeviceId !== ""}>
-        {selectedDeviceId === "" ? `Items per page:${itemsPerPage}`:`Items per page: 10 `}
-    </Dropdown.Toggle>
-    <Dropdown.Menu>
-        <Dropdown.Item onClick={() => handleItemsPerPageChange(2)}>2</Dropdown.Item>
-        <Dropdown.Item onClick={() => handleItemsPerPageChange(10)}>10</Dropdown.Item>
-        <Dropdown.Item onClick={() => handleItemsPerPageChange(20)}>20</Dropdown.Item>
-    </Dropdown.Menu>
-</Dropdown>
+    <div className="pagination float-right" style={{ marginBottom: '40px', marginRight: '60px' }}>
+        {renderPageNumbers()}
+    </div>
+</div>
+<label
+    variant="primary"
+    size='sm'
+    style={{
+        marginLeft: sidebarVisible ? '300px' : '130px', // Conditionally set marginLeft
+        marginBottom: '80px',
+        backgroundColor: 'blue',
+        color: 'white',
+        borderRadius: '5px',
+        height: '28px',
+        width: '180px',
+        textAlign: 'center'
+    }}
+>
+    <p>{getRangeLabel()}</p>
+</label>
 
 
-                </div>
-            </div>
+
+
+
             <ToastContainer />
         </div>
     );

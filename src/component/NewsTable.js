@@ -10,6 +10,9 @@ import '../style/app.css';
 import { Box, Skeleton } from '@mui/material';
 import TableRowsLoader from './TableRowsLoader'; // Make sure to use the correct p
 import { FaTimes } from 'react-icons/fa'; // Import the close (times) icon
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import AddIcon from '@mui/icons-material/Add';
 function NewsTable({ sidebarVisible }) {
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -288,7 +291,7 @@ function NewsTable({ sidebarVisible }) {
                   <div className="d-lg-flex align-items-center mb-4 gap-3">
                     <div className="ms-auto">
                       <Button variant="primary" onClick={() => openPopupModal('Add News')}>
-                        <i className="bx bxs-plus-square"></i> Add NEWS
+                        <AddIcon /> Add NEWS
                       </Button>
                     </div>
                   </div>
@@ -335,10 +338,10 @@ function NewsTable({ sidebarVisible }) {
                                 <td>
                                   <div class="d-flex order-actions">
                                     <a title="edit" href="javascript:;" onClick={() => openPopupModal('Update News', news)}>
-                                      <i className='bx bxs-edit'></i>
+                                      <EditIcon />
                                     </a>
                                     <a title="delete" href="javascript:;" className="ms-3" onClick={() => deleteEvent(news._id)}>
-                                      <i className="bx bxs-trash"></i>
+                                      <DeleteIcon />
                                     </a>
                                   </div>
                                 </td>
