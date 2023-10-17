@@ -11,6 +11,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 import '../style/app.css';
 import LogsLoader from './LogsLoader';
+import { DevicesOutlined } from '@material-ui/icons';
 
 function LogsTable({ sidebarVisible }) {
     const [logData, setLogData] = useState([]);
@@ -25,7 +26,7 @@ function LogsTable({ sidebarVisible }) {
     const [totalLogs, setTotalLogs] = useState(1);
 
     useEffect(() => {
-        fetchData(1, itemsPerPage);
+        fetchData(1, itemsPerPage, "");
         fetchDeviceIds();
     }, [itemsPerPage]);
 
@@ -35,9 +36,11 @@ function LogsTable({ sidebarVisible }) {
         }
     }, [selectedDeviceId]);
 
-    const fetchData = (page, perPage, deviceId=-1) => {
+    const fetchData = (page, perPage, deviceId) => {
         setLoading(true);
-        const url = `${config.NEW_SERVER_URL}/getVehicleLogDatapaginated?page=${page}&perPage=${perPage}&deviceId=${-1}`;
+        const url = deviceId === "" // Check for an empty string
+        ? `${config.NEW_SERVER_URL}/getVehicleLogDatapaginated?page=${page}&perPage=${perPage}`
+        : `${config.NEW_SERVER_URL}/getVehicleLogDatapaginated?page=${page}&perPage=${perPage}&deviceId=${deviceId}`;
     
         axios
             .get(url)
@@ -83,11 +86,7 @@ function LogsTable({ sidebarVisible }) {
     const handleMainLogPageChange = (newPage) => {
         if (newPage >= 1 && newPage <= totalPages) {
             setCurrentPage(newPage);
-            if (newPage > currentPage) {
-                fetchData(newPage, itemsPerPage);
-            } else if (newPage < currentPage) {
-                fetchData(newPage, itemsPerPage);
-            }
+            fetchData(newPage, itemsPerPage, selectedDeviceId); // Pass the selectedDeviceId
         }
     };
 
@@ -97,15 +96,17 @@ function LogsTable({ sidebarVisible }) {
     };
 
     const handleDeviceIdChange = (newDeviceId) => {
-        if (newDeviceId === "") {
-            // When "All Devices" is selected, fetch all data
+        if (newDeviceId === "") { // Check for an empty string, not " "
+            // When "All Devices" is selected, fetch all data and reset the page to 1
             setSelectedDeviceId("");
             setSelectedDeviceLogData([]);
-            fetchData(currentPage, itemsPerPage);
+            setCurrentPage(1); // Reset the page number to 1
+            fetchData(1, itemsPerPage, ""); // Pass an empty string
         } else {
-            // When a specific device is selected, fetch data for that device on the current page
+            // When a specific device is selected, fetch data for that device and reset the page to 1
             setSelectedDeviceId(newDeviceId);
-            fetchData(currentPage, itemsPerPage, newDeviceId);
+            setCurrentPage(1); // Reset the page number to 1
+            fetchData(1, itemsPerPage, newDeviceId);
         }
     };
     
@@ -235,13 +236,13 @@ function LogsTable({ sidebarVisible }) {
                             <div className="col-lg-15">
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
                                     <FormControl variant="outlined" style={{ width: '200px' }}>
-                                        <InputLabel>{selectedDeviceId === "" ? "All Devices" : "Device Id"}</InputLabel>
+                                        <InputLabel>{selectedDeviceId === " " ? "All Devices" : "Device Id"}</InputLabel>
                                         <Select
                                             value={selectedDeviceId}
                                             onChange={(e) => handleDeviceIdChange(e.target.value)}
-                                            label={selectedDeviceId === "" ? "All Devices" : "DeviceId"}
+                                            label={selectedDeviceId === " " ? "All Devices" : "DeviceId"}
                                         >
-                                            <MenuItem value="">All Devices</MenuItem>
+                                            <MenuItem value=" ">All Devices</MenuItem>
                                             {deviceIds.map((deviceId) => (
                                                 <MenuItem key={deviceId} value={deviceId}>
                                                     {deviceId}
