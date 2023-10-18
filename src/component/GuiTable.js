@@ -33,7 +33,7 @@ function GuiTable({ sidebarVisible }) {
     setLoading(true); // Set loading to true initially
     // Fetch data from the API when the component mounts
     axios
-      .get(`${config.SERVER_URL}/get_logger_gui`)
+      .get(`${config.NEW_SERVER_URL}/get_logger_gui`)
       .then((response) => {
         const fetchedData = response.data.array;
         const sortedData = fetchedData.sort((a, b) => new Date(b[1]) - new Date(a[1]));
@@ -52,45 +52,45 @@ function GuiTable({ sidebarVisible }) {
       // Handle the case where data is not an array
       return [];
     }
-
+  
     return data.filter((log) => {
-      const level = (log[0] || '').toLowerCase(); // Convert level to lowercase
+      const level = (log[0] || '').toLowerCase();
       const logDate = new Date(log[1]);
-      const apiRequest = (log[2] || '').toLowerCase(); // Convert apiRequest to lowercase
-      const apiResponse = (log[3] || '').toLowerCase(); // Convert apiResponse to lowercase
-      const co2Request = (log[4] || '').toLowerCase(); // Convert co2Request to lowercase
-      const co2Response = (log[5] || '').toLowerCase(); // Convert co2Response to lowercase
-      const adaptRequest = (log[6] || '').toLowerCase(); // Convert adaptRequest to lowercase
+      const apiRequest = (log[2] || '').toLowerCase();
+      const apiResponse = (log[3] || '').toLowerCase();
+      const co2Request = (log[4] || '').toLowerCase();
+      const co2Response = (log[5] || '').toLowerCase();
+      const adaptRequest = (log[6] || '').toLowerCase();
       const adaptResponse = (log[7] || '').toLowerCase();
-
+  
       const selectedDateStart = new Date(selectedDate);
       selectedDateStart.setHours(0, 0, 0, 0);
       const selectedDateEnd = new Date(selectedDate);
       selectedDateEnd.setHours(23, 59, 59, 999);
       const dateMatches =
         !selectedDate || (logDate >= selectedDateStart && logDate <= selectedDateEnd);
-
+  
       // Check if the search term matches the employee ID or company code
-      const employeeIdMatch = apiRequest?.includes(newSearchTermLowerCase);
-      const companyCodeMatch = apiResponse?.includes(newSearchTermCompanyLowerCase);
-
+      const employeeIdMatch = apiRequest.includes(newSearchTerm.toLowerCase());
+      const companyCodeMatch = apiResponse.includes(newSearchTermCompany.toLowerCase());
+  
       return (
         (searchField === 'All Fields' ||
-          (searchField === 'Level' && level.includes(searchTerm)) ||
+          (searchField === 'Level' && level.includes(searchTerm.toLowerCase())) ||
           (searchField === 'Date' && dateMatches) ||
-          (searchField === 'Api Request' && apiRequest?.includes(searchTerm)) ||
-          (searchField === 'Api Response' && apiResponse?.includes(searchTerm)) ||
-          (searchField === 'Co2 Request' && co2Request?.includes(searchTerm)) ||
-          (searchField === 'Co2 Response' && co2Response?.includes(searchTerm)) ||
-          (searchField === 'Adapt Request' && adaptRequest?.includes(searchTerm)) ||
-          (searchField === 'Adapt Response' && adaptResponse?.includes(searchTerm))) &&
+          (searchField === 'Api Request' && apiRequest.includes(searchTerm.toLowerCase())) ||
+          (searchField === 'Api Response' && apiResponse.includes(searchTerm.toLowerCase())) ||
+          (searchField === 'Co2 Request' && co2Request.includes(searchTerm.toLowerCase())) ||
+          (searchField === 'Co2 Response' && co2Response.includes(searchTerm.toLowerCase())) ||
+          (searchField === 'Adapt Request' && adaptRequest.includes(searchTerm.toLowerCase())) ||
+          (searchField === 'Adapt Response' && adaptResponse.includes(searchTerm.toLowerCase()))) &&
         (newSearchTerm === '' || employeeIdMatch) && // Check if employee ID matches
         (newSearchTermCompany === '' || companyCodeMatch) && // Check if company code matches
         dateMatches
       );
-
     });
   };
+  
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
