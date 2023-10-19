@@ -13,7 +13,8 @@ import '../style/app.css';
 import LogsLoader from './LogsLoader';
 import { DevicesOutlined } from '@material-ui/icons';
 import { FirstPage, LastPage } from '@mui/icons-material';
-
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 function LogsTable({ sidebarVisible }) {
     const [logData, setLogData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -128,8 +129,8 @@ function LogsTable({ sidebarVisible }) {
         const endPage = Math.min(totalPages, startPage + visiblePageCount - 1);
     
         const selectedButtonStyle = {
-            background: 'blue',
-            border: '1px solid lightgrey',
+            background: 'black',
+            // border: '1px solid lightgrey',
             color: 'white',
             marginRight: '3px',
         };
@@ -137,25 +138,13 @@ function LogsTable({ sidebarVisible }) {
         const buttonStyle = {
             background: 'transparent',
             border: '1px solid lightgrey',
-            marginRight: '3px',
+            marginRight: '3px'
         };
     
+     
         if (currentPage > 1) {
             pageNumbers.push(
-                <Button
-                    key="previous"
-                    variant=""
-                    size="sm"
-                    style={buttonStyle}
-                    onClick={() => handleMainLogPageChange(currentPage - 1)}
-                >
-                    Previous
-                </Button>
-            );
-        }
-        if (currentPage > 1) {
-            pageNumbers.push(
-                <Button
+                <Button title={"Start"}
                     key="first"
                     variant=""
                     size="sm"
@@ -166,7 +155,19 @@ function LogsTable({ sidebarVisible }) {
                 </Button>
             );
         }
-    
+        if (currentPage > 1) {
+            pageNumbers.push(
+                <Button title={"Previous"}
+                    key="previous"
+                    variant=""
+                    size="sm"
+                    style={buttonStyle}
+                    onClick={() => handleMainLogPageChange(currentPage - 1)}
+                >
+                    <ArrowBackIosIcon />
+                </Button>
+            );
+        }
         for (let i = startPage; i <= endPage; i++) {
             const isCurrentPage = i === currentPage;
             pageNumbers.push(
@@ -182,10 +183,22 @@ function LogsTable({ sidebarVisible }) {
                 </Button>
             );
         }
-    
+        if (currentPage < totalPages) {
+            pageNumbers.push(
+                <Button title={"Next"}
+                    key="next"
+                    variant=""
+                    size="sm" // Add this style to make the icons smaller
+                    style={buttonStyle}
+                    onClick={() => handleMainLogPageChange(currentPage + 1)}
+                >
+                 <ArrowForwardIosIcon />
+                </Button>
+            );
+        }
         if (currentPage < totalPages - 1) {
             pageNumbers.push(
-                <Button
+                <Button title={"End"}
                     key="last"
                     variant=""
                     size="sm"
@@ -196,19 +209,7 @@ function LogsTable({ sidebarVisible }) {
                 </Button>
             );
         }
-        if (currentPage < totalPages) {
-            pageNumbers.push(
-                <Button
-                    key="next"
-                    variant=""
-                    size="sm"
-                    style={buttonStyle}
-                    onClick={() => handleMainLogPageChange(currentPage + 1)}
-                >
-                    Next
-                </Button>
-            );
-        }
+      
     
         return pageNumbers;
     };
@@ -319,14 +320,14 @@ function LogsTable({ sidebarVisible }) {
     </div>
 </div>
 <label
-    variant="primary"
+    variant=""
     size='sm'
     style={{
         marginLeft: sidebarVisible ? '300px' : '130px', // Conditionally set marginLeft
         marginBottom: '80px',
-        backgroundColor: 'blue',
+        background: 'rgba(0, 0, 0, 0.7)', // Light black with 40% opacity
         color: 'white',
-        borderRadius: '5px',
+        borderRadius: '2px',
         height: '28px',
         width: '180px',
         textAlign: 'center'

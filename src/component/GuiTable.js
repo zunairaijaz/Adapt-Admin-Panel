@@ -43,6 +43,23 @@ function GuiTable({ sidebarVisible }) {
         console.log(error);
       });
   }, []);
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const handleNewSearchChange = (event) => {
+    const searchTerm = event.target.value // Convert the search term to lowercase
+    setNewSearchTerm(searchTerm);
+  };
+  
+  const handleNew1SearchChange = (event) => {
+    const searchTermCompany = event.target.value // Convert the search term to lowercase
+    setNewSearchTermCompany(searchTermCompany);
+  };
+  const handleSearchFieldChange = (event) => {
+    setSearchField(event.target.value);
+    setSearchTerm('');
+  };
   const filterData = (data) => {
     if (!Array.isArray(data)) {
       // Handle the case where data is not an array
@@ -63,42 +80,36 @@ function GuiTable({ sidebarVisible }) {
       selectedDateEnd.setHours(23, 59, 59, 999);
       const dateMatches =
         !selectedDate || (logDate >= selectedDateStart && logDate <= selectedDateEnd);
-      // Check if the search term matches the employee ID or company code
-      const employeeIdMatch = apiRequest.includes(newSearchTerm.toLowerCase());
-      const companyCodeMatch = apiResponse.includes(newSearchTermCompany.toLowerCase());
+
+        const matches = (
+          level.includes(searchTerm.toLowerCase()) ||
+          logDate.toString().includes(searchTerm.toLowerCase()) ||
+          apiRequest.includes(searchTerm.toLowerCase()) ||
+          apiResponse.includes(searchTerm.toLowerCase()) ||
+          co2Request.includes(searchTerm.toLowerCase())) ||
+          co2Response.includes(searchTerm.toLowerCase()) ||
+          adaptRequest.includes(searchTerm.toLowerCase()) ||
+          adaptResponse.includes(searchTerm.toLowerCase())
+             // Check if the search term matches the employee ID or company code
+             const employeeIdMatch =  apiRequest.includes(newSearchTerm.toLowerCase());
+             const companyCodeMatch = apiResponse.includes(newSearchTermCompany.toLowerCase());
       return (
-        (searchField === 'All Fields' ||
-          (searchField === 'Level' && level.includes(searchTerm.toLowerCase())) ||
-          (searchField === 'Date' && dateMatches) ||
-          (searchField === 'Api Request' && apiRequest.includes(searchTerm.toLowerCase())) ||
-          (searchField === 'Api Response' && apiResponse.includes(searchTerm.toLowerCase())) ||
-          (searchField === 'Co2 Request' && co2Request.includes(searchTerm.toLowerCase())) ||
-          (searchField === 'Co2 Response' && co2Response.includes(searchTerm.toLowerCase())) ||
-          (searchField === 'Adapt Request' && adaptRequest.includes(searchTerm.toLowerCase())) ||
-          (searchField === 'Adapt Response' && adaptResponse.includes(searchTerm.toLowerCase()))) &&
-        (newSearchTerm === '' || employeeIdMatch) && // Check if employee ID matches
-        (newSearchTermCompany === '' || companyCodeMatch) && // Check if company code matches
+        ((searchField === 'All Fields' && matches) ||
+        (searchField === 'Level' && level.includes(searchTerm.toLowerCase())) ||
+        (searchField === 'Date' && dateMatches) ||
+        (searchField === 'Api Request' && apiRequest.includes(searchTerm.toLowerCase())) ||
+        (searchField === 'Api Response' && apiResponse.includes(searchTerm.toLowerCase())) ||
+        (searchField === 'Co2 Request' && co2Request.includes(searchTerm.toLowerCase())) ||
+        (searchField === 'Co2 Response' && co2Response.includes(searchTerm.toLowerCase())) ||
+        (searchField === 'Adapt Request' && adaptRequest.includes(searchTerm.toLowerCase())) ||
+        (searchField === 'Adapt Response' && adaptResponse.includes(searchTerm.toLowerCase()) )) &&
+        (newSearchTerm === '' || employeeIdMatch) &&
+        (newSearchTermCompany === '' || companyCodeMatch) &&
         dateMatches
       );
     });
   };
-  const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value);
-  };
-
-  const handleNewSearchChange = (event) => {
-    const searchTerm = event.target.value.toLowerCase(); // Convert the search term to lowercase
-    setNewSearchTerm(searchTerm);
-  };
   
-  const handleNew1SearchChange = (event) => {
-    const searchTermCompany = event.target.value.toLowerCase(); // Convert the search term to lowercase
-    setNewSearchTermCompany(searchTermCompany);
-  };
-  const handleSearchFieldChange = (event) => {
-    setSearchField(event.target.value);
-    setSearchTerm('');
-  };
 
   const handleRowClick = (index) => {
     if (index === expandedRowIndex) {
@@ -211,8 +222,6 @@ function GuiTable({ sidebarVisible }) {
     filteredData.map((logData, index) => {
       const level = (logData[0] || '').trim().toLowerCase(); // Use trim to remove leading/trailing spaces
 
-      // Define CSS classes based on the "Level"
-      console.log("lev:::::::::",level);
      // const rowClass = level === 'error' ? 'error-row' : level === 'info' ? 'info-row' : '';
       const backgroundColor = level === 'error' ? '#dc3545': level === 'info' ? '#E8E8E8' : 'transparent';
 
