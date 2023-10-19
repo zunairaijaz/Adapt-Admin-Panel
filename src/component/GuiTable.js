@@ -11,7 +11,6 @@ import axios from 'axios';
 import config from '../config';
 import '../style/app.css';
 import GuiLoader from './GuiLoader'; // Import the GuiLoader component
-
 function GuiTable({ sidebarVisible }) {
   const [logData, setLogData] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -24,11 +23,9 @@ function GuiTable({ sidebarVisible }) {
   const [newSearchTermCompanyLowerCase, setNewSearchTermCompanyLowerCase] = useState('');
   const [expandedRowIndex, setExpandedRowIndex] = useState(-1);
   const [loading, setLoading] = useState(true); // Loading state
-
   const handleDateChange = (date) => {
     setSelectedDate(date);
   };
-
   useEffect(() => {
     setLoading(true); // Set loading to true initially
     // Fetch data from the API when the component mounts
@@ -46,13 +43,11 @@ function GuiTable({ sidebarVisible }) {
         console.log(error);
       });
   }, []);
-
   const filterData = (data) => {
     if (!Array.isArray(data)) {
       // Handle the case where data is not an array
       return [];
     }
-  
     return data.filter((log) => {
       const level = (log[0] || '').toLowerCase();
       const logDate = new Date(log[1]);
@@ -62,18 +57,15 @@ function GuiTable({ sidebarVisible }) {
       const co2Response = (log[5] || '').toLowerCase();
       const adaptRequest = (log[6] || '').toLowerCase();
       const adaptResponse = (log[7] || '').toLowerCase();
-  
       const selectedDateStart = new Date(selectedDate);
       selectedDateStart.setHours(0, 0, 0, 0);
       const selectedDateEnd = new Date(selectedDate);
       selectedDateEnd.setHours(23, 59, 59, 999);
       const dateMatches =
         !selectedDate || (logDate >= selectedDateStart && logDate <= selectedDateEnd);
-  
       // Check if the search term matches the employee ID or company code
       const employeeIdMatch = apiRequest.includes(newSearchTerm.toLowerCase());
       const companyCodeMatch = apiResponse.includes(newSearchTermCompany.toLowerCase());
-  
       return (
         (searchField === 'All Fields' ||
           (searchField === 'Level' && level.includes(searchTerm.toLowerCase())) ||
@@ -90,8 +82,6 @@ function GuiTable({ sidebarVisible }) {
       );
     });
   };
-  
-
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
   };

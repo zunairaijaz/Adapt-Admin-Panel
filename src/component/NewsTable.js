@@ -23,7 +23,7 @@ function NewsTable({ sidebarVisible }) {
   const [itemToDelete, setItemToDelete] = useState(null);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const imageInputRef = useRef(null); // Add this ref variable
-  ///--------->
+  ///---------> 
   const [values, setValues] = useState({
     title: '',
     description: '',

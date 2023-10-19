@@ -12,6 +12,7 @@ import 'react-toastify/dist/ReactToastify.min.css';
 import '../style/app.css';
 import LogsLoader from './LogsLoader';
 import { DevicesOutlined } from '@material-ui/icons';
+import { FirstPage, LastPage } from '@mui/icons-material';
 
 function LogsTable({ sidebarVisible }) {
     const [logData, setLogData] = useState([]);
@@ -152,6 +153,19 @@ function LogsTable({ sidebarVisible }) {
                 </Button>
             );
         }
+        if (currentPage > 1) {
+            pageNumbers.push(
+                <Button
+                    key="first"
+                    variant=""
+                    size="sm"
+                    style={buttonStyle}
+                    onClick={() => handleMainLogPageChange(1)}
+                >
+                    <FirstPage />
+                </Button>
+            );
+        }
     
         for (let i = startPage; i <= endPage; i++) {
             const isCurrentPage = i === currentPage;
@@ -169,33 +183,19 @@ function LogsTable({ sidebarVisible }) {
             );
         }
     
-        if (currentPage < totalPages-1) {
+        if (currentPage < totalPages - 1) {
             pageNumbers.push(
                 <Button
-                    key="ellipsis-end"
-                    variant=""
-                    size="sm"
-                    style={buttonStyle}
-                >
-                    ...
-                </Button>
-            );
-        }
-    
-        if (currentPage < totalPages-1) {
-            pageNumbers.push(
-                <Button
-                    key="total-pages"
+                    key="last"
                     variant=""
                     size="sm"
                     style={buttonStyle}
                     onClick={() => handleMainLogPageChange(totalPages)}
                 >
-                {totalPages}
+                    <LastPage />
                 </Button>
             );
         }
-    
         if (currentPage < totalPages) {
             pageNumbers.push(
                 <Button
