@@ -40,7 +40,7 @@ function SignIn() {
     setValues({ ...values, buttonText: 'Submitting..' });
     axios({
       method: 'POST',
-      url: `${config.SERVER_URL}/admin/signin`,
+      url: `${config.NEW_SERVER_URL}/admin/signin`,
       data: { email, password },
     })
       .then((response) => {

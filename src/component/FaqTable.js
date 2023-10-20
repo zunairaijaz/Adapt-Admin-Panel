@@ -48,7 +48,7 @@ function FaqTable({ sidebarVisible }) {
     setLoading(true);
     axios({
       method: 'POST',
-      url: `${config.SERVER_URL}/admin/all_faq`,
+      url: `${config.NEW_SERVER_URL}/admin/all_faq`,
     })
       .then((response) => {
         setIsArray(response.data);
@@ -102,7 +102,7 @@ function FaqTable({ sidebarVisible }) {
     } else {
       axios({
         method: 'POST',
-        url: `${config.SERVER_URL}/admin/add_faq`,
+        url: `${config.NEW_SERVER_URL}/admin/add_faq`,
         data: { question, answer },
       })
         .then((response) => {
@@ -122,7 +122,7 @@ function FaqTable({ sidebarVisible }) {
 
     axios({
       method: 'POST',
-      url: `${config.SERVER_URL}/admin/edit_faq`,
+      url: `${config.NEW_SERVER_URL}/admin/edit_faq`,
       data: { _id: FAQId, question, answer },
     })
       .then((response) => {
@@ -149,7 +149,7 @@ function FaqTable({ sidebarVisible }) {
       const _id = itemToDelete._id;
       axios({
         method: 'POST',
-        url: `${config.SERVER_URL}/admin/delete_faq`,
+        url: `${config.NEW_SERVER_URL}/admin/delete_faq`,
         data: { _id },
       })
         .then((response) => {

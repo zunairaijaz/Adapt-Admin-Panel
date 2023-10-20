@@ -41,7 +41,7 @@ function Time({ sidebarVisible }) {
   const fetchData = () => {
     axios({
       method: "post",
-      url: `${config.SERVER_URL}/admin/getTime`,
+      url: `${config.NEW_SERVER_URL}/admin/getTime`,
     })
       .then((response) => {
         console.log("response data: ", response);
@@ -91,7 +91,7 @@ function Time({ sidebarVisible }) {
       };
       axios({
         method: "post",
-        url: `${config.SERVER_URL}/admin/updateTime`,
+        url: `${config.NEW_SERVER_URL}/admin/updateTime`,
         data: payload,
       })
         .then((response) => {

@@ -16,7 +16,7 @@ function ForgotPassword() {
     setButtonText('Sending');
     axios({
       method: 'POST',
-      url: `${config.SERVER_URL}/admin/forgotPassword`,
+      url: `${config.NEW_SERVER_URL}/admin/forgotPassword`,
       data: { email },
     })
       .then((response) => {

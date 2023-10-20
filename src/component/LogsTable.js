@@ -42,8 +42,8 @@ function LogsTable({ sidebarVisible }) {
     const fetchData = (page, perPage, deviceId) => {
         setLoading(true);
         const url = deviceId === "" // Check for an empty string
-        ? `${config.SERVER_URL}/getVehicleLogDatapaginated?page=${page}&perPage=${perPage}`
-        : `${config.SERVER_URL}/getVehicleLogDatapaginated?page=${page}&perPage=${perPage}&deviceId=${deviceId}`;
+        ? `${config.NEW_SERVER_URL}/getVehicleLogDatapaginated?page=${page}&perPage=${perPage}`
+        : `${config.NEW_SERVER_URL}/getVehicleLogDatapaginated?page=${page}&perPage=${perPage}&deviceId=${deviceId}`;
     
         axios
             .get(url)
@@ -71,7 +71,7 @@ function LogsTable({ sidebarVisible }) {
    
 
     const fetchDeviceIds = () => {
-        axios.get(`${config.SERVER_URL}/getUniqueDeviceIds`)
+        axios.get(`${config.NEW_SERVER_URL}/getUniqueDeviceIds`)
             .then((response) => {
                 if (Array.isArray(response.data.deviceIds)) {
                     setDeviceIds(response.data.deviceIds);
@@ -152,7 +152,7 @@ function LogsTable({ sidebarVisible }) {
                     style={buttonStyle}
                     onClick={() => handleMainLogPageChange(1)}
                 >
-                    <SkipPreviousIcon />
+                      {"<<"}
                 </Button>
             );
         }
@@ -165,7 +165,7 @@ function LogsTable({ sidebarVisible }) {
                     style={buttonStyle}
                     onClick={() => handleMainLogPageChange(currentPage - 1)}
                 >
-                    <ArrowBackIosIcon />
+                    {"<"}
                 </Button>
             );
         }
@@ -193,7 +193,7 @@ function LogsTable({ sidebarVisible }) {
                     style={buttonStyle}
                     onClick={() => handleMainLogPageChange(currentPage + 1)}
                 >
-                 <ArrowForwardIosIcon />
+                {">"}
                 </Button>
             );
         }
@@ -206,7 +206,7 @@ function LogsTable({ sidebarVisible }) {
                     style={buttonStyle}
                     onClick={() => handleMainLogPageChange(totalPages)}
                 >
-                    <SkipNextIcon />
+                       {">>"}
                 </Button>
             );
         }

@@ -30,7 +30,7 @@ function GuiTable({ sidebarVisible }) {
     setLoading(true); // Set loading to true initially
     // Fetch data from the API when the component mounts
     axios
-      .get(`${config.SERVER_URL}/get_logger_gui`)
+      .get(`${config.NEW_SERVER_URL}/get_logger_gui`)
       .then((response) => {
         const fetchedData = response.data.array;
         const sortedData = fetchedData.sort((a, b) => new Date(b[1]) - new Date(a[1]));
