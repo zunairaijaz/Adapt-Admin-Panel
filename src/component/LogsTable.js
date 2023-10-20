@@ -12,7 +12,8 @@ import 'react-toastify/dist/ReactToastify.min.css';
 import '../style/app.css';
 import LogsLoader from './LogsLoader';
 import { DevicesOutlined } from '@material-ui/icons';
-import { FirstPage, LastPage } from '@mui/icons-material';
+import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
+import SkipNextIcon from '@mui/icons-material/SkipNext';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 function LogsTable({ sidebarVisible }) {
@@ -41,8 +42,8 @@ function LogsTable({ sidebarVisible }) {
     const fetchData = (page, perPage, deviceId) => {
         setLoading(true);
         const url = deviceId === "" // Check for an empty string
-        ? `${config.NEW_SERVER_URL}/getVehicleLogDatapaginated?page=${page}&perPage=${perPage}`
-        : `${config.NEW_SERVER_URL}/getVehicleLogDatapaginated?page=${page}&perPage=${perPage}&deviceId=${deviceId}`;
+        ? `${config.SERVER_URL}/getVehicleLogDatapaginated?page=${page}&perPage=${perPage}`
+        : `${config.SERVER_URL}/getVehicleLogDatapaginated?page=${page}&perPage=${perPage}&deviceId=${deviceId}`;
     
         axios
             .get(url)
@@ -70,7 +71,7 @@ function LogsTable({ sidebarVisible }) {
    
 
     const fetchDeviceIds = () => {
-        axios.get(`${config.NEW_SERVER_URL}/getUniqueDeviceIds`)
+        axios.get(`${config.SERVER_URL}/getUniqueDeviceIds`)
             .then((response) => {
                 if (Array.isArray(response.data.deviceIds)) {
                     setDeviceIds(response.data.deviceIds);
@@ -151,7 +152,7 @@ function LogsTable({ sidebarVisible }) {
                     style={buttonStyle}
                     onClick={() => handleMainLogPageChange(1)}
                 >
-                    <FirstPage />
+                    <SkipPreviousIcon />
                 </Button>
             );
         }
@@ -205,7 +206,7 @@ function LogsTable({ sidebarVisible }) {
                     style={buttonStyle}
                     onClick={() => handleMainLogPageChange(totalPages)}
                 >
-                    <LastPage />
+                    <SkipNextIcon />
                 </Button>
             );
         }

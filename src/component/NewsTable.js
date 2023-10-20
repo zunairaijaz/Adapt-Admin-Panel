@@ -42,7 +42,7 @@ function NewsTable({ sidebarVisible }) {
     setLoading(true);
     axios({
       method: 'POST',
-      url: `${config.NEW_SERVER_URL}/admin/allNews`,
+      url: `${config.SERVER_URL}/admin/allNews`,
     })
       .then((response) => {
         console.log("im calllled--------->", response.data);
@@ -144,7 +144,7 @@ function NewsTable({ sidebarVisible }) {
 
         axios({
           method: 'POST',
-          url: `${config.NEW_SERVER_URL}/admin/newsVideoLink`,
+          url: `${config.SERVER_URL}/admin/newsVideoLink`,
           data: { "title": values.title, "description": values.description, "newsVideoLink": values.newsVideoLink },
 
         })
@@ -167,7 +167,7 @@ function NewsTable({ sidebarVisible }) {
         formData.append('newsImage', isImageSelected);
         axios({
           method: 'POST',
-          url: `${config.NEW_SERVER_URL}/admin/newsImage`,
+          url: `${config.SERVER_URL}/admin/newsImage`,
           data: formData,
         })
           .then((response) => {
@@ -210,7 +210,7 @@ function NewsTable({ sidebarVisible }) {
 
         axios({
           method: 'POST',
-          url: `${config.NEW_SERVER_URL}/admin/editNewsVideoLink`,
+          url: `${config.SERVER_URL}/admin/editNewsVideoLink`,
           data: formData,
         })
           .then((response) => {
@@ -232,7 +232,7 @@ function NewsTable({ sidebarVisible }) {
         console.log("data of image--->", formData);
         axios({
           method: 'POST',
-          url: `${config.NEW_SERVER_URL}/admin/editNewsImage`,
+          url: `${config.SERVER_URL}/admin/editNewsImage`,
           data: formData,
         })
           .then((response) => {
@@ -266,7 +266,7 @@ function NewsTable({ sidebarVisible }) {
       const _id = itemToDelete._id;
       axios({
         method: 'POST',
-        url: `${config.NEW_SERVER_URL}/admin/deleteNews`,
+        url: `${config.SERVER_URL}/admin/deleteNews`,
         data: { _id },
       })
         .then((response) => {
