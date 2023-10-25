@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { HashRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import Time from './component/Time';
 import SignIn from './component/Auth/SignIn';
-import SignOut from './component/Auth/SignOut';
 import ForgotPassword from './component/Auth/ForgotPassword';
 import ResetPassword from './component/Auth/ResetPassword';
 import SideBar from './component/SideBar';
@@ -12,7 +11,7 @@ import NewsTable from './component/NewsTable';
 import GuiTable from './component/GuiTable';
 import FaqTable from './component/FaqTable';
 import LogsTable from './component/LogsTable';
-
+import SignOut from './component/Auth/Signout';
 function App() {
   const [sidebarVisible, setSidebarVisible] = useState(true);
   const [token, setToken] = useState(null);

@@ -29,7 +29,7 @@ function LogsTable({ sidebarVisible }) {
     const [totalLogs, setTotalLogs] = useState(1);
 
     useEffect(() => {
-        fetchData(1, itemsPerPage, "");
+        fetchData(1, itemsPerPage,selectedDeviceId);
         fetchDeviceIds();
     }, [itemsPerPage]);
 
@@ -38,22 +38,20 @@ function LogsTable({ sidebarVisible }) {
             setSelectedDeviceLogData([]);
         }
     }, [selectedDeviceId]);
-
     const fetchData = (page, perPage, deviceId) => {
         setLoading(true);
-        const url = deviceId === "" // Check for an empty string
-        ? `${config.NEW_SERVER_URL}/getVehicleLogDatapaginated?page=${page}&perPage=${perPage}`
-        : `${config.NEW_SERVER_URL}/getVehicleLogDatapaginated?page=${page}&perPage=${perPage}&deviceId=${deviceId}`;
+    
+        // Construct the URL based on the current page, items per page, and selected device ID
+        const url = `${config.NEW_SERVER_URL}/getVehicleLogDatapaginated?page=${page}&perPage=${perPage}&deviceId=${deviceId}`;
     
         axios
             .get(url)
             .then((response) => {
                 if (response.data.success) {
                     const sortedLogData = response.data.data.sort((a, b) => new Date(b.dateTime) - new Date(a.dateTime));
-                    setLogData(sortedLogData);                   
+                    setLogData(sortedLogData);
                     setTotalPages(Math.ceil(response.data.totalPages));
                     setTotalLogs(Math.ceil(response.data.totalLogs));
-
                     setLoading(false);
                 } else {
                     console.error('Error fetching data:', response.data.error);
@@ -67,7 +65,6 @@ function LogsTable({ sidebarVisible }) {
                 setLoading(false);
             });
     };
-    
    
 
     const fetchDeviceIds = () => {
@@ -95,8 +92,12 @@ function LogsTable({ sidebarVisible }) {
 
     const handleMainLogItemsPerPageChange = (newItemsPerPage) => {
         setItemsPerPage(newItemsPerPage);
-        setCurrentPage(1);
+    
+        // Fetch data with the current selected device ID and current page
+        fetchData(currentPage, newItemsPerPage, selectedDeviceId);
     };
+    
+    
 
     const handleDeviceIdChange = (newDeviceId) => {
         if (newDeviceId === "") { // Check for an empty string, not " "
@@ -104,12 +105,12 @@ function LogsTable({ sidebarVisible }) {
             setSelectedDeviceId("");
             setSelectedDeviceLogData([]);
             setCurrentPage(1); // Reset the page number to 1
-            fetchData(1, itemsPerPage, ""); // Pass an empty string
+            fetchData(1, itemsPerPage, newDeviceId); // Pass an empty string
         } else {
             // When a specific device is selected, fetch data for that device and reset the page to 1
             setSelectedDeviceId(newDeviceId);
             setCurrentPage(1); // Reset the page number to 1
-            fetchData(1, itemsPerPage, newDeviceId);
+            fetchData(currentPage, itemsPerPage, newDeviceId);
         }
     };
     
@@ -285,7 +286,7 @@ function LogsTable({ sidebarVisible }) {
                                                         logData.map((log, index) => (
                                                             <tr
                                                                 key={index}
-                                                                onClick={() => handleRowClick(index)}
+                                                                onDoubleClick={() => handleRowClick(index)}
                                                                 style={{
                                                                     height: expandedRowIndex === index ? 'auto' : '50px',
                                                                     whiteSpace: expandedRowIndex === index ? 'break-spaces' : 'nowrap',

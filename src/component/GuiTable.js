@@ -230,7 +230,7 @@ function GuiTable({ sidebarVisible }) {
       return (
         <tr
           key={index}
-          onClick={() => handleRowClick(index)}
+          onDoubleClick={() => handleRowClick(index)}
          // className={rowClass}
           style={{
             height: expandedRowIndex === index ? 'auto' : '50px',
