@@ -149,6 +149,24 @@ function SideBar({ sidebarVisible, toggleSidebar, onLinkClick }) {
                 </div>
               </NavLink>
             </li>
+            <li>
+              <NavLink
+                to="/guidb"
+                style={linkStyle}
+                activeStyle={activeLinkStyle} // Apply active styles to the NavLink
+                onClick={onLinkClick} // Close sidebar on link click
+
+              >
+                <div className="parent-icon">
+                  <GradingIcon
+                    className={activeLinkStyle.color === 'black' ? iconActiveClass : iconInactiveClass}
+                  />
+                </div>
+                <div className={`menu-title ${!sidebarVisible ? 'hidden' : ''}`}>
+                  Database Logger GUI
+                </div>
+              </NavLink>
+            </li>
           </ul>
         </div>
       </div>

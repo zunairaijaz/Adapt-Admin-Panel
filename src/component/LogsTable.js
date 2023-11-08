@@ -27,6 +27,8 @@ function LogsTable({ sidebarVisible }) {
     const [loading, setLoading] = useState(true);
     const [totalPages, setTotalPages] = useState(1);
     const [totalLogs, setTotalLogs] = useState(1);
+    const [expandedRowIndices, setExpandedRowIndices] = useState([]);
+
 
     useEffect(() => {
         fetchData(1, itemsPerPage,selectedDeviceId);
@@ -66,6 +68,16 @@ function LogsTable({ sidebarVisible }) {
             });
     };
    
+  function formatDateTime(inputDate) {
+    const date = new Date(inputDate);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  }
 
     const fetchDeviceIds = () => {
         axios.get(`${config.NEW_SERVER_URL}/getUniqueDeviceIds`)
@@ -114,15 +126,21 @@ function LogsTable({ sidebarVisible }) {
         }
     };
     
-    
-
     const handleRowClick = (index) => {
-        if (index === expandedRowIndex) {
-            setExpandedRowIndex(-1);
+        const updatedExpandedRowIndices = [...expandedRowIndices];
+    
+        if (updatedExpandedRowIndices.includes(index)) {
+            // Double-click on an expanded row: collapse it
+            const indexOfExpandedRow = updatedExpandedRowIndices.indexOf(index);
+            updatedExpandedRowIndices.splice(indexOfExpandedRow, 1);
         } else {
-            setExpandedRowIndex(index);
+            // Double-click on a non-expanded row: expand it
+            updatedExpandedRowIndices.push(index);
         }
+    
+        setExpandedRowIndices(updatedExpandedRowIndices);
     };
+
     const renderPageNumbers = () => {
         const pageNumbers = [];
         const visiblePageCount = 3; // Number of visible page numbers
@@ -288,16 +306,16 @@ function LogsTable({ sidebarVisible }) {
                                                                 key={index}
                                                                 onDoubleClick={() => handleRowClick(index)}
                                                                 style={{
-                                                                    height: expandedRowIndex === index ? 'auto' : '50px',
-                                                                    whiteSpace: expandedRowIndex === index ? 'break-spaces' : 'nowrap',
-                                                                    textOverflow: expandedRowIndex === index ? 'inherit' : 'ellipsis',
+                                                                    height: expandedRowIndices.includes(index) ? 'auto' : '50px',
+                                                                    whiteSpace: expandedRowIndices.includes(index) ? 'break-spaces' : 'nowrap',
+                                                                    textOverflow: expandedRowIndices.includes(index) ? 'inherit' : 'ellipsis',
                                                                 }}
                                                             >
                                                                 <td title={log.deviceId}>
                                                                     {log.deviceId}
                                                                 </td>
-                                                                <td title={log.dateTime}>
-                                                                    {log.dateTime}
+                                                                <td title={formatDateTime(log.dateTime)}>
+                                                                    {formatDateTime(log.dateTime)}
                                                                 </td>
                                                                 <td title={log.logString}>
                                                                     {log.logString}

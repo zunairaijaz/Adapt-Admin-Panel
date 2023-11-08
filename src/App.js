@@ -11,7 +11,9 @@ import NewsTable from './component/NewsTable';
 import GuiTable from './component/GuiTable';
 import FaqTable from './component/FaqTable';
 import LogsTable from './component/LogsTable';
+import GuiTableDatabase from './component/GuiTableDatabase';
 import SignOut from './component/Auth/Signout';
+
 function App() {
   const [sidebarVisible, setSidebarVisible] = useState(true);
   const [token, setToken] = useState(null);
@@ -69,6 +71,9 @@ function App() {
           </Route>
           <Route exact path="/gui">
             <GuiTable sidebarVisible={sidebarVisible} />
+          </Route>
+          <Route exact path="/guidb">
+            <GuiTableDatabase sidebarVisible={sidebarVisible} />
           </Route>
           </>
     )}

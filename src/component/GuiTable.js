@@ -23,6 +23,7 @@ function GuiTable({ sidebarVisible }) {
   const [newSearchTermCompanyLowerCase, setNewSearchTermCompanyLowerCase] = useState('');
   const [expandedRowIndex, setExpandedRowIndex] = useState(-1);
   const [loading, setLoading] = useState(true); // Loading state
+  const [expandedRowIndices, setExpandedRowIndices] = useState([]);
   const handleDateChange = (date) => {
     setSelectedDate(date);
   };
@@ -112,14 +113,20 @@ function GuiTable({ sidebarVisible }) {
   
 
   const handleRowClick = (index) => {
-    if (index === expandedRowIndex) {
-      // If the clicked row is already expanded, collapse it
-      setExpandedRowIndex(-1);
+    const updatedExpandedRowIndices = [...expandedRowIndices];
+
+    if (updatedExpandedRowIndices.includes(index)) {
+        // Double-click on an expanded row: collapse it
+        const indexOfExpandedRow = updatedExpandedRowIndices.indexOf(index);
+        updatedExpandedRowIndices.splice(indexOfExpandedRow, 1);
     } else {
-      // Expand the clicked row
-      setExpandedRowIndex(index);
+        // Double-click on a non-expanded row: expand it
+        updatedExpandedRowIndices.push(index);
     }
-  };
+
+    setExpandedRowIndices(updatedExpandedRowIndices);
+};
+
 
   const filteredData = filterData(logData); // Reverse the order
 
@@ -233,10 +240,10 @@ function GuiTable({ sidebarVisible }) {
           onDoubleClick={() => handleRowClick(index)}
          // className={rowClass}
           style={{
-            height: expandedRowIndex === index ? 'auto' : '50px',
-            whiteSpace: expandedRowIndex === index ? 'break-spaces' : 'nowrap',
-            textOverflow: expandedRowIndex === index ? 'inherit' : 'ellipsis',
-            wordBreak: expandedRowIndex === index ? 'break-all' : 'inherit',
+            height:  expandedRowIndices.includes(index) ? 'auto' : '50px',
+            whiteSpace: expandedRowIndices.includes(index) ? 'break-spaces' : 'nowrap',
+            textOverflow: expandedRowIndices.includes(index) ? 'inherit' : 'ellipsis',
+            wordBreak: expandedRowIndices.includes(index) ? 'break-all' : 'inherit',
           }}
         >
           <td title={logData[0]}
