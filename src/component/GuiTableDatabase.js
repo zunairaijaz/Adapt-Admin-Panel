@@ -298,8 +298,8 @@ function GuiTableDatabase({ sidebarVisible }) {
                       style={{ width: '180px' }}
                     />
                   </div>
-                  <div style={{ marginLeft: '300px' }}>
-                    <FormControl variant="outlined" style={{ width: '200px' }}>
+                  <div style={{ marginLeft:'200px' }}>
+                    <FormControl variant="outlined" style={{ height: '37px', width: '200px' }}>
                       <InputLabel>Logs per Page</InputLabel>
                       <Select
                         value={itemsPerPage}

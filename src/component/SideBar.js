@@ -64,7 +64,7 @@ function SideBar({ sidebarVisible, toggleSidebar, onLinkClick }) {
                 to="/news"
                 style={linkStyle}
                 activeStyle={activeLinkStyle} // Apply active styles to the NavLink
-                onClick={onLinkClick} // Close sidebar on link click
+                // onClick={onLinkClick} // Close sidebar on link click
 
              >
                 <div className="parent-icon">
@@ -82,7 +82,7 @@ function SideBar({ sidebarVisible, toggleSidebar, onLinkClick }) {
                 to="/time"
                 style={linkStyle}
                 activeStyle={activeLinkStyle} // Apply active styles to the NavLink
-                onClick={onLinkClick} // Close sidebar on link click
+                // onClick={onLinkClick} // Close sidebar on link click
 
               >
                 <div className="parent-icon">
@@ -100,7 +100,7 @@ function SideBar({ sidebarVisible, toggleSidebar, onLinkClick }) {
                 to="/faq"
                 style={linkStyle}
                 activeStyle={activeLinkStyle} // Apply active styles to the NavLink
-                onClick={onLinkClick} // Close sidebar on link click
+                // onClick={onLinkClick} // Close sidebar on link click
 
               >
                 <div className="parent-icon">
@@ -118,7 +118,7 @@ function SideBar({ sidebarVisible, toggleSidebar, onLinkClick }) {
                 to="/logs"
                 style={linkStyle}
                 activeStyle={activeLinkStyle} // Apply active styles to the NavLink
-                onClick={onLinkClick} // Close sidebar on link click
+                // onClick={onLinkClick} // Close sidebar on link click
 
               >
                 <div className="parent-icon">
@@ -136,7 +136,7 @@ function SideBar({ sidebarVisible, toggleSidebar, onLinkClick }) {
                 to="/gui"
                 style={linkStyle}
                 activeStyle={activeLinkStyle} // Apply active styles to the NavLink
-                onClick={onLinkClick} // Close sidebar on link click
+                // onClick={onLinkClick} // Close sidebar on link click
 
               >
                 <div className="parent-icon">
@@ -154,7 +154,7 @@ function SideBar({ sidebarVisible, toggleSidebar, onLinkClick }) {
                 to="/guidb"
                 style={linkStyle}
                 activeStyle={activeLinkStyle} // Apply active styles to the NavLink
-                onClick={onLinkClick} // Close sidebar on link click
+                // onClick={onLinkClick} // Close sidebar on link click
 
               >
                 <div className="parent-icon">
