@@ -31,7 +31,7 @@ function LogsTable({ sidebarVisible }) {
 
 
     useEffect(() => {
-        fetchData(1, itemsPerPage,selectedDeviceId);
+        fetchData(1, itemsPerPage, selectedDeviceId);
         fetchDeviceIds();
     }, [itemsPerPage]);
 
@@ -42,10 +42,10 @@ function LogsTable({ sidebarVisible }) {
     }, [selectedDeviceId]);
     const fetchData = (page, perPage, deviceId) => {
         setLoading(true);
-    
+
         // Construct the URL based on the current page, items per page, and selected device ID
         const url = `${config.NEW_SERVER_URL}/getVehicleLogDatapaginated?page=${page}&perPage=${perPage}&deviceId=${deviceId}`;
-    
+
         axios
             .get(url)
             .then((response) => {
@@ -67,17 +67,17 @@ function LogsTable({ sidebarVisible }) {
                 setLoading(false);
             });
     };
-   
-  function formatDateTime(inputDate) {
-    const date = new Date(inputDate);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    const hours = String(date.getHours()).padStart(2, '0');
-    const minutes = String(date.getMinutes()).padStart(2, '0');
-    const seconds = String(date.getSeconds()).padStart(2, '0');
-    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-  }
+
+    function formatDateTime(inputDate) {
+        const date = new Date(inputDate);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const seconds = String(date.getSeconds()).padStart(2, '0');
+        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    }
 
     const fetchDeviceIds = () => {
         axios.get(`${config.NEW_SERVER_URL}/getUniqueDeviceIds`)
@@ -104,12 +104,12 @@ function LogsTable({ sidebarVisible }) {
 
     const handleMainLogItemsPerPageChange = (newItemsPerPage) => {
         setItemsPerPage(newItemsPerPage);
-    
+
         // Fetch data with the current selected device ID and current page
         fetchData(currentPage, newItemsPerPage, selectedDeviceId);
     };
-    
-    
+
+
 
     const handleDeviceIdChange = (newDeviceId) => {
         if (newDeviceId === "") { // Check for an empty string, not " "
@@ -122,13 +122,13 @@ function LogsTable({ sidebarVisible }) {
             // When a specific device is selected, fetch data for that device and reset the page to 1
             setSelectedDeviceId(newDeviceId);
             setCurrentPage(1); // Reset the page number to 1
-            fetchData(currentPage, itemsPerPage, newDeviceId);
+            fetchData(1, itemsPerPage, newDeviceId);
         }
     };
-    
+
     const handleRowClick = (index) => {
         const updatedExpandedRowIndices = [...expandedRowIndices];
-    
+
         if (updatedExpandedRowIndices.includes(index)) {
             // Double-click on an expanded row: collapse it
             const indexOfExpandedRow = updatedExpandedRowIndices.indexOf(index);
@@ -137,31 +137,32 @@ function LogsTable({ sidebarVisible }) {
             // Double-click on a non-expanded row: expand it
             updatedExpandedRowIndices.push(index);
         }
-    
+
+        console.log('Expanded Row Indices:', updatedExpandedRowIndices); // Log the indices
         setExpandedRowIndices(updatedExpandedRowIndices);
     };
 
     const renderPageNumbers = () => {
         const pageNumbers = [];
         const visiblePageCount = 3; // Number of visible page numbers
-    
+
         const startPage = Math.max(1, currentPage - Math.floor(visiblePageCount / 2));
         const endPage = Math.min(totalPages, startPage + visiblePageCount - 1);
-    
+
         const selectedButtonStyle = {
             background: 'black',
             // border: '1px solid lightgrey',
             color: 'white',
             marginRight: '3px',
         };
-    
+
         const buttonStyle = {
             background: 'transparent',
             border: '1px solid lightgrey',
             marginRight: '3px'
         };
-    
-     
+
+
         if (currentPage > 1) {
             pageNumbers.push(
                 <Button title={"Start"}
@@ -171,7 +172,7 @@ function LogsTable({ sidebarVisible }) {
                     style={buttonStyle}
                     onClick={() => handleMainLogPageChange(1)}
                 >
-                      {"<<"}
+                    {"<<"}
                 </Button>
             );
         }
@@ -212,7 +213,7 @@ function LogsTable({ sidebarVisible }) {
                     style={buttonStyle}
                     onClick={() => handleMainLogPageChange(currentPage + 1)}
                 >
-                {">"}
+                    {">"}
                 </Button>
             );
         }
@@ -225,15 +226,15 @@ function LogsTable({ sidebarVisible }) {
                     style={buttonStyle}
                     onClick={() => handleMainLogPageChange(totalPages)}
                 >
-                       {">>"}
+                    {">>"}
                 </Button>
             );
         }
-      
-    
+
+
         return pageNumbers;
     };
-    
+
     const getRangeLabel = () => {
         if (totalLogs === 0) {
             return '0 items';
@@ -296,34 +297,35 @@ function LogsTable({ sidebarVisible }) {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                
+
                                                 {loading ? (
                                                     <LogsLoader rowsNum={itemsPerPage} />
                                                 ) : (
-                                                    
-                                                        logData.map((log, index) => (
-                                                            <tr
-                                                                key={index}
-                                                                onDoubleClick={() => handleRowClick(index)}
-                                                                style={{
-                                                                    height: expandedRowIndices.includes(index) ? 'auto' : '50px',
-                                                                    whiteSpace: expandedRowIndices.includes(index) ? 'break-spaces' : 'nowrap',
-                                                                    textOverflow: expandedRowIndices.includes(index) ? 'inherit' : 'ellipsis',
-                                                                }}
-                                                            >
-                                                                <td title={log.deviceId}>
-                                                                    {log.deviceId}
-                                                                </td>
-                                                                <td title={formatDateTime(log.dateTime)}>
-                                                                    {formatDateTime(log.dateTime)}
-                                                                </td>
-                                                                <td title={log.logString}>
-                                                                    {log.logString}
-                                                                </td>
-                                                            </tr>
-                                                        ))
-                                                     
-                                                    )
+
+                                                    logData.map((log, index) => (
+                                                        <tr
+                                                            key={index}
+                                                            onDoubleClick={() => handleRowClick(index)}
+                                                            style={{
+                                                                height: expandedRowIndices.includes(index) ? 'auto' : '50px',
+                                                                whiteSpace: expandedRowIndices.includes(index) ? 'break-spaces' : 'nowrap',
+                                                                textOverflow: 'ellipsis',
+
+                                                            }}
+                                                        >
+                                                            <td title={log.deviceId}>
+                                                                {log.deviceId}
+                                                            </td>
+                                                            <td title={formatDateTime(log.dateTime)}>
+                                                                {formatDateTime(log.dateTime)}
+                                                            </td>
+                                                            <td title={log.logString}>
+                                                                {log.logString}
+                                                            </td>
+                                                        </tr>
+                                                    ))
+
+                                                )
                                                 }
                                             </tbody>
                                         </table>
@@ -335,26 +337,26 @@ function LogsTable({ sidebarVisible }) {
                 </div>
             </div>
             <div className="table-pagination">
-    <div className="pagination float-right" style={{ marginBottom: '40px', marginRight: '60px' }}>
-        {renderPageNumbers()}
-    </div>
-</div>
-<label
-    variant=""
-    size='sm'
-    style={{
-        marginLeft: sidebarVisible ? '300px' : '130px', // Conditionally set marginLeft
-        marginBottom: '80px',
-        background: 'rgba(0, 0, 0, 0.7)', // Light black with 40% opacity
-        color: 'white',
-        borderRadius: '2px',
-        height: '28px',
-        width: '180px',
-        textAlign: 'center'
-    }}
->
-    <p>{getRangeLabel()}</p>
-</label>
+                <div className="pagination float-right" style={{ marginBottom: '40px', marginRight: '60px' }}>
+                    {renderPageNumbers()}
+                </div>
+            </div>
+            <label
+                variant=""
+                size='sm'
+                style={{
+                    marginLeft: sidebarVisible ? '300px' : '130px', // Conditionally set marginLeft
+                    marginBottom: '80px',
+                    background: 'rgba(0, 0, 0, 0.7)', // Light black with 40% opacity
+                    color: 'white',
+                    borderRadius: '2px',
+                    height: '28px',
+                    width: '180px',
+                    textAlign: 'center'
+                }}
+            >
+                <p>{getRangeLabel()}</p>
+            </label>
 
 
 
