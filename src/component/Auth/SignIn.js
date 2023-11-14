@@ -3,8 +3,8 @@ import '../../style/app.css';
 import { IconButton } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import { toast, ToastContainer} from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.min.css';import axios from 'axios';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css'; import axios from 'axios';
 import { useHistory } from 'react-router-dom';
 import config from '../../config'; // Import or define 'config' here
 import { Link } from 'react-router-dom';
@@ -30,13 +30,13 @@ function SignIn() {
 
   const clickSubmit = (event) => {
     event.preventDefault();
-  
+
     // Check if email or password is empty
     if (!email || !password) {
       toast.error('Email and password are required.');
       return;
     }
-  
+
     setValues({ ...values, buttonText: 'Submitting..' });
     axios({
       method: 'POST',
@@ -64,7 +64,7 @@ function SignIn() {
         }
       });
   };
-  
+
 
   const [passwordVisible, setPasswordVisible] = useState(false);
 
@@ -118,7 +118,7 @@ function SignIn() {
                               </IconButton>
                             </div>
                           </div>
-                         
+
                           <div className="col-md-20 text-end">
                             <Link to="/forgotpass">Forgot Password?</Link>
                           </div>
@@ -141,7 +141,7 @@ function SignIn() {
       </div>
       <ToastContainer />
     </div>
-   
+
   );
 }
 

@@ -291,17 +291,15 @@ function LogsTable({ sidebarVisible }) {
                                         <table className="table mb-0">
                                             <thead className="table-light">
                                                 <tr>
-                                                    <th>Device ID</th>
-                                                    <th>DateTime</th>
+                                                    <th style={{ width: '20%' }}>Device ID</th>
+                                                    <th style={{ width: '30%' }}>DateTime</th>
                                                     <th>Log String</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-
                                                 {loading ? (
                                                     <LogsLoader rowsNum={itemsPerPage} />
                                                 ) : (
-
                                                     logData.map((log, index) => (
                                                         <tr
                                                             key={index}
@@ -309,7 +307,7 @@ function LogsTable({ sidebarVisible }) {
                                                             style={{
                                                                 height: expandedRowIndices.includes(index) ? 'auto' : '50px',
                                                                 whiteSpace: expandedRowIndices.includes(index) ? 'break-spaces' : 'nowrap',
-                                                                textOverflow: 'ellipsis',
+                                                                overflow: expandedRowIndex === index ? 'auto' : 'hidden',
 
                                                             }}
                                                         >
@@ -319,14 +317,18 @@ function LogsTable({ sidebarVisible }) {
                                                             <td title={formatDateTime(log.dateTime)}>
                                                                 {formatDateTime(log.dateTime)}
                                                             </td>
-                                                            <td title={log.logString}>
+                                                            <td title={log.logString}
+                                                                style={{
+                                                                    columnWidth: '250px',
+                                                                    overflow: expandedRowIndex === index ? 'auto' : 'hidden',
+
+                                                                }}>
                                                                 {log.logString}
+
                                                             </td>
                                                         </tr>
                                                     ))
-
-                                                )
-                                                }
+                                                )}
                                             </tbody>
                                         </table>
                                     </div>
@@ -363,7 +365,7 @@ function LogsTable({ sidebarVisible }) {
 
 
             <ToastContainer />
-        </div>
+        </div >
     );
 }
 
