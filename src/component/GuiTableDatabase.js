@@ -373,29 +373,9 @@ function GuiTableDatabase({ sidebarVisible }) {
                                     {formatDateTime(logData.date)}
                                   </td>
                                   <td
-                                    title={logData.adaptRequest}
-                                    style={{
-                                      columnWidth: '352px',
-                                      overflow: expandedRowIndex === index ? 'auto' : 'hidden',
-                                      backgroundColor,
-                                    }}
-                                  >
-                                    {JSON.stringify(logData.adaptRequest)}
-                                  </td>
-                                  <td
-                                    title={logData.adaptResponse}
-                                    style={{
-                                      columnWidth: '300px',
-                                      overflow: expandedRowIndex === index ? 'auto' : 'hidden',
-                                      backgroundColor,
-                                    }}
-                                  >
-                                    {JSON.stringify(logData.adaptResponse)}
-                                  </td>
-                                  <td
                                     title={logData.apiRequest}
                                     style={{
-                                      columnWidth: '300px',
+                                      columnWidth: '352px',
                                       overflow: expandedRowIndex === index ? 'auto' : 'hidden',
                                       backgroundColor,
                                     }}
@@ -415,7 +395,7 @@ function GuiTableDatabase({ sidebarVisible }) {
                                   <td
                                     title={logData.co2Request}
                                     style={{
-                                      columnWidth: '200px',
+                                      columnWidth: '300px',
                                       overflow: expandedRowIndex === index ? 'auto' : 'hidden',
                                       backgroundColor,
                                     }}
@@ -431,6 +411,26 @@ function GuiTableDatabase({ sidebarVisible }) {
                                     }}
                                   >
                                     {JSON.stringify(logData.co2Response)}
+                                  </td>
+                                  <td
+                                    title={logData.adaptRequest}
+                                    style={{
+                                      columnWidth: '200px',
+                                      overflow: expandedRowIndex === index ? 'auto' : 'hidden',
+                                      backgroundColor,
+                                    }}
+                                  >
+                                    {JSON.stringify(logData.adaptRequest)}
+                                  </td>
+                                  <td
+                                    title={logData.adaptResponse}
+                                    style={{
+                                      columnWidth: '300px',
+                                      overflow: expandedRowIndex === index ? 'auto' : 'hidden',
+                                      backgroundColor,
+                                    }}
+                                  >
+                                    {JSON.stringify(logData.adaptResponse)}
                                   </td>
                                 </tr>
                               );
