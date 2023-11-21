@@ -317,15 +317,40 @@ function LogsTable({ sidebarVisible }) {
                                                             <td title={formatDateTime(log.dateTime)}>
                                                                 {formatDateTime(log.dateTime)}
                                                             </td>
-                                                            <td title={log.logString}
+                                                            <td
+                                                                title={log.logString}
                                                                 style={{
-                                                                    columnWidth: '250px',
+                                                                    columnWidth: '500px',
                                                                     overflow: expandedRowIndex === index ? 'auto' : 'hidden',
+                                                                    whiteSpace: expandedRowIndices.includes(index) ? 'normal' : 'nowrap',
+                                                                    wordBreak: expandedRowIndices.includes(index) ? 'break-all' : 'inherit',
+                                                                    fontSize: '14px',
+                                                                    // '@media (zoom: 1.5)': {
+                                                                    //     display: 'block',
+                                                                    //     columnWidth: '50px',
+                                                                    //     height: expandedRowIndices.includes(index) ? 'auto' : '50px',
+                                                                    //     wordBreak: 'break-all',
 
-                                                                }}>
+                                                                    //     whiteSpace: 'nowrap',
+                                                                    // },
+                                                                    // '@media (zoom: 0.75) and (zoom: not(1))': {
+                                                                    //     display: 'block',
+                                                                    //     whiteSpace: 'nowrap',
+                                                                    //     wordBreak: 'break-all',
+                                                                    //     overflowWrap: 'break-word',
+                                                                    //     columnWidth: '50px',
+                                                                    //     height: expandedRowIndices.includes(index) ? 'auto' : '50px',
+
+
+                                                                    // },
+                                                                }}
+                                                            >
                                                                 {log.logString}
-
                                                             </td>
+
+
+
+
                                                         </tr>
                                                     ))
                                                 )}
