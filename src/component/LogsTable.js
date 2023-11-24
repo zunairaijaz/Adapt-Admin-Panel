@@ -291,8 +291,8 @@ function LogsTable({ sidebarVisible }) {
                                         <table className="table mb-0">
                                             <thead className="table-light">
                                                 <tr>
-                                                    <th style={{ width: '20%' }}>Device ID</th>
-                                                    <th style={{ width: '30%' }}>DateTime</th>
+                                                    <th >Device ID</th>
+                                                    <th >DateTime</th>
                                                     <th>Log String</th>
                                                 </tr>
                                             </thead>
@@ -314,7 +314,9 @@ function LogsTable({ sidebarVisible }) {
                                                             <td title={log.deviceId}>
                                                                 {log.deviceId}
                                                             </td>
-                                                            <td title={formatDateTime(log.dateTime)}>
+                                                            <td
+                                                                title={formatDateTime(log.dateTime)}
+                                                            >
                                                                 {formatDateTime(log.dateTime)}
                                                             </td>
                                                             <td
