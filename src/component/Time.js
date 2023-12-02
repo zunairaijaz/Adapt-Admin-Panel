@@ -12,6 +12,8 @@ import InputLabel from "@mui/material/InputLabel";
 import Button from "@mui/material/Button";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
+import TimezoneSelect from "react-timezone-select";
+
 function Time({ sidebarVisible }) {
   const [data, setData] = useState([
     { day: "Monday", start_time: "", end_time: "", set: "" },
@@ -33,10 +35,24 @@ function Time({ sidebarVisible }) {
     { day: "Saturday", start_time: "", end_time: "", set: "" },
     { day: "Sunday", start_time: "", end_time: "", set: "" },
   ]);
-
+  const [companyId, setCompanyId] = useState(""); // State for selected company ID
+  const [selectedTimezone, setSelectedTimezone] = useState("Europe/London");
+  const [companyIds, setCompanyIds] = useState([]); // State for company IDs
   useEffect(() => {
+    axios({
+      method: "get",
+      url: `${config.NEW_SERVER_URL}/getUniqueCompanyCodes`,
+    })
+      .then((response) => {
+        console.log("Company Codes Response:", response.data);
+        setCompanyIds(response.data.deviceIds); // Assuming the API returns an array of company codes
+      })
+      .catch((err) => {
+        console.error("Error fetching company codes:", err);
+      });
     fetchData();
   }, []);
+
 
   const fetchData = () => {
     axios({
@@ -123,15 +139,53 @@ function Time({ sidebarVisible }) {
     updatedData[rowIndex].set = event.target.value;
     setData(updatedData);
   };
+  const handleCompanyChange = (event) => {
+    const selectedCompanyId = event.target.value;
+    setCompanyId(selectedCompanyId);
+    // Fetch data for the selected company ID
+    fetchData();
+  };
+  const handleTimezoneChange = (timezone) => {
+    setSelectedTimezone(timezone);
+    // Add your logic to fetch data based on the selected timezone
+  };
+
   return (
     <div className="App">
       <div className="page-wrapper">
-      <div className={`page-content ${sidebarVisible ? 'content-moved-left1' : 'content-moved-right1'}`}>
-      <h1 style={{ margin: '0', marginLeft: sidebarVisible ? '0' : '0px' }}>Time</h1>
-          <hr style={{ borderTop: '2px solid #333',marginLeft: sidebarVisible ? '0' : '0px' }} />
+        <div className={`page-content ${sidebarVisible ? 'content-moved-left1' : 'content-moved-right1'}`}>
+          <h1 style={{ margin: '0', marginLeft: sidebarVisible ? '0' : '0px' }}>Time</h1>
+          <hr style={{ borderTop: '2px solid #333', marginLeft: sidebarVisible ? '0' : '0px' }} />
+
+
           <div className=" mt-3">
             <div className="row justify-content-center">
               <div className="col-lg-15">
+                <FormControl fullWidth style={{ marginBottom: "16px", width: '200px' }}>
+                  <InputLabel id="company-id-label" style={{ marginTop: '-8px' }}>Company Code</InputLabel>
+                  <Select style={{ height: '40px' }}
+                    labelId="company-id-label"
+                    id="company-id"
+                    value={companyId}
+                    label="Company ID"
+                    onChange={handleCompanyChange}
+                  >
+                    {companyIds.map((id) => (
+                      <MenuItem key={id} value={id}>
+                        {id}
+                      </MenuItem>
+                    ))}
+
+                  </Select>
+                </FormControl>
+                {/*Timezone-select */}
+                <FormControl style={{ marginBottom: '16px', marginLeft: '10px', width: '250px' }}>
+                  <InputLabel id="timezone-label"></InputLabel>
+                  <TimezoneSelect
+                    value={selectedTimezone}
+                    onChange={handleTimezoneChange}
+                  />
+                </FormControl>
                 <div className="table-responsive">
                   <table className="table mb-0">
                     <thead className="table-light">
