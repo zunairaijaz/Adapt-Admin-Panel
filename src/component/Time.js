@@ -53,7 +53,6 @@ function Time({ sidebarVisible }) {
     fetchData();
   }, []);
 
-
   const fetchData = () => {
     axios({
       method: "post",
@@ -89,14 +88,34 @@ function Time({ sidebarVisible }) {
         console.log("error", err);
       });
   };
+  
+  const fetchCompanyData = (company_code) => {
+    const payload = {
+      company_code,
+    }
+    axios({
+      method: "post",
+      url: `${config.NEW_SERVER_URL}/admin/getCompanyTime`,
+      data: payload,
+    })
+      .then((response) => {
+        console.log("response data: ", response);
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
+  };
+
   const updateRow = (day) => {
-    console.log("Id in updateRow: ", Id); // Add this line to check the value of Id
+    console.log("Id in updateRow: ", companyId, selectedTimezone.value); // Add this line to check the value of Id
     const Shr = Number(data[day].start_time.split(":")[0]) * 60;
     const Sm = Number(data[day].start_time.split(":")[1]);
     const Ehr = Number(data[day].end_time.split(":")[0]) * 60;
     const Em = Number(data[day].end_time.split(":")[1]);
     if (Shr + Sm < Ehr + Em) {
       const payload = {
+          company_code: companyId,
+          time_zone: selectedTimezone.value,
         day: data[day].day,
         data: {
           start_time: data[day].start_time,
@@ -129,6 +148,7 @@ function Time({ sidebarVisible }) {
       toast.error("End time must be greater than Start time");
     }
   };
+  
   const handleChange = (event, rowIndex, fieldName) => {
     const updatedData = [...data];
     updatedData[rowIndex][fieldName] = event.target.value;
@@ -143,7 +163,8 @@ function Time({ sidebarVisible }) {
     const selectedCompanyId = event.target.value;
     setCompanyId(selectedCompanyId);
     // Fetch data for the selected company ID
-    fetchData();
+    fetchCompanyData(selectedCompanyId);
+    // fetchData();
   };
   const handleTimezoneChange = (timezone) => {
     setSelectedTimezone(timezone);
@@ -161,7 +182,7 @@ function Time({ sidebarVisible }) {
           <div className=" mt-3">
             <div className="row justify-content-center">
               <div className="col-lg-15">
-                <FormControl fullWidth style={{ marginBottom: "16px", width: '200px' }}>
+                <FormControl style={{ marginBottom: "16px", width: '200px' }}>
                   <InputLabel id="company-id-label" style={{ marginTop: '-8px' }}>Company Code</InputLabel>
                   <Select style={{ height: '40px' }}
                     labelId="company-id-label"
@@ -179,7 +200,7 @@ function Time({ sidebarVisible }) {
                   </Select>
                 </FormControl>
                 {/*Timezone-select */}
-                <FormControl style={{ marginBottom: '16px', marginLeft: '10px', width: '250px' }}>
+                <FormControl style={{ marginBottom: '16px', marginLeft: '10px'}}>
                   <InputLabel id="timezone-label"></InputLabel>
                   <TimezoneSelect
                     value={selectedTimezone}
