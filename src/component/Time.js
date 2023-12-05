@@ -88,11 +88,12 @@ function Time({ sidebarVisible }) {
         console.log("error", err);
       });
   };
-  
+
   const fetchCompanyData = (company_code) => {
     const payload = {
       company_code,
-    }
+    };
+
     axios({
       method: "post",
       url: `${config.NEW_SERVER_URL}/admin/getCompanyTime`,
@@ -100,6 +101,32 @@ function Time({ sidebarVisible }) {
     })
       .then((response) => {
         console.log("response data: ", response);
+        console.log(response.data.time._id);
+
+        setId(response.data.time._id);
+
+        if (typeof response.data.time === "object") {
+          const updatedData = Object.keys(response.data.time).map((day) => {
+            const dayData = response.data.time[day];
+
+            return {
+              day: day,
+              start_time: dayData.start_time || "",
+              end_time: dayData.end_time || "",
+              set: dayData.set || "",
+            };
+          });
+
+
+          if (response.data.time.time_zone) {
+            setSelectedTimezone(response.data.time.time_zone);
+          }
+
+          setIsArray(updatedData);
+          setData(updatedData);
+        } else {
+          console.error("Invalid data structure in API response");
+        }
       })
       .catch((err) => {
         console.log("error", err);
@@ -114,8 +141,8 @@ function Time({ sidebarVisible }) {
     const Em = Number(data[day].end_time.split(":")[1]);
     if (Shr + Sm < Ehr + Em) {
       const payload = {
-          company_code: companyId,
-          time_zone: selectedTimezone.value,
+        company_code: companyId,
+        time_zone: selectedTimezone.value,
         day: data[day].day,
         data: {
           start_time: data[day].start_time,
@@ -148,7 +175,7 @@ function Time({ sidebarVisible }) {
       toast.error("End time must be greater than Start time");
     }
   };
-  
+
   const handleChange = (event, rowIndex, fieldName) => {
     const updatedData = [...data];
     updatedData[rowIndex][fieldName] = event.target.value;
@@ -200,7 +227,7 @@ function Time({ sidebarVisible }) {
                   </Select>
                 </FormControl>
                 {/*Timezone-select */}
-                <FormControl style={{ marginBottom: '16px', marginLeft: '10px'}}>
+                <FormControl style={{ marginBottom: '16px', marginLeft: '10px' }}>
                   <InputLabel id="timezone-label"></InputLabel>
                   <TimezoneSelect
                     value={selectedTimezone}
@@ -220,7 +247,7 @@ function Time({ sidebarVisible }) {
                     <tbody>
                       {data.map(
                         (row, index) =>
-                          row.day !== "_id" && (
+                          row.day !== "_id" && row.day !== "time_zone" && row.day !== "company_code" && row.day !== "__v" && (
                             <tr key={index}>
                               <td>{row.day}</td>
                               <td>
