@@ -163,7 +163,7 @@ function Time({ sidebarVisible }) {
               autoClose: 3000,
               hideProgressBar: false,
             });
-            fetchData(); // Refresh data after successful update
+            // fetchData(); // Refresh data after successful update
           } else {
             toast.error("Failed to update data. Please try again.");
           }
