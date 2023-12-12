@@ -99,6 +99,8 @@ function LogsTable({ sidebarVisible }) {
         if (newPage >= 1 && newPage <= totalPages) {
             setCurrentPage(newPage);
             fetchData(newPage, itemsPerPage, selectedDeviceId); // Pass the selectedDeviceId
+            setExpandedRowIndices([]); // Use the state setter function to update the state
+
         }
     };
 
@@ -322,33 +324,18 @@ function LogsTable({ sidebarVisible }) {
                                                             <td
                                                                 title={log.logString}
                                                                 style={{
-                                                                    columnWidth: '500px',
+                                                                    columnWidth: '750px',
                                                                     overflow: expandedRowIndex === index ? 'auto' : 'hidden',
-                                                                    whiteSpace: expandedRowIndices.includes(index) ? 'normal' : 'nowrap',
+                                                                    whiteSpace: expandedRowIndices.includes(index) ? 'break-spaces' : 'nowrap',
+                                                                    height: expandedRowIndices.includes(index) ? 'auto' : '50px',
                                                                     wordBreak: expandedRowIndices.includes(index) ? 'break-all' : 'inherit',
+                                                                    wordWrap: 'break-word', // Add this line to break spaces and move them to the next line
                                                                     fontSize: '14px',
-                                                                    // '@media (zoom: 1.5)': {
-                                                                    //     display: 'block',
-                                                                    //     columnWidth: '50px',
-                                                                    //     height: expandedRowIndices.includes(index) ? 'auto' : '50px',
-                                                                    //     wordBreak: 'break-all',
-
-                                                                    //     whiteSpace: 'nowrap',
-                                                                    // },
-                                                                    // '@media (zoom: 0.75) and (zoom: not(1))': {
-                                                                    //     display: 'block',
-                                                                    //     whiteSpace: 'nowrap',
-                                                                    //     wordBreak: 'break-all',
-                                                                    //     overflowWrap: 'break-word',
-                                                                    //     columnWidth: '50px',
-                                                                    //     height: expandedRowIndices.includes(index) ? 'auto' : '50px',
-
-
-                                                                    // },
                                                                 }}
                                                             >
                                                                 {log.logString}
                                                             </td>
+
 
 
 
