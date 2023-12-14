@@ -272,7 +272,7 @@ function LogsTable({ sidebarVisible }) {
             );
         });
 
-        setLogData(filteredLogData);
+        setLogData(filteredLogData)
     };
 
 
@@ -331,8 +331,8 @@ function LogsTable({ sidebarVisible }) {
                     <div className=" mt-3">
                         <div className="row justify-content-center">
                             <div className="col-lg-15">
-                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                                    <FormControl variant="outlined" style={{ width: '200px' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
+                                    <FormControl variant="outlined" style={{ width: '200px', marginRight: '10px' }}>
                                         <InputLabel>{selectedDeviceId === " " ? "All Devices" : "Device Id"}</InputLabel>
                                         <Select
                                             value={selectedDeviceId}
@@ -347,7 +347,7 @@ function LogsTable({ sidebarVisible }) {
                                             ))}
                                         </Select>
                                     </FormControl>
-                                    <FormControl>
+                                    <FormControl variant="outlined" style={{ width: '200px', marginRight: '10px' }}>
                                         <input
                                             type="text"
                                             id="search"
@@ -355,21 +355,10 @@ function LogsTable({ sidebarVisible }) {
                                             className="form-control"
                                             value={searchQuery}
                                             onChange={handleSearchQueryChange}
-                                            style={{ width: '200px' }}
                                         />
                                     </FormControl>
-                                    <div style={{ marginLeft: '350px' }}>
-                                        {selectedDeviceId && (
-                                            <Button
-                                                variant="primary"
-                                                onClick={handleExportButtonClick}
-                                            >
-                                                <FileDownloadIcon />
-                                                Export
-                                            </Button>
-                                        )}
-                                    </div>
-                                    <FormControl variant="outlined" style={{ width: '200px' }}>
+
+                                    <FormControl variant="outlined" style={{ width: '200px', marginRight: '10px' }}>
                                         <InputLabel>Items per Page</InputLabel>
                                         <Select
                                             value={itemsPerPage}
@@ -382,7 +371,17 @@ function LogsTable({ sidebarVisible }) {
                                             <MenuItem value={100}>100</MenuItem>
                                         </Select>
                                     </FormControl>
-
+                                    <div >
+                                        {selectedDeviceId && (
+                                            <Button
+                                                variant="primary"
+                                                onClick={handleExportButtonClick}
+                                            >
+                                                <FileDownloadIcon />
+                                                Export
+                                            </Button>
+                                        )}
+                                    </div>
                                 </div>
 
 
