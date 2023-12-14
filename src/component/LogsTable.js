@@ -262,51 +262,32 @@ function LogsTable({ sidebarVisible }) {
     const handleSearchQueryChange = (event) => {
         const query = event.target.value;
         setSearchQuery(query);
-
-        // Filter the logData based on the case-sensitive search query
-        const filteredLogData = logData.filter((log) => {
-            return (
-                log.deviceId.includes(query) ||
-                formatDateTime(log.dateTime).includes(query) ||
-                log.logString.includes(query)
-            );
-        });
-
-        setLogData(filteredLogData)
     };
 
-
-
-    // Filter the logData based on the search query
     const filteredLogData = logData.filter((log) => {
-        return log.deviceId.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        return (
+            log.deviceId.toLowerCase().includes(searchQuery.toLowerCase()) ||
             formatDateTime(log.dateTime).toLowerCase().includes(searchQuery.toLowerCase()) ||
-            log.logString.toLowerCase().includes(searchQuery.toLowerCase());
+            log.logString.toLowerCase().includes(searchQuery.toLowerCase())
+        );
     });
+
     const handleExportButtonClick = () => {
+        const exportData = searchQuery ? filteredLogData : logData;
         if (selectedDeviceId) {
-            // Check if there is an API endpoint for exporting data
             if (config.NEW_SERVER_URL && config.NEW_SERVER_URL.length > 0) {
-                // Make a request to get export data for the selected device ID
                 axios
                     .get(`${config.NEW_SERVER_URL}/getVehicleLogDataByDeviceId?deviceId=${selectedDeviceId}`)
                     .then((response) => {
-                        // Extract only the needed columns and format the date
                         const formattedData = response.data.data.map((log) => ({
                             deviceId: log.deviceId,
                             dateTime: log.dateTime ? new Date(log.dateTime).toISOString().slice(0, 19).replace('T', ' ') + ' UTC' : '',
                             logString: log.logString,
                         }));
-
-                        // Convert array of objects to CSV string using Papaparse
                         const csvString = Papa.unparse(formattedData, {
                             header: true,
                         });
-
-                        // Convert the CSV string to Blob
                         const blob = new Blob([csvString], { type: 'text/csv' });
-
-                        // Use the FileSaver library to trigger the file download
                         saveAs(blob, `exported_data_${selectedDeviceId}.csv`);
                     })
                     .catch((error) => {
@@ -314,7 +295,6 @@ function LogsTable({ sidebarVisible }) {
                         toast.error('Error exporting data: ' + error.message);
                     });
             } else {
-                // Handle the case where there is no API endpoint for exporting data
                 toast.error('Export functionality not available.');
             }
         } else {
@@ -357,7 +337,6 @@ function LogsTable({ sidebarVisible }) {
                                             onChange={handleSearchQueryChange}
                                         />
                                     </FormControl>
-
                                     <FormControl variant="outlined" style={{ width: '200px', marginRight: '10px' }}>
                                         <InputLabel>Items per Page</InputLabel>
                                         <Select
@@ -371,7 +350,7 @@ function LogsTable({ sidebarVisible }) {
                                             <MenuItem value={100}>100</MenuItem>
                                         </Select>
                                     </FormControl>
-                                    <div >
+                                    <div>
                                         {selectedDeviceId && selectedDeviceId !== " " && (
                                             <Button
                                                 variant="primary"
@@ -383,15 +362,13 @@ function LogsTable({ sidebarVisible }) {
                                         )}
                                     </div>
                                 </div>
-
-
                                 <div className="card-body">
                                     <div className="table-responsive" style={{ maxHeight: 'calc(100vh - 200px)', overflowY: 'auto' }}>
                                         <table className="table mb-0">
                                             <thead className="table-light">
                                                 <tr>
-                                                    <th >Device ID</th>
-                                                    <th >DateTime</th>
+                                                    <th>Device ID</th>
+                                                    <th>DateTime</th>
                                                     <th>Log String</th>
                                                 </tr>
                                             </thead>
@@ -399,7 +376,7 @@ function LogsTable({ sidebarVisible }) {
                                                 {loading ? (
                                                     <LogsLoader rowsNum={itemsPerPage} />
                                                 ) : (
-                                                    logData.map((log, index) => (
+                                                    filteredLogData.map((log, index) => (
                                                         <tr
                                                             key={index}
                                                             onDoubleClick={() => handleRowClick(index)}
@@ -407,7 +384,6 @@ function LogsTable({ sidebarVisible }) {
                                                                 height: expandedRowIndices.includes(index) ? 'auto' : '50px',
                                                                 whiteSpace: expandedRowIndices.includes(index) ? 'break-spaces' : 'nowrap',
                                                                 overflow: expandedRowIndex === index ? 'auto' : 'hidden',
-
                                                             }}
                                                         >
                                                             <td title={log.deviceId}>
@@ -426,17 +402,12 @@ function LogsTable({ sidebarVisible }) {
                                                                     whiteSpace: expandedRowIndices.includes(index) ? 'break-spaces' : 'nowrap',
                                                                     height: expandedRowIndices.includes(index) ? 'auto' : '50px',
                                                                     wordBreak: expandedRowIndices.includes(index) ? 'break-all' : 'inherit',
-                                                                    wordWrap: 'break-word', // Add this line to break spaces and move them to the next line
+                                                                    wordWrap: 'break-word',
                                                                     fontSize: '14px',
                                                                 }}
                                                             >
                                                                 {log.logString}
                                                             </td>
-
-
-
-
-
                                                         </tr>
                                                     ))
                                                 )}
@@ -458,9 +429,9 @@ function LogsTable({ sidebarVisible }) {
                 variant=""
                 size='sm'
                 style={{
-                    marginLeft: sidebarVisible ? '300px' : '130px', // Conditionally set marginLeft
+                    marginLeft: sidebarVisible ? '300px' : '130px',
                     marginBottom: '80px',
-                    background: 'rgba(0, 0, 0, 0.7)', // Light black with 40% opacity
+                    background: 'rgba(0, 0, 0, 0.7)',
                     color: 'white',
                     borderRadius: '2px',
                     height: '28px',
@@ -470,13 +441,8 @@ function LogsTable({ sidebarVisible }) {
             >
                 <p>{getRangeLabel()}</p>
             </label>
-
-
-
-
-
             <ToastContainer />
-        </div >
+        </div>
     );
 }
 
