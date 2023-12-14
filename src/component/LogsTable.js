@@ -372,7 +372,7 @@ function LogsTable({ sidebarVisible }) {
                                         </Select>
                                     </FormControl>
                                     <div >
-                                        {selectedDeviceId && (
+                                        {selectedDeviceId && selectedDeviceId !== " " && (
                                             <Button
                                                 variant="primary"
                                                 onClick={handleExportButtonClick}
