@@ -16,6 +16,10 @@ import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import { saveAs } from 'file-saver';
+import Papa from 'papaparse';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+
 function LogsTable({ sidebarVisible }) {
     const [logData, setLogData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -28,7 +32,7 @@ function LogsTable({ sidebarVisible }) {
     const [totalPages, setTotalPages] = useState(1);
     const [totalLogs, setTotalLogs] = useState(1);
     const [expandedRowIndices, setExpandedRowIndices] = useState([]);
-
+    const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {
         fetchData(1, itemsPerPage, selectedDeviceId);
@@ -40,6 +44,13 @@ function LogsTable({ sidebarVisible }) {
             setSelectedDeviceLogData([]);
         }
     }, [selectedDeviceId]);
+    // Add a new useEffect to reset the logData when searchQuery is empty
+    useEffect(() => {
+        if (searchQuery === '') {
+            fetchData(currentPage, itemsPerPage, selectedDeviceId);
+        }
+    }, [searchQuery, currentPage, itemsPerPage, selectedDeviceId]);
+
     const fetchData = (page, perPage, deviceId) => {
         setLoading(true);
 
@@ -248,6 +259,68 @@ function LogsTable({ sidebarVisible }) {
 
         return `${start} to ${end} / ${total} items`;
     };
+    const handleSearchQueryChange = (event) => {
+        const query = event.target.value;
+        setSearchQuery(query);
+
+        // Filter the logData based on the case-sensitive search query
+        const filteredLogData = logData.filter((log) => {
+            return (
+                log.deviceId.includes(query) ||
+                formatDateTime(log.dateTime).includes(query) ||
+                log.logString.includes(query)
+            );
+        });
+
+        setLogData(filteredLogData);
+    };
+
+
+
+    // Filter the logData based on the search query
+    const filteredLogData = logData.filter((log) => {
+        return log.deviceId.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            formatDateTime(log.dateTime).toLowerCase().includes(searchQuery.toLowerCase()) ||
+            log.logString.toLowerCase().includes(searchQuery.toLowerCase());
+    });
+    const handleExportButtonClick = () => {
+        if (selectedDeviceId) {
+            // Check if there is an API endpoint for exporting data
+            if (config.NEW_SERVER_URL && config.NEW_SERVER_URL.length > 0) {
+                // Make a request to get export data for the selected device ID
+                axios
+                    .get(`${config.NEW_SERVER_URL}/getVehicleLogDataByDeviceId?deviceId=${selectedDeviceId}`)
+                    .then((response) => {
+                        // Extract only the needed columns and format the date
+                        const formattedData = response.data.data.map((log) => ({
+                            deviceId: log.deviceId,
+                            dateTime: log.dateTime ? new Date(log.dateTime).toISOString().slice(0, 19).replace('T', ' ') + ' UTC' : '',
+                            logString: log.logString,
+                        }));
+
+                        // Convert array of objects to CSV string using Papaparse
+                        const csvString = Papa.unparse(formattedData, {
+                            header: true,
+                        });
+
+                        // Convert the CSV string to Blob
+                        const blob = new Blob([csvString], { type: 'text/csv' });
+
+                        // Use the FileSaver library to trigger the file download
+                        saveAs(blob, `exported_data_${selectedDeviceId}.csv`);
+                    })
+                    .catch((error) => {
+                        console.error('Error exporting data:', error);
+                        toast.error('Error exporting data: ' + error.message);
+                    });
+            } else {
+                // Handle the case where there is no API endpoint for exporting data
+                toast.error('Export functionality not available.');
+            }
+        } else {
+            toast.error('Please select a device before exporting.');
+        }
+    };
 
     return (
         <div className="App">
@@ -274,6 +347,28 @@ function LogsTable({ sidebarVisible }) {
                                             ))}
                                         </Select>
                                     </FormControl>
+                                    <FormControl>
+                                        <input
+                                            type="text"
+                                            id="search"
+                                            placeholder="Search"
+                                            className="form-control"
+                                            value={searchQuery}
+                                            onChange={handleSearchQueryChange}
+                                            style={{ width: '200px' }}
+                                        />
+                                    </FormControl>
+                                    <div style={{ marginLeft: '350px' }}>
+                                        {selectedDeviceId && (
+                                            <Button
+                                                variant="primary"
+                                                onClick={handleExportButtonClick}
+                                            >
+                                                <FileDownloadIcon />
+                                                Export
+                                            </Button>
+                                        )}
+                                    </div>
                                     <FormControl variant="outlined" style={{ width: '200px' }}>
                                         <InputLabel>Items per Page</InputLabel>
                                         <Select
@@ -287,7 +382,10 @@ function LogsTable({ sidebarVisible }) {
                                             <MenuItem value={100}>100</MenuItem>
                                         </Select>
                                     </FormControl>
+
                                 </div>
+
+
                                 <div className="card-body">
                                     <div className="table-responsive" style={{ maxHeight: 'calc(100vh - 200px)', overflowY: 'auto' }}>
                                         <table className="table mb-0">
