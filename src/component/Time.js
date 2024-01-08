@@ -229,7 +229,7 @@ function Time({ sidebarVisible }) {
                   />
                 </FormControl>
                 <Button
-                  style={{ height: "37px", marginLeft: " 450px", position: "fixed !important" }}
+                  style={{ height: "37px", float:"right", position: "fixed !important" }}
                   variant="contained"
                   onClick={() => {
                     updateAllRows();
