@@ -13,6 +13,8 @@ import Button from "@mui/material/Button";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import TimezoneSelect from "react-timezone-select";
+import UpdateIcon from '@mui/icons-material/Update';
+import Grid from "@mui/material/Grid";
 
 function Time({ sidebarVisible }) {
   const [data, setData] = useState([
@@ -24,7 +26,6 @@ function Time({ sidebarVisible }) {
     { day: "Saturday", start_time: "", end_time: "", set: "" },
     { day: "Sunday", start_time: "", end_time: "", set: "" },
   ]);
-
   const [Id, setId] = useState("");
   const [isArray, setIsArray] = useState([
     { day: "Monday", start_time: "", end_time: "", set: "" },
@@ -52,7 +53,6 @@ function Time({ sidebarVisible }) {
       });
     fetchData();
   }, []);
-
   const fetchData = () => {
     axios({
       method: "post",
@@ -60,7 +60,6 @@ function Time({ sidebarVisible }) {
     })
       .then((response) => {
         console.log("response data: ", response);
-
         console.log(response.data.time._id);
         // Set the Id state with a valid value here
         setId(response.data.time._id); // Assuming _id is available in the API response
@@ -69,7 +68,6 @@ function Time({ sidebarVisible }) {
         if (typeof response.data.time === "object") {
           const updatedData = Object.keys(response.data.time).map((day) => {
             const dayData = response.data.time[day];
-
             return {
               day: day,
               start_time: dayData.start_time || "",
@@ -77,7 +75,6 @@ function Time({ sidebarVisible }) {
               set: dayData.set || "",
             };
           });
-
           setIsArray(updatedData); // Update isArray with fetched data
           setData(updatedData); // Also update data if needed
         } else {
@@ -88,12 +85,10 @@ function Time({ sidebarVisible }) {
         console.log("error", err);
       });
   };
-
   const fetchCompanyData = (company_code) => {
     const payload = {
       company_code,
     };
-
     axios({
       method: "post",
       url: `${config.NEW_SERVER_URL}/admin/getCompanyTime`,
@@ -102,9 +97,7 @@ function Time({ sidebarVisible }) {
       .then((response) => {
         console.log("response data: ", response);
         console.log(response.data.time._id);
-
         setId(response.data.time._id);
-
         if (typeof response.data.time === "object") {
           const updatedData = Object.keys(response.data.time).map((day) => {
             const dayData = response.data.time[day];
@@ -116,12 +109,9 @@ function Time({ sidebarVisible }) {
               set: dayData.set || "",
             };
           });
-
-
           if (response.data.time.time_zone) {
             setSelectedTimezone(response.data.time.time_zone);
           }
-
           setIsArray(updatedData);
           setData(updatedData);
         } else {
@@ -132,50 +122,57 @@ function Time({ sidebarVisible }) {
         console.log("error", err);
       });
   };
-
-  const updateRow = (day) => {
-    console.log("Id in updateRow: ", companyId, selectedTimezone.value); // Add this line to check the value of Id
-    const Shr = Number(data[day].start_time.split(":")[0]) * 60;
-    const Sm = Number(data[day].start_time.split(":")[1]);
-    const Ehr = Number(data[day].end_time.split(":")[0]) * 60;
-    const Em = Number(data[day].end_time.split(":")[1]);
-    if (Shr + Sm < Ehr + Em) {
-      const payload = {
-        company_code: companyId,
-        time_zone: selectedTimezone.value,
-        day: data[day].day,
-        data: {
-          start_time: data[day].start_time,
-          end_time: data[day].end_time,
-          set: data[day].set,
-        },
-        _id: Id, // Include the _id here
-      };
-      axios({
-        method: "post",
-        url: `${config.NEW_SERVER_URL}/admin/updateTime`,
-        data: payload,
+  const updateAllRows = () => {
+    // Construct an array of data for all rows
+    const dataArray = data.map((row) => {
+      const Shr = Number(row.start_time.split(":")[0]) * 60;
+      const Sm = Number(row.start_time.split(":")[1]);
+      const Ehr = Number(row.end_time.split(":")[0]) * 60;
+      const Em = Number(row.end_time.split(":")[1]);
+      if (Shr + Sm < Ehr + Em) {
+        return {
+          day: row.day,
+          data: {
+            start_time: row.start_time,
+            end_time: row.end_time,
+            set: row.set,
+          },
+        };
+      } else {
+        toast.error(`End time must be greater than Start time for ${row.day}`);
+        return null;
+      }
+    });
+    // Filter out null entries (rows with invalid data)
+    const validDataArray = dataArray.filter((row) => row !== null);
+    // Create the payload with the array of data
+    const payload = {
+      data: validDataArray,
+      _id: Id, // Include the _id here
+      company_code: companyId,
+      time_zone: selectedTimezone,
+    };
+    // Send the API call with the array of data
+    axios({
+      method: "post",
+      url: `${config.NEW_SERVER_URL}/admin/updateTime`, // Update the API endpoint accordingly
+      data: payload,
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          toast.success(`Data updated successfully`, {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+          });
+        } else {
+          toast.error(`Failed to update data. Please try again.`);
+        }
       })
-        .then((response) => {
-          if (response.status === 200) {
-            toast.success("Data updated successfully", {
-              position: "top-right",
-              autoClose: 3000,
-              hideProgressBar: false,
-            });
-            // fetchData(); // Refresh data after successful update
-          } else {
-            toast.error("Failed to update data. Please try again.");
-          }
-        })
-        .catch((err) => {
-          console.log("error", err);
-        });
-    } else {
-      toast.error("End time must be greater than Start time");
-    }
+      .catch((err) => {
+        console.log("error", err);
+      });
   };
-
   const handleChange = (event, rowIndex, fieldName) => {
     const updatedData = [...data];
     updatedData[rowIndex][fieldName] = event.target.value;
@@ -197,15 +194,12 @@ function Time({ sidebarVisible }) {
     setSelectedTimezone(timezone);
     // Add your logic to fetch data based on the selected timezone
   };
-
   return (
     <div className="App">
       <div className="page-wrapper">
         <div className={`page-content ${sidebarVisible ? 'content-moved-left1' : 'content-moved-right1'}`}>
           <h1 style={{ margin: '0', marginLeft: sidebarVisible ? '0' : '0px' }}>Time</h1>
           <hr style={{ borderTop: '2px solid #333', marginLeft: sidebarVisible ? '0' : '0px' }} />
-
-
           <div className=" mt-3">
             <div className="row justify-content-center">
               <div className="col-lg-15">
@@ -234,6 +228,15 @@ function Time({ sidebarVisible }) {
                     onChange={handleTimezoneChange}
                   />
                 </FormControl>
+                <Button
+                  style={{ height: "37px", marginLeft: " 450px", position: "fixed !important" }}
+                  variant="contained"
+                  onClick={() => {
+                    updateAllRows();
+                  }}
+                >
+                  <UpdateIcon />Update
+                </Button>
                 <div className="table-responsive">
                   <table className="table mb-0">
                     <thead className="table-light">
@@ -241,7 +244,6 @@ function Time({ sidebarVisible }) {
                         <th>Day</th>
                         <th>Business Hours</th>
                         <th>Active</th>
-                        <th>Action</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -295,18 +297,7 @@ function Time({ sidebarVisible }) {
                                 </FormControl>
                               </td>
 
-                              <td>
-                                <Button
-                                  variant="outlined"
-                                  onClick={() => {
-                                    console.log("Update button clicked");
-                                    updateRow(index);
-                                  }}
-                                  style={{ width: "80%", height: "100%" }}
-                                >
-                                  Update
-                                </Button>
-                              </td>
+
                             </tr>
                           )
                       )}
