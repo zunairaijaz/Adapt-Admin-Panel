@@ -61,22 +61,27 @@ function Time({ sidebarVisible }) {
       .then((response) => {
         console.log("response data: ", response);
         console.log(response.data.time._id);
-        // Set the Id state with a valid value here
-        setId(response.data.time._id); // Assuming _id is available in the API response
-        // console.log("id is --->11"
-        //   , Id);
+        setId(response.data.time._id);
+
         if (typeof response.data.time === "object") {
-          const updatedData = Object.keys(response.data.time).map((day) => {
-            const dayData = response.data.time[day];
-            return {
-              day: day,
-              start_time: dayData.start_time || "",
-              end_time: dayData.end_time || "",
-              set: dayData.set || "",
-            };
-          });
-          setIsArray(updatedData); // Update isArray with fetched data
-          setData(updatedData); // Also update data if needed
+          const updatedData = Object.keys(response.data.time)
+            .filter((day) => day !== "_id" && day !== "time_zone" && day !== "company_code" && day !== "__v")
+            .sort((a, b) => {
+              const daysOrder = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
+              return daysOrder.indexOf(a) - daysOrder.indexOf(b);
+            })
+            .map((day) => {
+              const dayData = response.data.time[day];
+              return {
+                day: day,
+                start_time: dayData.start_time || "",
+                end_time: dayData.end_time || "",
+                set: dayData.set || "",
+              };
+            });
+
+          setIsArray(updatedData);
+          setData(updatedData);
         } else {
           console.error("Invalid data structure in API response");
         }
@@ -85,6 +90,7 @@ function Time({ sidebarVisible }) {
         console.log("error", err);
       });
   };
+
   const fetchCompanyData = (company_code) => {
     const payload = {
       company_code,
@@ -98,20 +104,28 @@ function Time({ sidebarVisible }) {
         console.log("response data: ", response);
         console.log(response.data.time._id);
         setId(response.data.time._id);
-        if (typeof response.data.time === "object") {
-          const updatedData = Object.keys(response.data.time).map((day) => {
-            const dayData = response.data.time[day];
 
-            return {
-              day: day,
-              start_time: dayData.start_time || "",
-              end_time: dayData.end_time || "",
-              set: dayData.set || "",
-            };
-          });
+        if (typeof response.data.time === "object") {
+          const updatedData = Object.keys(response.data.time)
+            .filter((day) => day !== "_id" && day !== "time_zone" && day !== "company_code" && day !== "__v")
+            .sort((a, b) => {
+              const daysOrder = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
+              return daysOrder.indexOf(a) - daysOrder.indexOf(b);
+            })
+            .map((day) => {
+              const dayData = response.data.time[day];
+              return {
+                day: day,
+                start_time: dayData.start_time || "",
+                end_time: dayData.end_time || "",
+                set: dayData.set || "",
+              };
+            });
+
           if (response.data.time.time_zone) {
             setSelectedTimezone(response.data.time.time_zone);
           }
+
           setIsArray(updatedData);
           setData(updatedData);
         } else {
@@ -122,6 +136,7 @@ function Time({ sidebarVisible }) {
         console.log("error", err);
       });
   };
+
   const updateAllRows = () => {
     // Construct an array of data for all rows
     const dataArray = data.map((row) => {
@@ -229,7 +244,7 @@ function Time({ sidebarVisible }) {
                   />
                 </FormControl>
                 <Button
-                  style={{ height: "37px", float:"right", position: "fixed !important" }}
+                  style={{ height: "37px", float: "right", position: "fixed !important" }}
                   variant="contained"
                   onClick={() => {
                     updateAllRows();

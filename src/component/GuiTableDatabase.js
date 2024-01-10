@@ -38,7 +38,7 @@ function GuiTableDatabase({ sidebarVisible }) {
 
   const fetchData = (page, perPage, search, searchField, selectedDate, newSearchTerm, newSearchTermCompany) => {
     setLoading(true); // Set loading to true initially
-    
+
     const requestBody = {
       page,
       perPage,
@@ -74,7 +74,7 @@ function GuiTableDatabase({ sidebarVisible }) {
     setItemsPerPage(newItemsPerPage);
 
     // Fetch data with the current selected device ID and current page
-    fetchData(currentPage, newItemsPerPage, searchTerm, searchField, selectedDate, newSearchTerm  , newSearchTermCompany);
+    fetchData(currentPage, newItemsPerPage, searchTerm, searchField, selectedDate, newSearchTerm, newSearchTermCompany);
   };
 
   function formatDateTime(inputDate) {
@@ -92,16 +92,16 @@ function GuiTableDatabase({ sidebarVisible }) {
     const updatedExpandedRowIndices = [...expandedRowIndices];
 
     if (updatedExpandedRowIndices.includes(index)) {
-        // Double-click on an expanded row: collapse it
-        const indexOfExpandedRow = updatedExpandedRowIndices.indexOf(index);
-        updatedExpandedRowIndices.splice(indexOfExpandedRow, 1);
+      // Double-click on an expanded row: collapse it
+      const indexOfExpandedRow = updatedExpandedRowIndices.indexOf(index);
+      updatedExpandedRowIndices.splice(indexOfExpandedRow, 1);
     } else {
-        // Double-click on a non-expanded row: expand it
-        updatedExpandedRowIndices.push(index);
+      // Double-click on a non-expanded row: expand it
+      updatedExpandedRowIndices.push(index);
     }
 
     setExpandedRowIndices(updatedExpandedRowIndices);
-};
+  };
 
 
   const renderPageNumbers = () => {
@@ -298,7 +298,7 @@ function GuiTableDatabase({ sidebarVisible }) {
                       style={{ width: '180px' }}
                     />
                   </div>
-                  <div style={{ margin:'3px' }}>
+                  <div style={{ margin: '3px' }}>
                     <FormControl variant="outlined" style={{ height: '37px', width: '200px' }}>
                       <InputLabel>Logs per Page</InputLabel>
                       <Select
@@ -346,10 +346,10 @@ function GuiTableDatabase({ sidebarVisible }) {
                                   onDoubleClick={() => handleRowClick(index)}
                                   // className={rowClass}
                                   style={{
-                                    height:  expandedRowIndices.includes(index) ? 'auto' : '50px',
-                                    whiteSpace:  expandedRowIndices.includes(index) ? 'break-spaces' : 'nowrap',
-                                    textOverflow:  expandedRowIndices.includes(index) ? 'inherit' : 'ellipsis',
-                                    wordBreak:  expandedRowIndices.includes(index) ? 'break-all' : 'inherit',
+                                    height: expandedRowIndices.includes(index) ? 'auto' : '50px',
+                                    whiteSpace: expandedRowIndices.includes(index) ? 'break-spaces' : 'nowrap',
+                                    textOverflow: expandedRowIndices.includes(index) ? 'inherit' : 'ellipsis',
+                                    wordBreak: expandedRowIndices.includes(index) ? 'break-all' : 'inherit',
                                   }}
                                 >
                                   <td title={logData.level}
