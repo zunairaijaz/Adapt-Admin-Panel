@@ -15,7 +15,6 @@ import "react-toastify/dist/ReactToastify.min.css";
 import TimezoneSelect from "react-timezone-select";
 import UpdateIcon from '@mui/icons-material/Update';
 import Grid from "@mui/material/Grid";
-
 function Time({ sidebarVisible }) {
   const [data, setData] = useState([
     { day: "Monday", start_time: "", end_time: "", set: "" },
@@ -37,7 +36,7 @@ function Time({ sidebarVisible }) {
     { day: "Sunday", start_time: "", end_time: "", set: "" },
   ]);
   const [companyId, setCompanyId] = useState(""); // State for selected company ID
-  const [selectedTimezone, setSelectedTimezone] = useState("Europe/London");
+  const [selectedTimezone, setSelectedTimezone] = useState("Etc/GMT");
   const [companyIds, setCompanyIds] = useState([]); // State for company IDs
   useEffect(() => {
     axios({

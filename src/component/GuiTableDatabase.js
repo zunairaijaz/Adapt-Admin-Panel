@@ -305,6 +305,7 @@ function GuiTableDatabase({ sidebarVisible }) {
                         value={itemsPerPage}
                         onChange={(e) => handleMainLogItemsPerPageChange(e.target.value)}
                         label="Logs per Page"
+
                       >
                         <MenuItem value={5}>5</MenuItem>
                         <MenuItem value={10}>10</MenuItem>
