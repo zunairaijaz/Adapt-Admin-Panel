@@ -68,15 +68,18 @@ function GuiTableDatabase({ sidebarVisible }) {
 
   const handleMainLogPageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
+      const formattedDate = selectedDate?.toLocaleDateString('en-US', { timeZone: 'Asia/Karachi' });
+
       setCurrentPage(newPage);
-      fetchData(newPage, itemsPerPage, searchTerm, searchField, selectedDate, newSearchTerm, newSearchTermCompany);
+      fetchData(newPage, itemsPerPage, searchTerm, searchField, formattedDate, newSearchTerm, newSearchTermCompany);
     }
   };
   const handleMainLogItemsPerPageChange = (newItemsPerPage) => {
     setItemsPerPage(newItemsPerPage);
+    const formattedDate = selectedDate?.toLocaleDateString('en-US', { timeZone: 'Asia/Karachi' });
 
     // Fetch data with the current selected device ID and current page
-    fetchData(currentPage, newItemsPerPage, searchTerm, searchField, selectedDate, newSearchTerm, newSearchTermCompany);
+    fetchData(currentPage, newItemsPerPage, searchTerm, searchField, formattedDate, newSearchTerm, newSearchTermCompany);
   };
 
   function formatDateTime(inputDate) {
