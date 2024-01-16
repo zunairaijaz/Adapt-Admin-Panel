@@ -29,8 +29,10 @@ function GuiTableDatabase({ sidebarVisible }) {
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
-    fetchData(1, itemsPerPage, searchTerm, searchField, date, newSearchTerm, newSearchTermCompany)
+    const formattedDate = date?.toLocaleDateString('en-US', { timeZone: 'Asia/Karachi' });
+    fetchData(1, itemsPerPage, searchTerm, searchField, formattedDate, newSearchTerm, newSearchTermCompany);
   };
+
 
   useEffect(() => {
     fetchData(currentPage, itemsPerPage, searchTerm, searchField, selectedDate, newSearchTerm, newSearchTermCompany);
@@ -210,6 +212,8 @@ function GuiTableDatabase({ sidebarVisible }) {
   const handleSearchFieldChange = (event) => {
     setSearchField(event.target.value);
     setSearchTerm('');
+    fetchData(currentPage, itemsPerPage, searchTerm, event.target.value, selectedDate, newSearchTerm, newSearchTermCompany);
+
   };
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
