@@ -64,9 +64,9 @@ function SideBar({ sidebarVisible, toggleSidebar, onLinkClick }) {
                 to="/news"
                 style={linkStyle}
                 activeStyle={activeLinkStyle} // Apply active styles to the NavLink
-                // onClick={onLinkClick} // Close sidebar on link click
+              // onClick={onLinkClick} // Close sidebar on link click
 
-             >
+              >
                 <div className="parent-icon">
                   <InsertPhotoIcon
                     className={activeLinkStyle.color === 'black' ? iconActiveClass : iconInactiveClass}
@@ -82,7 +82,7 @@ function SideBar({ sidebarVisible, toggleSidebar, onLinkClick }) {
                 to="/time"
                 style={linkStyle}
                 activeStyle={activeLinkStyle} // Apply active styles to the NavLink
-                // onClick={onLinkClick} // Close sidebar on link click
+              // onClick={onLinkClick} // Close sidebar on link click
 
               >
                 <div className="parent-icon">
@@ -100,7 +100,7 @@ function SideBar({ sidebarVisible, toggleSidebar, onLinkClick }) {
                 to="/faq"
                 style={linkStyle}
                 activeStyle={activeLinkStyle} // Apply active styles to the NavLink
-                // onClick={onLinkClick} // Close sidebar on link click
+              // onClick={onLinkClick} // Close sidebar on link click
 
               >
                 <div className="parent-icon">
@@ -118,7 +118,7 @@ function SideBar({ sidebarVisible, toggleSidebar, onLinkClick }) {
                 to="/logs"
                 style={linkStyle}
                 activeStyle={activeLinkStyle} // Apply active styles to the NavLink
-                // onClick={onLinkClick} // Close sidebar on link click
+              // onClick={onLinkClick} // Close sidebar on link click
 
               >
                 <div className="parent-icon">
@@ -131,12 +131,12 @@ function SideBar({ sidebarVisible, toggleSidebar, onLinkClick }) {
                 </div>
               </NavLink>
             </li>
-            <li>
+            {/* <li>
               <NavLink
                 to="/gui"
                 style={linkStyle}
                 activeStyle={activeLinkStyle} // Apply active styles to the NavLink
-                // onClick={onLinkClick} // Close sidebar on link click
+              // onClick={onLinkClick} // Close sidebar on link click
 
               >
                 <div className="parent-icon">
@@ -148,13 +148,13 @@ function SideBar({ sidebarVisible, toggleSidebar, onLinkClick }) {
                   Logger GUI
                 </div>
               </NavLink>
-            </li>
+            </li> */}
             <li>
               <NavLink
                 to="/guidb"
                 style={linkStyle}
                 activeStyle={activeLinkStyle} // Apply active styles to the NavLink
-                // onClick={onLinkClick} // Close sidebar on link click
+              // onClick={onLinkClick} // Close sidebar on link click
 
               >
                 <div className="parent-icon">
@@ -163,7 +163,7 @@ function SideBar({ sidebarVisible, toggleSidebar, onLinkClick }) {
                   />
                 </div>
                 <div className={`menu-title ${!sidebarVisible ? 'hidden' : ''}`}>
-                  Database Logger GUI
+                  Transaction Logs
                 </div>
               </NavLink>
             </li>
