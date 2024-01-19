@@ -30,6 +30,7 @@ function GuiTableDatabase({ sidebarVisible }) {
   const handleDateChange = (date) => {
     setSelectedDate(date);
     const formattedDate = date?.toLocaleDateString('en-US', { timeZone: 'Asia/Karachi' });
+    setCurrentPage(1);
     fetchData(1, itemsPerPage, searchTerm, searchField, formattedDate, newSearchTerm, newSearchTermCompany);
   };
 
@@ -39,8 +40,7 @@ function GuiTableDatabase({ sidebarVisible }) {
   }, [itemsPerPage]);
 
   const fetchData = (page, perPage, search, searchField, selectedDate, newSearchTerm, newSearchTermCompany) => {
-    setLoading(true); // Set loading to true initially
-
+    setLoading(true); // Set loading to true initiall
     const requestBody = {
       page,
       perPage,
@@ -77,9 +77,9 @@ function GuiTableDatabase({ sidebarVisible }) {
   const handleMainLogItemsPerPageChange = (newItemsPerPage) => {
     setItemsPerPage(newItemsPerPage);
     const formattedDate = selectedDate?.toLocaleDateString('en-US', { timeZone: 'Asia/Karachi' });
-
+    setCurrentPage(1);
     // Fetch data with the current selected device ID and current page
-    fetchData(currentPage, newItemsPerPage, searchTerm, searchField, formattedDate, newSearchTerm, newSearchTermCompany);
+    fetchData(1, newItemsPerPage, searchTerm, searchField, formattedDate, newSearchTerm, newSearchTermCompany);
   };
 
   function formatDateTime(inputDate) {
