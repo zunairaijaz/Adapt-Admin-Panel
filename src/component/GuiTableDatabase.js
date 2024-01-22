@@ -311,6 +311,7 @@ function GuiTableDatabase({ sidebarVisible }) {
                       <Select
                         value={itemsPerPage}
                         onChange={(e) => handleMainLogItemsPerPageChange(e.target.value)}
+                        style={{ height: 38 }}
                         label="Logs per Page"
 
                       >

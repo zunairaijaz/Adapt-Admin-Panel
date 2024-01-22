@@ -323,11 +323,17 @@ function LogsTable({ sidebarVisible }) {
                                         />
                                     </FormControl>
                                     <FormControl variant="outlined" style={{ width: '200px', marginRight: '10px' }}>
-                                        <InputLabel>{selectedDeviceId === " " ? "All Devices" : "Device Id"}</InputLabel>
+                                        <InputLabel>
+                                            {selectedDeviceId === " " ? "All Devices" : <span style={{ position: 'relative', top: '-5px', textAlign: 'center', display: 'inline-block' }}>Device Id</span>}
+                                        </InputLabel>
+
                                         <Select
                                             value={selectedDeviceId}
                                             onChange={(e) => handleDeviceIdChange(e.target.value)}
-                                            label={selectedDeviceId === " " ? "All Devices" : "DeviceId"}
+
+                                            label={selectedDeviceId === " " ? "All Devices" : "Device Id"}
+                                            style={{ height: 38 }}
+
                                         >
                                             <MenuItem value=" ">All Devices</MenuItem>
                                             {deviceIds.map((deviceId) => (
@@ -343,6 +349,8 @@ function LogsTable({ sidebarVisible }) {
                                         <Select
                                             value={itemsPerPage}
                                             onChange={(e) => handleMainLogItemsPerPageChange(e.target.value)}
+                                            style={{ height: 38 }}
+
                                             label="Items per Page"
                                         >
                                             <MenuItem value={5}>5</MenuItem>
