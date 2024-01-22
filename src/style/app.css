@@ -2644,11 +2644,10 @@ a {
 	}
 
 	.sidebar-wrapper {
-
-		left: -300px;
-
-		box-shadow: none
+		background-color: black;
+		/* Add the desired background color */
 	}
+
 
 	.page-wrapper {
 
@@ -2900,6 +2899,7 @@ a {
 	background-color: blue !important;
 	color: lightsalmon;
 }
+
 
 /* @media (zoom: 0.9) and (zoom: not(1)) {
 	.table-responsive {
