@@ -183,12 +183,60 @@ a {
 
 
 
+/* Default styles for larger screens */
 .page-content {
-
 	padding: 1.5rem 1.5rem 0.7rem 1.5rem;
-
 }
 
+/* Media query for screens smaller than 768px (adjust the breakpoint as needed) */
+@media (max-width: 767.98px) {
+	.page-content {
+		/* Adjustments for smaller screens go here */
+		padding: 1rem;
+		/* Adjust the padding for smaller screens */
+	}
+}
+
+/* Media query for medium-sized screens (e.g., tablets) */
+@media screen and (max-width: 992px) {
+	.mb-3 {
+		flex-wrap: wrap;
+		/* Allow items to wrap to the next line */
+	}
+
+	/* Adjust individual styles for search components if needed */
+	.mb-3 label,
+	.mb-3 input,
+	.mb-3 select,
+	.mb-3 #newSearch,
+	.mb-3 #newSearchCompany,
+	.mb-3 .form-control,
+	.mb-3 .MuiSelect-root,
+	.mb-3 .FormControl {
+		width: calc(0 - 10px);
+		/* Three fields on the first line */
+		margin-right: 10px;
+		/* Adjust spacing between fields */
+		margin-bottom: 10px;
+		/* Add some space between lines */
+	}
+
+	/* Adjust the styles for the date picker specifically */
+	.mb-3 .react-datepicker__input-container,
+	.mb-3 .react-datepicker-wrapper {
+		width: calc(0 - 10px);
+		/* Adjust the width to match other fields */
+		margin-right: 0;
+		/* Remove the right margin for the date picker */
+	}
+
+	.mb-3 .form-control,
+	.mb-3 .MuiSelect-root,
+	.mb-3 .FormControl {
+		margin-right: 0;
+		/* Remove right margin for the last field on the line */
+	}
+}
 
 
 .page-footer {
