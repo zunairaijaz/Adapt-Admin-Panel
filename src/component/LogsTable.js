@@ -311,7 +311,7 @@ function LogsTable({ sidebarVisible }) {
                     <div className=" mt-3">
                         <div className="row justify-content-center">
                             <div className="col-lg-15">
-                                <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
+                                <div style={{ display: 'flex', minWidth: '230px', alignItems: 'center', marginBottom: '20px' }}>
                                     <FormControl variant="outlined" style={{ width: '200px', marginRight: '10px' }}>
                                         <input
                                             type="text"
@@ -320,6 +320,7 @@ function LogsTable({ sidebarVisible }) {
                                             className="form-control"
                                             value={searchQuery}
                                             onChange={handleSearchQueryChange}
+
                                         />
                                     </FormControl>
                                     <FormControl variant="outlined" style={{ width: '200px', marginRight: '10px' }}>

@@ -1,6 +1,6 @@
 // App.js
 import React, { useState, useEffect } from 'react';
-import { HashRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
+import { HashRouter as Router, Route, Switch } from 'react-router-dom';
 import Time from './component/Time';
 import SignIn from './component/Auth/SignIn';
 import ForgotPassword from './component/Auth/ForgotPassword';
@@ -27,56 +27,69 @@ function App() {
     // Get the token from localStorage when the component mounts
     const storedToken = localStorage.getItem('admin');
     setToken(storedToken);
+
+    // Add event listener to handle window resize
+    const handleResize = () => {
+      // Close the sidebar if the window width is below a certain threshold (e.g., 768 pixels)
+      if (window.innerWidth < 768) {
+        setSidebarVisible(false);
+      }
+    };
+
+    // Attach the event listener
+    window.addEventListener('resize', handleResize);
+
+    // Clean up the event listener on component unmount
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
 
   return (
     <Router>
       <div className="App">
-        {/* Render the Header and Sidebar */}
-       
-
         <Switch>
           <Route exact path="/">
             <SignIn />
           </Route>
           <Route exact path="/forgotpass">
-          <ForgotPassword />
+            <ForgotPassword />
           </Route>
           <Route exact path="/resetpass">
-          <ResetPassword />
+            <ResetPassword />
           </Route>
           <Route exact path="/signout">
             <SignOut />
           </Route>
           {token && (
-          <>
-            <Header />
-            <SideBar
-              sidebarVisible={sidebarVisible}
-              toggleSidebar={toggleSidebar}
-              onLinkClick={() => setSidebarVisible(false)} // Close sidebar on link click
-            />
-    
-          <Route exact path="/news">
-            <NewsTable sidebarVisible={sidebarVisible} />
-          </Route>
-          <Route exact path="/time">
-            <Time sidebarVisible={sidebarVisible} />
-          </Route>
-          <Route exact path="/faq">
-            <FaqTable sidebarVisible={sidebarVisible} />
-          </Route>
-          <Route exact path="/logs">
-            <LogsTable sidebarVisible={sidebarVisible} />
-          </Route>
-          <Route exact path="/gui">
-            <GuiTable sidebarVisible={sidebarVisible} />
-          </Route>
-          <Route exact path="/guidb">
-            <GuiTableDatabase sidebarVisible={sidebarVisible} />
-          </Route>
-          </>
-    )}
+            <>
+              <Header />
+              <SideBar
+                sidebarVisible={sidebarVisible}
+                toggleSidebar={toggleSidebar}
+                onLinkClick={() => setSidebarVisible(false)} // Close sidebar on link click
+              />
+
+              <Route exact path="/news">
+                <NewsTable sidebarVisible={sidebarVisible} />
+              </Route>
+              <Route exact path="/time">
+                <Time sidebarVisible={sidebarVisible} />
+              </Route>
+              <Route exact path="/faq">
+                <FaqTable sidebarVisible={sidebarVisible} />
+              </Route>
+              <Route exact path="/logs">
+                <LogsTable sidebarVisible={sidebarVisible} />
+              </Route>
+              <Route exact path="/gui">
+                <GuiTable sidebarVisible={sidebarVisible} />
+              </Route>
+              <Route exact path="/guidb">
+                <GuiTableDatabase sidebarVisible={sidebarVisible} />
+              </Route>
+            </>
+          )}
         </Switch>
       </div>
     </Router>

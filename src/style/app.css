@@ -226,6 +226,8 @@ a {
 	.mb-3 .react-datepicker-wrapper {
 		width: calc(0 - 10px);
 		/* Adjust the width to match other fields */
+		margin-top: 5px;
+
 		margin-right: 0;
 		/* Remove the right margin for the date picker */
 	}
