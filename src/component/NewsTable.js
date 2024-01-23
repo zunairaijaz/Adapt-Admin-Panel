@@ -290,14 +290,15 @@ function NewsTable({ sidebarVisible }) {
                 <div className="card-body">
                   <div className="d-lg-flex align-items-center mb-4 gap-3">
                     <div className="ms-auto">
-                      <Button variant="primary" onClick={() => openPopupModal('Add News')}>
+                      <Button variant="primary" onClick={() => openPopupModal('Add News')} className="btn-add-news">
                         <AddIcon /> Add NEWS
                       </Button>
+
                     </div>
                   </div>
-                  <div class="table-responsive">
-                    <table class="table mb-0">
-                      <thead class="table-light">
+                  <div className="table-responsive">
+                    <table className="table mb-0">
+                      <thead className="table-light">
                         <tr>
                           <th>No.</th>
                           <th>Title</th>
@@ -336,7 +337,7 @@ function NewsTable({ sidebarVisible }) {
                                   ) : null}
                                 </td>
                                 <td>
-                                  <div class="d-flex order-actions">
+                                  <div className="d-flex order-actions">
                                     <a title="edit" href="javascript:;" onClick={() => openPopupModal('Update News', news)}>
                                       <EditIcon />
                                     </a>

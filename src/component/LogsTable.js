@@ -413,7 +413,7 @@ function LogsTable({ sidebarVisible }) {
                                                                     height: expandedRowIndices.includes(index) ? 'auto' : '50px',
                                                                     wordBreak: expandedRowIndices.includes(index) ? 'break-all' : 'inherit',
                                                                     wordWrap: 'break-word',
-                                                                    fontSize: '14px',
+                                                                    // fontSize: '14px',
                                                                 }}
                                                             >
                                                                 {log.logString}
