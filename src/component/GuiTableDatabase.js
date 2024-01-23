@@ -240,7 +240,7 @@ function GuiTableDatabase({ sidebarVisible }) {
           <hr style={{ borderTop: '2px solid #333', marginLeft: sidebarVisible ? '0' : '0px' }} />
           <div className={` mt-3`}>
             <div className="row justify-content-center">
-              <div className="col-lg-15">
+              <div className="col-lg-12">
                 <div className="mb-3" style={{ display: 'flex', alignItems: 'center' }}>
                   <label htmlFor="search" style={{ marginRight: '10px' }}>
                     Search:{' '}

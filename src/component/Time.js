@@ -9,7 +9,7 @@ import config from "../config";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 // import Stack from "@mui/material/Stack";
-import Button from "@mui/material/Button";
+import Button from 'react-bootstrap/Button';
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import TimezoneSelect from "react-timezone-select";
@@ -242,15 +242,16 @@ function Time({ sidebarVisible }) {
                     onChange={handleTimezoneChange}
                   />
                 </FormControl>
-                <Button
-                  style={{ height: "37px", float: "right", position: "fixed !important" }}
-                  variant="contained"
+
+                <Button style={{ height: "37px", float: "right", marginBottom: '10px', marginTop: '-10px', position: "fixed !important" }}
+
+                  variant="primary"
                   onClick={() => {
                     updateAllRows();
-                  }}
-                >
+                  }} className="btn-add-news">
                   <UpdateIcon />Update
                 </Button>
+
                 <div className="table-responsive">
                   <table className="table mb-0">
                     <thead className="table-light">

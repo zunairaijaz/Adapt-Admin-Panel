@@ -199,7 +199,9 @@ a {
 
 /* Media query for medium-sized screens (e.g., tablets) */
 @media screen and (max-width: 992px) {
-	.mb-3 {
+
+	.mb-3,
+	.mt-3 {
 		flex-wrap: wrap;
 		/* Allow items to wrap to the next line */
 	}
@@ -218,8 +220,10 @@ a {
 		margin-right: 10px;
 		/* Adjust spacing between fields */
 		margin-bottom: 10px;
+
 		/* Add some space between lines */
 	}
+
 
 	/* Adjust the styles for the date picker specifically */
 	.mb-3 .react-datepicker__input-container,
@@ -236,9 +240,34 @@ a {
 	.mb-3 .MuiSelect-root,
 	.mb-3 .FormControl {
 		margin-right: 0;
+
 		/* Remove right margin for the last field on the line */
 	}
+
+
+
 }
+
+/* Media query for small-sized screens */
+@media screen and (max-width: 600px) {
+	.my-3 {
+		flex-wrap: wrap;
+	}
+
+	.form-control {
+		width: 100%;
+		margin-right: 0;
+		margin-bottom: 15px;
+	}
+
+	/* Add space between all form-control elements in my-3 */
+	.my-3 .form-control {
+		margin-bottom: 15px;
+		margin-top: 15px;
+		/* Adjust the value as needed */
+	}
+}
+
 
 
 .page-footer {

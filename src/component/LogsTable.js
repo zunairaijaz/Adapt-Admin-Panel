@@ -311,18 +311,8 @@ function LogsTable({ sidebarVisible }) {
                     <div className=" mt-3">
                         <div className="row justify-content-center">
                             <div className="col-lg-15">
-                                <div style={{ display: 'flex', minWidth: '230px', alignItems: 'center', marginBottom: '20px' }}>
-                                    <FormControl variant="outlined" style={{ width: '200px', marginRight: '10px' }}>
-                                        <input
-                                            type="text"
-                                            id="search"
-                                            placeholder="Search"
-                                            className="form-control"
-                                            value={searchQuery}
-                                            onChange={handleSearchQueryChange}
+                                <div className="my-3" style={{ display: 'flex', alignItems: 'center' }}>
 
-                                        />
-                                    </FormControl>
                                     <FormControl variant="outlined" style={{ width: '200px', marginRight: '10px' }}>
                                         <InputLabel>
                                             {selectedDeviceId === " " ? "All Devices" : <span style={{ position: 'relative', top: '-5px', textAlign: 'center', display: 'inline-block' }}>Device Id</span>}
@@ -344,7 +334,17 @@ function LogsTable({ sidebarVisible }) {
                                             ))}
                                         </Select>
                                     </FormControl>
+                                    <FormControl variant="outlined" style={{ width: '200px', marginRight: '10px' }}>
+                                        <input
+                                            type="text"
+                                            id="search"
+                                            placeholder="Search"
+                                            className="form-control"
+                                            value={searchQuery}
+                                            onChange={handleSearchQueryChange}
 
+                                        />
+                                    </FormControl>
                                     <FormControl variant="outlined" style={{ width: '200px', marginRight: '10px' }}>
                                         <InputLabel>Items per Page</InputLabel>
                                         <Select
