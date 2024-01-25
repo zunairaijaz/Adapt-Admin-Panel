@@ -375,6 +375,8 @@ function GuiTableDatabase({ sidebarVisible }) {
                     </Select>
                   </FormControl> */}
                   <FormControl style={{ marginLeft: '3px', width: '180px' }}>
+                    <InputLabel>Select</InputLabel>
+
                     <Select
                       value={searchField}
                       label="Search Field"
@@ -397,9 +399,11 @@ function GuiTableDatabase({ sidebarVisible }) {
                   {selectedApiType && !['All Fields', 'Level'].includes(selectedApiType) && (
                     <>
                       <FormControl style={{ marginLeft: '3px', width: '180px' }}>
-                        <InputLabel>Search Field</InputLabel>
+                        <InputLabel>Select</InputLabel>
                         <Select
                           value={selectedSearchField}
+                          label="Search Field"
+
                           onChange={(e) => setSelectedSearchField(e.target.value)}
                           style={{ height: '37px' }}
                         >
