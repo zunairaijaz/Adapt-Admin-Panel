@@ -2628,8 +2628,6 @@ a {
 
 }
 
-
-
 .btn-inverse-dark:hover {
 
 	color: #223035;
@@ -2637,10 +2635,7 @@ a {
 	background-color: rgba(34, 48, 53, 0.2);
 
 	border-color: rgba(34, 48, 53, 0.2);
-
 }
-
-
 
 .btn-facebook,
 
@@ -2655,18 +2650,12 @@ a {
 	color: #fff
 }
 
-
-
-
-
 .btn-white {
 
 	background-color: #fff;
 
 	border-color: #e7eaf3
 }
-
-
 
 .chart-container1 {
 
@@ -2675,15 +2664,7 @@ a {
 	height: 380px
 }
 
-
-
-
-
-
 @media only screen and (max-width: 1199px) {
-
-
-
 	.row.row-group>div {
 
 		border-right: 0;
@@ -2692,8 +2673,6 @@ a {
 
 	}
 
-
-
 	.row.row-group>div:last-child {
 
 		border-right: none;
@@ -2701,12 +2680,7 @@ a {
 		border-bottom: 0;
 
 	}
-
-
-
 }
-
-
 
 @media screen and (max-width:1024px) {
 
@@ -2714,8 +2688,6 @@ a {
 
 		left: 0 !important
 	}
-
-
 
 	.mobile-toggle-menu {
 
@@ -2727,7 +2699,6 @@ a {
 		/* Add the desired background color */
 	}
 
-
 	.page-wrapper {
 
 		margin-left: 0
@@ -2737,8 +2708,6 @@ a {
 
 		left: 0
 	}
-
-
 
 	.wrapper.toggled .sidebar-wrapper {
 
@@ -2753,37 +2722,17 @@ a {
 	.wrapper.toggled .overlay {
 
 		position: fixed;
-
 		top: 0;
-
 		right: 0;
-
 		bottom: 0;
-
 		left: 0;
-
 		background: #000;
-
 		opacity: .6;
-
 		z-index: 10;
-
 		display: block;
-
 		cursor: move;
-
 		transition: all .2s ease-out
 	}
-
-
-
-
-
-
-
-
-
-
 
 	.email-toggled .overlay {
 
@@ -2809,10 +2758,7 @@ a {
 
 		transition: all .3s ease-out
 	}
-
 }
-
-
 
 @media screen and (max-width:991px) {
 
@@ -2851,10 +2797,7 @@ a {
 
 		left: 0
 	}
-
 }
-
-
 
 @media screen and (max-width:767px) {
 
@@ -2869,10 +2812,7 @@ a {
 
 		padding: 2.5rem 1rem
 	}
-
 }
-
-
 
 @media screen and (max-width:620px) {
 
@@ -2890,10 +2830,7 @@ a {
 
 		width: 100% !important
 	}
-
 }
-
-
 
 @media screen and (max-width:520px) {
 
@@ -2903,7 +2840,6 @@ a {
 
 		display: none
 	}
-
 }
 
 /* Custom modal width */
@@ -2925,10 +2861,8 @@ a {
 }
 
 /* Default styles for larger screens */
-
 /*................TABLE................*/
 /* Add this CSS to your component's stylesheet or import an external CSS file */
-
 /* Default (Left) Sidebar Position */
 .left-sidebar {
 	display: flex;
@@ -2950,7 +2884,6 @@ a {
 /* .content-moved-left {
 	margin-left: 240px; /* Adjust this value according to your sidebar width */
 /*} */
-
 .content-moved-right1 {
 	margin-top: 10px;
 	margin-left: 65px;
@@ -2967,8 +2900,6 @@ a {
 
 }
 
-
-
 .error {
 	background-color: red !important;
 
@@ -2978,7 +2909,6 @@ a {
 	background-color: blue !important;
 	color: lightsalmon;
 }
-
 
 /* @media (zoom: 0.9) and (zoom: not(1)) {
 	.table-responsive {
