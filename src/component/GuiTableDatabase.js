@@ -26,6 +26,10 @@ function GuiTableDatabase({ sidebarVisible }) {
   const [totalPages, setTotalPages] = useState(1);
   const [totalLogs, setTotalLogs] = useState(1);
   const [expandedRowIndices, setExpandedRowIndices] = useState([]);
+  const [selectedApiType, setSelectedApiType] = useState(''); // New state for selected API type
+  const [apiDropdownItems, setApiDropdownItems] = useState([{}]);
+  const [selectedSearchField, setSelectedSearchField] = useState('');
+  const [dropdownVisible, setDropdownVisible] = useState(true); // Adjust the initial value as needed
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
@@ -213,26 +217,126 @@ function GuiTableDatabase({ sidebarVisible }) {
     return `${start} - ${end} / ${total} logs`;
   };
   const handleSearchFieldChange = (event) => {
-    setSearchField(event.target.value);
-    setSearchTerm('');
-    fetchData(currentPage, itemsPerPage, searchTerm, event.target.value, selectedDate, newSearchTerm, newSearchTermCompany);
+    console.log('Selected Search Field:', event.target.value);
 
+    const fieldValue = event.target?.value;
+    if (fieldValue !== undefined) {
+      setSearchField(fieldValue);
+      setSearchTerm('');
+
+      // If the selected API type is not 'All Fields' or 'Level', fetch data based on API type
+      if (fieldValue !== 'All Fields' || fieldValue !== 'Level') {
+        setSelectedApiType(fieldValue);
+        handleApiTypeChange({ target: { value: fieldValue } }); // Call handleApiTypeChange with a synthetic event
+      } else {
+        // If 'All Fields' or 'Level' is selected, update the API type and hide the dropdown
+        setSelectedApiType(fieldValue);
+
+        setDropdownVisible(false);
+        // Fetch data based on other filters
+        fetchData(currentPage, itemsPerPage, searchTerm, fieldValue, selectedDate, newSearchTerm, newSearchTermCompany);
+
+        // Update selectedSearchField when 'All Fields' or 'Level' is selected
+      }
+    }
   };
+
+
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
     fetchData(currentPage, itemsPerPage, event.target.value, searchField, selectedDate, newSearchTerm, newSearchTermCompany)
   };
-  const handleNewSearchChange = (event) => {
-    setNewSearchTerm(event.target.value);
-    fetchData(currentPage, itemsPerPage, searchTerm, searchField, selectedDate, event.target.value, newSearchTermCompany)
+
+  const handleApiTypeChange = (event) => {
+    console.log('Selected API Type:', event.target.value);
+
+    const selectedType = event.target?.value;
+    if (selectedType !== undefined) {
+      setSelectedApiType(selectedType);
+
+      switch (selectedType) {
+        case 'Api Request':
+          setApiDropdownItems([
+            { id: 1, value: 'deviceId' },
+            { id: 2, value: 'employeeId' },
+            { id: 3, value: 'date' },
+            { id: 4, value: 'day' },
+            { id: 5, value: 'month' },
+            { id: 6, value: 'year' },
+            { id: 7, value: 'timeHour' },
+            { id: 8, value: 'timeMinute' },
+            { id: 9, value: 'yourLocation' },
+            { id: 10, value: 'destination' },
+            { id: 11, value: 'distanceKM' },
+            { id: 12, value: 'startTime' },
+            { id: 13, value: 'transportationMode' },
+            { id: 14, value: 'motionDetectedTrip' },
+            { id: 15, value: 'idlingTimeSec' },
+            { id: 16, value: 'endTime' },
+          ]);
+          break;
+        case 'Api Response':
+          setApiDropdownItems([
+            {
+              id: 1,
+              value: 'id'
+            },
+            { id: 2, value: 'compnay_code' },
+            { id: 3, value: 'fuelType' },
+            { id: 4, value: 'purchase_company' },
+            { id: 5, value: 'totalTripsCo2Emit' },
+            { id: 6, value: 'totalCommunitysCo2Emit' },
+            { id: 7, value: 'monthlyAverageCo2Emit' },
+            { id: 8, value: 'license_plate' },
+            { id: 9, value: 'employee_id' },
+            { id: 10, value: 'duid_vehicle_id' },
+            { id: 11, value: 'annual_carbon_emit' },
+            { id: 12, value: 'fuel_efficiency' },
+            { id: 13, value: 'createdAt' },
+            { id: 14, value: 'updatedAt' },
+
+          ]);
+          break;
+        case 'Co2 Request':
+          setApiDropdownItems([
+            { id: 1, value: 'distance' },
+            { id: 2, value: 'transportation_type' },
+          ]);
+          break;
+        case 'Co2 Response':
+          setApiDropdownItems([
+            { id: 1, value: 'status' },
+            { id: 2, value: 'result' },
+          ]);
+          break;
+        case 'Adapt Request':
+          setApiDropdownItems([
+            { id: 1, value: 'sys_datetime' },
+            { id: 2, value: 'vehicle_id' },
+            { id: 3, value: 'trip_id' },
+            { id: 4, value: 'dateTime' },
+            { id: 5, value: 'distance' },
+            { id: 6, value: 'co2e' },
+            { id: 7, value: 'status' },
+          ]);
+          break;
+        case 'Adapt Response':
+          setApiDropdownItems([
+            { id: 1, value: 'result' },
+            { id: 2, value: 'status' },
+          ]);
+          break;
+        default:
+          setApiDropdownItems([]);
+          setSearchTerm(''); // Reset search term for other API types
+          break;
+      }
+    }
   };
-  const handleNew1SearchChange = (event) => {
-    const newSearchTermCompany = event.target.value // Convert the search term to lowercase
-    setNewSearchTermCompany(newSearchTermCompany);
-    fetchData(currentPage, itemsPerPage, searchTerm, searchField, selectedDate, newSearchTerm, event.target.value)
-  };
+  console.log("secrrrrrr:", selectedSearchField);
 
   return (
+
     <div className="App">
       <div className={`page-wrapper `}>
         <div className={`page-content ${sidebarVisible ? 'content-moved-left1' : 'content-moved-right1'}`}>
@@ -243,7 +347,6 @@ function GuiTableDatabase({ sidebarVisible }) {
               <div className="col-lg-12">
                 <div className="mb-3" style={{ display: 'flex', alignItems: 'center' }}>
                   <label htmlFor="search" style={{ marginRight: '10px' }}>
-                    Search:{' '}
                   </label>
                   <input
                     type="text"
@@ -254,7 +357,24 @@ function GuiTableDatabase({ sidebarVisible }) {
                     className="form-control"
                     style={{ width: '150px' }}
                   />
-                  <FormControl style={{ marginLeft: '3px', width: '120px' }}>
+                  {/* <FormControl style={{ marginLeft: '3px', width: '120px' }}>
+                    <Select
+                      value={searchField}
+                      label="Search Field"
+                      onChange={handleSearchFieldChange}
+                      style={{ height: '37px' }}
+                    >
+                      <MenuItem value="All Fields">All Fields</MenuItem>
+                      <MenuItem value="Level">Level</MenuItem>
+                      <MenuItem value="Api Request">Api Request</MenuItem>
+                      <MenuItem value="Api Response">Api Response</MenuItem>
+                      <MenuItem value="Co2 Request">Co2 Request</MenuItem>
+                      <MenuItem value="Co2 Response">Co2 Response</MenuItem>
+                      <MenuItem value="Adapt Request">Adapt Request</MenuItem>
+                      <MenuItem value="Adapt Response">Adapt Response</MenuItem>
+                    </Select>
+                  </FormControl> */}
+                  <FormControl style={{ marginLeft: '3px', width: '180px' }}>
                     <Select
                       value={searchField}
                       label="Search Field"
@@ -271,6 +391,32 @@ function GuiTableDatabase({ sidebarVisible }) {
                       <MenuItem value="Adapt Response">Adapt Response</MenuItem>
                     </Select>
                   </FormControl>
+
+                  {/* Second dropdown for selecting search field within the chosen API Type */}
+
+                  {selectedApiType && !['All Fields', 'Level'].includes(selectedApiType) && (
+                    <>
+                      <FormControl style={{ marginLeft: '3px', width: '180px' }}>
+                        <InputLabel>Search Field</InputLabel>
+                        <Select
+                          value={selectedSearchField}
+                          onChange={(e) => setSelectedSearchField(e.target.value)}
+                          style={{ height: '37px' }}
+                        >
+                          <MenuItem value="">Select</MenuItem>
+                          {apiDropdownItems.map((item) => (
+                            <MenuItem key={item.id} value={item.value}>
+                              {item.value}
+                            </MenuItem>
+                          ))}
+                        </Select>
+
+                      </FormControl>
+
+                    </>
+
+                  )}
+
                   <div
                     style={{ marginLeft: '3px', width: '180px', backgroundColor: 'white !important' }}
                   >
@@ -283,7 +429,7 @@ function GuiTableDatabase({ sidebarVisible }) {
                       style={{ width: '180px' }}
                     />
                   </div>
-                  <div style={{ marginLeft: '3px' }}>
+                  {/* <div style={{ marginLeft: '3px' }}>
                     <input
                       type="text"
                       id="newSearch"
@@ -304,7 +450,7 @@ function GuiTableDatabase({ sidebarVisible }) {
                       className="form-control"
                       style={{ width: '180px' }}
                     />
-                  </div>
+                  </div> */}
                   <div style={{ margin: '3px' }}>
                     <FormControl variant="outlined" style={{ height: '37px', width: '200px' }}>
                       <InputLabel>Logs per Page</InputLabel>
