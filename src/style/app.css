@@ -2995,6 +2995,11 @@ a {
 } */
 /* Your existing styles */
 /* ... */
+.table th,
+.table td {
+	padding: 12px;
+	/* Adjust the padding as needed */
+}
 
 /* Add a media query for smaller screen sizes */
 @media screen and (max-width: 768px) {
@@ -3004,23 +3009,7 @@ a {
 	th {
 		font-size: 0.5rem;
 		/* Adjust the font size as needed */
-
 	}
-
-	/* Add other styles for smaller screens */
-	/* ... */
-}
-
-/* Custom media query for adjusting spacing on smaller screens */
-/* Default styles for larger screens */
-.table th,
-.table td {
-	padding: 12px;
-	/* Adjust the padding as needed */
-}
-
-/* Media query for smaller screens */
-@media (max-width: 768px) {
 
 	.table th,
 	.table td {
@@ -3029,9 +3018,9 @@ a {
 	}
 
 	.table img {
-		width: 50px;
+		width: 30px;
 		/* Adjust the image width as needed */
-		height: 50px;
+		height: 30px;
 		/* Adjust the image height as needed */
 	}
 
