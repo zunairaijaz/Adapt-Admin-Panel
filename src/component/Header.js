@@ -2,7 +2,7 @@ import React from 'react';
 import PersonIcon from '@material-ui/icons/Person';
 import { Link } from 'react-router-dom'; // Import Link for navigation
 import Signout from './Auth/SignIn'; // Import the Signout component
-
+import '../style/app.css';
 function Header() {
   return (
     <div className="App">

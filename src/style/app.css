@@ -2814,23 +2814,23 @@ a {
 	}
 }
 
-@media screen and (max-width:620px) {
-
-	.topbar .navbar .dropdown-menu::after {
-
-		display: none
+@media screen and (max-width: 620px),
+(min-width: 300px) {
+	.user-box .dropdown-menu::after {
+		display: none;
 	}
 
-	.topbar .navbar .dropdown {
-
-		position: static !important
+	.user-box .dropdown {
+		position: static !important;
 	}
 
-	.topbar .navbar .dropdown-menu {
-
-		width: 100% !important
+	.user-box .dropdown-menu {
+		width: 100% !important;
+		min-width: auto !important;
+		/* Add this line to remove the minimum width constraint */
 	}
 }
+
 
 @media screen and (max-width:520px) {
 
@@ -2963,5 +2963,24 @@ a {
 		/* Adjust the margin between action buttons */
 	}
 }
+
+/* Default styles for form controls */
+.responsive-form-control {
+	width: 200px;
+	/* Set the default width for larger screens */
+}
+
+/* Media query for small screens */
+@media screen and (max-width: 767px) {
+	.responsive-form-control {
+		width: 100%;
+		/* Set the width to 100% on small screens */
+	}
+}
+
+/* Default styles for form controls */
+
+/* Your other styles */
+
 
 /* app.css */

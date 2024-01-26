@@ -19,7 +19,6 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { saveAs } from 'file-saver';
 import Papa from 'papaparse';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
-
 function LogsTable({ sidebarVisible }) {
     const [logData, setLogData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -33,12 +32,10 @@ function LogsTable({ sidebarVisible }) {
     const [totalLogs, setTotalLogs] = useState(1);
     const [expandedRowIndices, setExpandedRowIndices] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
-
     useEffect(() => {
         fetchData(1, itemsPerPage, selectedDeviceId);
         fetchDeviceIds();
     }, [itemsPerPage]);
-
     useEffect(() => {
         if (selectedDeviceId === "") {
             setSelectedDeviceLogData([]);
@@ -50,7 +47,6 @@ function LogsTable({ sidebarVisible }) {
             fetchData(currentPage, itemsPerPage, selectedDeviceId);
         }
     }, [searchQuery, currentPage, itemsPerPage, selectedDeviceId]);
-
     const fetchData = (page, perPage, deviceId) => {
         setLoading(true);
 
@@ -78,7 +74,6 @@ function LogsTable({ sidebarVisible }) {
                 setLoading(false);
             });
     };
-
     function formatDateTime(inputDate) {
         const date = new Date(inputDate);
         const year = date.getFullYear();
@@ -89,7 +84,6 @@ function LogsTable({ sidebarVisible }) {
         const seconds = String(date.getSeconds()).padStart(2, '0');
         return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
     }
-
     const fetchDeviceIds = () => {
         axios.get(`${config.NEW_SERVER_URL}/getUniqueDeviceIds`)
             .then((response) => {
@@ -105,7 +99,6 @@ function LogsTable({ sidebarVisible }) {
                 setDeviceIds([]);
             });
     };
-
     const handleMainLogPageChange = (newPage) => {
         if (newPage >= 1 && newPage <= totalPages) {
             setCurrentPage(newPage);
@@ -114,16 +107,12 @@ function LogsTable({ sidebarVisible }) {
 
         }
     };
-
     const handleMainLogItemsPerPageChange = (newItemsPerPage) => {
         setItemsPerPage(newItemsPerPage);
 
         // Fetch data with the current selected device ID and current page
         fetchData(currentPage, newItemsPerPage, selectedDeviceId);
     };
-
-
-
     const handleDeviceIdChange = (newDeviceId) => {
         if (newDeviceId === "") { // Check for an empty string, not " "
             // When "All Devices" is selected, fetch all data and reset the page to 1
@@ -138,7 +127,6 @@ function LogsTable({ sidebarVisible }) {
             fetchData(1, itemsPerPage, newDeviceId);
         }
     };
-
     const handleRowClick = (index) => {
         const updatedExpandedRowIndices = [...expandedRowIndices];
 
@@ -154,7 +142,6 @@ function LogsTable({ sidebarVisible }) {
         console.log('Expanded Row Indices:', updatedExpandedRowIndices); // Log the indices
         setExpandedRowIndices(updatedExpandedRowIndices);
     };
-
     const renderPageNumbers = () => {
         const pageNumbers = [];
         const visiblePageCount = 3; // Number of visible page numbers
@@ -247,7 +234,6 @@ function LogsTable({ sidebarVisible }) {
 
         return pageNumbers;
     };
-
     const getRangeLabel = () => {
         if (totalLogs === 0) {
             return '0 items';
@@ -263,7 +249,6 @@ function LogsTable({ sidebarVisible }) {
         const query = event.target.value;
         setSearchQuery(query);
     };
-
     const filteredLogData = logData.filter((log) => {
         return (
             log.deviceId.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -271,7 +256,6 @@ function LogsTable({ sidebarVisible }) {
             log.logString.toLowerCase().includes(searchQuery.toLowerCase())
         );
     });
-
     const handleExportButtonClick = () => {
         const exportData = searchQuery ? filteredLogData : logData;
         if (selectedDeviceId) {
@@ -301,7 +285,6 @@ function LogsTable({ sidebarVisible }) {
             toast.error('Please select a device before exporting.');
         }
     };
-
     return (
         <div className="App">
             <div className="page-wrapper">
@@ -309,11 +292,11 @@ function LogsTable({ sidebarVisible }) {
                     <h1 style={{ margin: '0', marginLeft: sidebarVisible ? '0' : '0px' }}>App Logs</h1>
                     <hr style={{ borderTop: '2px solid #333', marginLeft: sidebarVisible ? '0' : '0px' }} />
                     <div className=" mt-3">
-                        <div className="row justify-content-center">
-                            <div className="col-lg-15">
+                        <div className='container'>
+                            <div className="row justify-content-center">
                                 <div className="my-3" style={{ display: 'flex', alignItems: 'center' }}>
 
-                                    <FormControl variant="outlined" style={{ width: '200px', marginRight: '10px' }}>
+                                    <FormControl variant="outlined" className="responsive-form-control" style={{ marginRight: '10px' }}>
                                         <InputLabel>
                                             {selectedDeviceId === " " ? "All Devices" : <span style={{ position: 'relative', top: '-5px', textAlign: 'center', display: 'inline-block' }}>Device Id</span>}
                                         </InputLabel>
@@ -334,10 +317,11 @@ function LogsTable({ sidebarVisible }) {
                                             ))}
                                         </Select>
                                     </FormControl>
-                                    <FormControl variant="outlined" style={{ width: '200px', marginRight: '10px' }}>
+                                    <FormControl variant="outlined" className="responsive-form-control" style={{ marginRight: '10px' }}>
                                         <input
                                             type="text"
                                             id="search"
+                                            width={'full width'}
                                             placeholder="Search"
                                             className="form-control"
                                             value={searchQuery}
@@ -345,7 +329,7 @@ function LogsTable({ sidebarVisible }) {
 
                                         />
                                     </FormControl>
-                                    <FormControl variant="outlined" style={{ width: '200px', marginRight: '10px' }}>
+                                    <FormControl variant="outlined" className="responsive-form-control" style={{ marginRight: '10px' }}>
                                         <InputLabel>Items per Page</InputLabel>
                                         <Select
                                             value={itemsPerPage}
@@ -372,6 +356,8 @@ function LogsTable({ sidebarVisible }) {
                                         )}
                                     </div>
                                 </div>
+                            </div>
+                            <div className='row'>
                                 <div className="card-body">
                                     <div className="table-responsive" style={{ maxHeight: 'calc(100vh - 200px)', overflowY: 'auto' }}>
                                         <table className="table mb-0">
@@ -452,8 +438,7 @@ function LogsTable({ sidebarVisible }) {
                 <p>{getRangeLabel()}</p>
             </label>
             <ToastContainer />
-        </div>
+        </div >
     );
 }
-
 export default LogsTable;

@@ -344,20 +344,21 @@ function GuiTableDatabase({ sidebarVisible }) {
           <hr style={{ borderTop: '2px solid #333', marginLeft: sidebarVisible ? '0' : '0px' }} />
           <div className={` mt-3`}>
             <div className="row justify-content-center">
-              <div className="col-lg-12">
-                <div className="mb-3" style={{ display: 'flex', alignItems: 'center' }}>
-                  <label htmlFor="search" style={{ marginRight: '10px' }}>
-                  </label>
-                  <input
-                    type="text"
-                    value={searchTerm}
-                    onChange={handleSearchChange}
-                    id="search"
-                    placeholder="Search "
-                    className="form-control"
-                    style={{ width: '150px' }}
-                  />
-                  {/* <FormControl style={{ marginLeft: '3px', width: '120px' }}>
+              <div className="container">
+                <div className='row'>
+                  <div className="mb-3" style={{ display: 'flex', alignItems: 'center' }}>
+                    <label htmlFor="search" style={{ marginRight: '10px' }}>
+                    </label>
+                    <input
+                      type="text"
+                      value={searchTerm}
+                      onChange={handleSearchChange}
+                      id="search"
+                      placeholder="Search "
+                      className="form-control"
+                      style={{ width: '150px' }}
+                    />
+                    {/* <FormControl style={{ marginLeft: '3px', width: '120px' }}>
                     <Select
                       value={searchField}
                       label="Search Field"
@@ -374,66 +375,63 @@ function GuiTableDatabase({ sidebarVisible }) {
                       <MenuItem value="Adapt Response">Adapt Response</MenuItem>
                     </Select>
                   </FormControl> */}
-                  <FormControl style={{ marginLeft: '3px', width: '180px' }}>
-                    <InputLabel>Select</InputLabel>
+                    <FormControl style={{ marginLeft: '3px', width: '180px' }}>
+                      <InputLabel>Select</InputLabel>
 
-                    <Select
-                      value={searchField}
-                      label="Search Field"
-                      onChange={handleSearchFieldChange}
-                      style={{ height: '37px' }}
+                      <Select
+                        value={searchField}
+                        label="Search Field"
+                        onChange={handleSearchFieldChange}
+                        style={{ height: '37px' }}
+                      >
+                        <MenuItem value="All Fields">All Fields</MenuItem>
+                        <MenuItem value="Level">Level</MenuItem>
+                        <MenuItem value="Api Request">Api Request</MenuItem>
+                        <MenuItem value="Api Response">Api Response</MenuItem>
+                        <MenuItem value="Co2 Request">Co2 Request</MenuItem>
+                        <MenuItem value="Co2 Response">Co2 Response</MenuItem>
+                        <MenuItem value="Adapt Request">Adapt Request</MenuItem>
+                        <MenuItem value="Adapt Response">Adapt Response</MenuItem>
+                      </Select>
+                    </FormControl>
+
+                    {/* Second dropdown for selecting search field within the chosen API Type */}
+
+                    {selectedApiType && !['All Fields', 'Level'].includes(selectedApiType) && (
+                      <>
+                        <FormControl style={{ marginLeft: '3px', width: '180px' }}>
+                          <InputLabel>
+                            Select
+                          </InputLabel>
+                          <Select
+                            value={selectedSearchField}
+                            label="Search Field"
+
+                            onChange={(e) => setSelectedSearchField(e.target.value)}
+                            style={{ height: '37px' }}
+                          >
+                            {apiDropdownItems.map((item) => (
+                              <MenuItem key={item.id} value={item.value}>
+                                {item.value}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
+                      </>
+                    )}
+                    <div
+                      style={{ marginLeft: '3px', width: '180px', backgroundColor: 'white !important' }}
                     >
-                      <MenuItem value="All Fields">All Fields</MenuItem>
-                      <MenuItem value="Level">Level</MenuItem>
-                      <MenuItem value="Api Request">Api Request</MenuItem>
-                      <MenuItem value="Api Response">Api Response</MenuItem>
-                      <MenuItem value="Co2 Request">Co2 Request</MenuItem>
-                      <MenuItem value="Co2 Response">Co2 Response</MenuItem>
-                      <MenuItem value="Adapt Request">Adapt Request</MenuItem>
-                      <MenuItem value="Adapt Response">Adapt Response</MenuItem>
-                    </Select>
-                  </FormControl>
-
-                  {/* Second dropdown for selecting search field within the chosen API Type */}
-
-                  {selectedApiType && !['All Fields', 'Level'].includes(selectedApiType) && (
-                    <>
-                      <FormControl style={{ marginLeft: '3px', width: '180px' }}>
-                        <InputLabel>Select</InputLabel>
-                        <Select
-                          value={selectedSearchField}
-                          label="Search Field"
-
-                          onChange={(e) => setSelectedSearchField(e.target.value)}
-                          style={{ height: '37px' }}
-                        >
-                          <MenuItem value="">Select</MenuItem>
-                          {apiDropdownItems.map((item) => (
-                            <MenuItem key={item.id} value={item.value}>
-                              {item.value}
-                            </MenuItem>
-                          ))}
-                        </Select>
-
-                      </FormControl>
-
-                    </>
-
-                  )}
-
-                  <div
-                    style={{ marginLeft: '3px', width: '180px', backgroundColor: 'white !important' }}
-                  >
-                    <DatePicker
-                      selected={selectedDate}
-                      onChange={(date) => handleDateChange(date)}
-                      placeholderText="Select Date"
-                      dateFormat="yyyy-MM-dd"
-                      className="form-control"
-                      style={{ width: '180px' }}
-                    />
-                  </div>
-                  {/* <div style={{ marginLeft: '3px' }}>
+                      <DatePicker
+                        selected={selectedDate}
+                        onChange={(date) => handleDateChange(date)}
+                        placeholderText="Select Date"
+                        dateFormat="yyyy-MM-dd"
+                        className="form-control"
+                        style={{ width: '180px' }}
+                      />
+                    </div>
+                    {/* <div style={{ marginLeft: '3px' }}>
                     <input
                       type="text"
                       id="newSearch"
@@ -455,158 +453,162 @@ function GuiTableDatabase({ sidebarVisible }) {
                       style={{ width: '180px' }}
                     />
                   </div> */}
-                  <div style={{ margin: '3px' }}>
-                    <FormControl variant="outlined" style={{ height: '37px', width: '200px' }}>
-                      <InputLabel>Logs per Page</InputLabel>
-                      <Select
-                        value={itemsPerPage}
-                        onChange={(e) => handleMainLogItemsPerPageChange(e.target.value)}
-                        style={{ height: 38 }}
-                        label="Logs per Page"
+                    <div style={{ margin: '3px' }}>
+                      <FormControl variant="outlined" style={{ height: '37px', width: '200px' }}>
+                        <InputLabel>Logs per Page</InputLabel>
+                        <Select
+                          value={itemsPerPage}
+                          onChange={(e) => handleMainLogItemsPerPageChange(e.target.value)}
+                          style={{ height: 38 }}
+                          label="Logs per Page"
 
-                      >
-                        <MenuItem value={5}>5</MenuItem>
-                        <MenuItem value={10}>10</MenuItem>
-                        <MenuItem value={50}>50</MenuItem>
-                        <MenuItem value={100}>100</MenuItem>
-                      </Select>
-                    </FormControl>
+                        >
+                          <MenuItem value={5}>5</MenuItem>
+                          <MenuItem value={10}>10</MenuItem>
+                          <MenuItem value={50}>50</MenuItem>
+                          <MenuItem value={100}>100</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </div>
                   </div>
                 </div>
-                <div className="card-body">
-                  <div className="table-responsive" style={{ maxHeight: 'calc(100vh - 200px)', overflowY: 'auto' }}>
-                    <table className={`table mb-0`}>
-                      <thead className="table-light">
-                        <tr>
-                          <th>Level</th>
-                          <th>Date</th>
-                          <th>Api Request</th>
-                          <th>Api Response</th>
-                          <th>Co2 Request</th>
-                          <th>Co2 Response</th>
-                          <th>Adapt Request</th>
-                          <th>Adapt Response</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {
-                          loading ? (
-                            <GuiLoader rowsNum={10} />
-                          ) : logData.length > 0 ? (
-                            logData.map((logData, index) => {
-                              // const rowClass = level === 'error' ? 'error-row' : level === 'info' ? 'info-row' : '';
-                              const backgroundColor = logData.level === 'error' ? '#dc3545' : logData.level === 'info' ? '#E8E8E8' : 'transparent';
+                <div className='row'>
 
-                              // console.log("rowclass",rowClass);
+                  <div className="card-body">
+                    <div className="table-responsive" style={{ maxHeight: 'calc(100vh - 200px)', overflowY: 'auto' }}>
+                      <table className={`table mb-0`}>
+                        <thead className="table-light">
+                          <tr>
+                            <th>Level</th>
+                            <th>Date</th>
+                            <th>Api Request</th>
+                            <th>Api Response</th>
+                            <th>Co2 Request</th>
+                            <th>Co2 Response</th>
+                            <th>Adapt Request</th>
+                            <th>Adapt Response</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {
+                            loading ? (
+                              <GuiLoader rowsNum={10} />
+                            ) : logData.length > 0 ? (
+                              logData.map((logData, index) => {
+                                // const rowClass = level === 'error' ? 'error-row' : level === 'info' ? 'info-row' : '';
+                                const backgroundColor = logData.level === 'error' ? '#dc3545' : logData.level === 'info' ? '#E8E8E8' : 'transparent';
 
-                              return (
-                                <tr
-                                  key={index}
-                                  onDoubleClick={() => handleRowClick(index)}
-                                  // className={rowClass}
-                                  style={{
-                                    height: expandedRowIndices.includes(index) ? 'auto' : '50px',
-                                    whiteSpace: expandedRowIndices.includes(index) ? 'break-spaces' : 'nowrap',
-                                    textOverflow: expandedRowIndices.includes(index) ? 'inherit' : 'ellipsis',
-                                    wordBreak: expandedRowIndices.includes(index) ? 'break-all' : 'inherit',
-                                  }}
-                                >
-                                  <td title={logData.level}
-                                    style={{
-                                      columnWidth: '50px',
-                                      whiteSpace: 'nowrap',
-                                      backgroundColor,
+                                // console.log("rowclass",rowClass);
 
-                                    }}
-                                  >
-                                    {logData.level}
-                                  </td>
-                                  <td
-                                    title={formatDateTime(logData.date)}
+                                return (
+                                  <tr
+                                    key={index}
+                                    onDoubleClick={() => handleRowClick(index)}
+                                    // className={rowClass}
                                     style={{
-                                      columnWidth: '200px',
-                                      overflow: expandedRowIndex === index ? 'auto' : 'hidden',
-                                      backgroundColor,
+                                      height: expandedRowIndices.includes(index) ? 'auto' : '50px',
+                                      whiteSpace: expandedRowIndices.includes(index) ? 'break-spaces' : 'nowrap',
+                                      textOverflow: expandedRowIndices.includes(index) ? 'inherit' : 'ellipsis',
+                                      wordBreak: expandedRowIndices.includes(index) ? 'break-all' : 'inherit',
                                     }}
                                   >
-                                    {formatDateTime(logData.date)}
-                                  </td>
-                                  <td
-                                    title={logData.apiRequest}
-                                    style={{
-                                      columnWidth: '352px',
-                                      overflow: expandedRowIndex === index ? 'auto' : 'hidden',
-                                      backgroundColor,
-                                    }}
-                                  >
-                                    {JSON.stringify(logData.apiRequest)}
-                                  </td>
-                                  <td
-                                    title={logData.apiResponse}
-                                    style={{
-                                      columnWidth: '300px',
-                                      overflow: expandedRowIndex === index ? 'auto' : 'hidden',
-                                      backgroundColor,
-                                    }}
-                                  >
-                                    {JSON.stringify(logData.apiResponse)}
-                                  </td>
-                                  <td
-                                    title={logData.co2Request}
-                                    style={{
-                                      columnWidth: '300px',
-                                      overflow: expandedRowIndex === index ? 'auto' : 'hidden',
-                                      backgroundColor,
-                                    }}
-                                  >
-                                    {JSON.stringify(logData.co2Request)}
-                                  </td>
-                                  <td
-                                    title={logData.co2Response}
-                                    style={{
-                                      columnWidth: '300px',
-                                      overflow: expandedRowIndex === index ? 'auto' : 'hidden',
-                                      backgroundColor,
-                                    }}
-                                  >
-                                    {JSON.stringify(logData.co2Response)}
-                                  </td>
-                                  <td
-                                    title={logData.adaptRequest}
-                                    style={{
-                                      columnWidth: '200px',
-                                      overflow: expandedRowIndex === index ? 'auto' : 'hidden',
-                                      backgroundColor,
-                                    }}
-                                  >
-                                    {JSON.stringify(logData.adaptRequest)}
-                                  </td>
-                                  <td
-                                    title={logData.adaptResponse}
-                                    style={{
-                                      columnWidth: '300px',
-                                      overflow: expandedRowIndex === index ? 'auto' : 'hidden',
-                                      backgroundColor,
-                                    }}
-                                  >
-                                    {JSON.stringify(logData.adaptResponse)}
-                                  </td>
-                                </tr>
-                              );
-                            })
-                          ) : (
-                            <tr>
-                              <td colSpan="20" style={{ textAlign: 'center' }}>
-                                <div style={{ display: 'inline-block' }}>
-                                  <p>No Data available.</p>
-                                </div>
-                              </td>
-                            </tr>
-                          )
-                        }
+                                    <td title={logData.level}
+                                      style={{
+                                        columnWidth: '50px',
+                                        whiteSpace: 'nowrap',
+                                        backgroundColor,
 
-                      </tbody>
-                    </table>
+                                      }}
+                                    >
+                                      {logData.level}
+                                    </td>
+                                    <td
+                                      title={formatDateTime(logData.date)}
+                                      style={{
+                                        columnWidth: '200px',
+                                        overflow: expandedRowIndex === index ? 'auto' : 'hidden',
+                                        backgroundColor,
+                                      }}
+                                    >
+                                      {formatDateTime(logData.date)}
+                                    </td>
+                                    <td
+                                      title={logData.apiRequest}
+                                      style={{
+                                        columnWidth: '352px',
+                                        overflow: expandedRowIndex === index ? 'auto' : 'hidden',
+                                        backgroundColor,
+                                      }}
+                                    >
+                                      {JSON.stringify(logData.apiRequest)}
+                                    </td>
+                                    <td
+                                      title={logData.apiResponse}
+                                      style={{
+                                        columnWidth: '300px',
+                                        overflow: expandedRowIndex === index ? 'auto' : 'hidden',
+                                        backgroundColor,
+                                      }}
+                                    >
+                                      {JSON.stringify(logData.apiResponse)}
+                                    </td>
+                                    <td
+                                      title={logData.co2Request}
+                                      style={{
+                                        columnWidth: '300px',
+                                        overflow: expandedRowIndex === index ? 'auto' : 'hidden',
+                                        backgroundColor,
+                                      }}
+                                    >
+                                      {JSON.stringify(logData.co2Request)}
+                                    </td>
+                                    <td
+                                      title={logData.co2Response}
+                                      style={{
+                                        columnWidth: '300px',
+                                        overflow: expandedRowIndex === index ? 'auto' : 'hidden',
+                                        backgroundColor,
+                                      }}
+                                    >
+                                      {JSON.stringify(logData.co2Response)}
+                                    </td>
+                                    <td
+                                      title={logData.adaptRequest}
+                                      style={{
+                                        columnWidth: '200px',
+                                        overflow: expandedRowIndex === index ? 'auto' : 'hidden',
+                                        backgroundColor,
+                                      }}
+                                    >
+                                      {JSON.stringify(logData.adaptRequest)}
+                                    </td>
+                                    <td
+                                      title={logData.adaptResponse}
+                                      style={{
+                                        columnWidth: '300px',
+                                        overflow: expandedRowIndex === index ? 'auto' : 'hidden',
+                                        backgroundColor,
+                                      }}
+                                    >
+                                      {JSON.stringify(logData.adaptResponse)}
+                                    </td>
+                                  </tr>
+                                );
+                              })
+                            ) : (
+                              <tr>
+                                <td colSpan="20" style={{ textAlign: 'center' }}>
+                                  <div style={{ display: 'inline-block' }}>
+                                    <p>No Data available.</p>
+                                  </div>
+                                </td>
+                              </tr>
+                            )
+                          }
+
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 </div>
               </div>

@@ -13,7 +13,7 @@ import FaqTable from './component/FaqTable';
 import LogsTable from './component/LogsTable';
 import GuiTableDatabase from './component/GuiTableDatabase';
 import SignOut from './component/Auth/Signout';
-
+import './style/app.css';
 function App() {
   const [sidebarVisible, setSidebarVisible] = useState(true);
   const [token, setToken] = useState(null);
