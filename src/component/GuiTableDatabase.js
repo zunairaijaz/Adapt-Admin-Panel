@@ -41,6 +41,7 @@ function GuiTableDatabase({ sidebarVisible }) {
 
   useEffect(() => {
     fetchData(currentPage, itemsPerPage, searchTerm, searchField, selectedDate, newSearchTerm, newSearchTermCompany);
+
   }, [itemsPerPage]);
 
   const fetchData = (page, perPage, search, searchField, selectedDate, newSearchTerm, newSearchTermCompany) => {
@@ -400,16 +401,25 @@ function GuiTableDatabase({ sidebarVisible }) {
                     {selectedApiType && !['All Fields', 'Level'].includes(selectedApiType) && (
                       <>
                         <FormControl style={{ marginLeft: '3px', width: '180px' }}>
-                          <InputLabel>
+                          {/* <InputLabel>
                             Select
+                          </InputLabel> */}
+                          <InputLabel>
+
+                            <span style={{ position: 'relative', top: '-5px', textAlign: 'center', display: 'inline-block' }}>
+                              Select
+                            </span>
+
                           </InputLabel>
                           <Select
+
                             value={selectedSearchField}
-                            label="Search Field"
+                            label="Select"
 
                             onChange={(e) => setSelectedSearchField(e.target.value)}
                             style={{ height: '37px' }}
                           >
+
                             {apiDropdownItems.map((item) => (
                               <MenuItem key={item.id} value={item.value}>
                                 {item.value}
