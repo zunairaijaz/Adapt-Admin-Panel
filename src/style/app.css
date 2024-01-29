@@ -200,50 +200,24 @@ a {
 /* Media query for medium-sized screens (e.g., tablets) */
 @media screen and (max-width: 992px) {
 
-	.mb-3,
-	.mt-3 {
+
+
+	.mb-3 {
 		flex-wrap: wrap;
-		/* Allow items to wrap to the next line */
 	}
 
-	/* Adjust individual styles for search components if needed */
-	.mb-3 label,
-	.mb-3 input,
-	.mb-3 select,
-	.mb-3 #newSearch,
-	.mb-3 #newSearchCompany,
-	.mb-3 .form-control,
-	.mb-3 .MuiSelect-root,
-	.mb-3 .FormControl {
-		width: calc(0 - 10px);
-		/* Three fields on the first line */
-		margin-right: 10px;
-		/* Adjust spacing between fields */
-		margin-bottom: 10px;
-
-		/* Add some space between lines */
-	}
-
-
-	/* Adjust the styles for the date picker specifically */
-	.mb-3 .react-datepicker__input-container,
-	.mb-3 .react-datepicker-wrapper {
-		width: calc(0 - 10px);
-		/* Adjust the width to match other fields */
-		margin-top: 5px;
-
+	.form-control {
+		width: 100%;
 		margin-right: 0;
-		/* Remove the right margin for the date picker */
+		margin-bottom: 15px;
 	}
 
-	.mb-3 .form-control,
-	.mb-3 .MuiSelect-root,
-	.mb-3 .FormControl {
-		margin-right: 0;
-
-		/* Remove right margin for the last field on the line */
+	/* Add space between all form-control elements in my-3 */
+	.mb-3 .form-control {
+		margin-bottom: 15px;
+		margin-top: 15px;
+		/* Adjust the value as needed */
 	}
-
 
 
 }
