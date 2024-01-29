@@ -292,8 +292,9 @@ function LogsTable({ sidebarVisible }) {
                     <h1 style={{ margin: '0', marginLeft: sidebarVisible ? '0' : '0px' }}>App Logs</h1>
                     <hr style={{ borderTop: '2px solid #333', marginLeft: sidebarVisible ? '0' : '0px' }} />
                     <div className=" mt-3">
-                        <div className='container'>
-                            <div className="row justify-content-center">
+                        <div className="row justify-content-center">
+
+                            <div className='container'>
                                 <div className="my-3" style={{ display: 'flex', alignItems: 'center' }}>
 
                                     <FormControl variant="outlined" className="responsive-form-control" style={{ marginRight: '10px' }}>

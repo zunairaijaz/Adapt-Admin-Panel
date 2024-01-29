@@ -199,9 +199,6 @@ a {
 
 /* Media query for medium-sized screens (e.g., tablets) */
 @media screen and (max-width: 992px) {
-
-
-
 	.mb-3 {
 		flex-wrap: wrap;
 	}
@@ -218,12 +215,10 @@ a {
 		margin-top: 15px;
 		/* Adjust the value as needed */
 	}
-
-
 }
 
 /* Media query for small-sized screens */
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 992px) {
 	.my-3 {
 		flex-wrap: wrap;
 	}
@@ -241,8 +236,6 @@ a {
 		/* Adjust the value as needed */
 	}
 }
-
-
 
 .page-footer {
 
