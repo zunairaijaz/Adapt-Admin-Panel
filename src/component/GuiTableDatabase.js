@@ -12,6 +12,7 @@ import axios from 'axios';
 import config from '../config';
 import '../style/app.css';
 import GuiLoader from './GuiLoader'; // Import the GuiLoader component
+import { Typography } from '@mui/material';
 function GuiTableDatabase({ sidebarVisible }) {
   const [logData, setLogData] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -319,6 +320,8 @@ function GuiTableDatabase({ sidebarVisible }) {
             { id: 5, value: 'distance' },
             { id: 6, value: 'co2e' },
             { id: 7, value: 'status' },
+            { id: 8, value: 'idlingTimeSec' },
+
           ]);
           break;
         case 'Adapt Response':
@@ -395,32 +398,30 @@ function GuiTableDatabase({ sidebarVisible }) {
                         <MenuItem value="Adapt Response">Adapt Response</MenuItem>
                       </Select>
                     </FormControl>
-
                     {/* Second dropdown for selecting search field within the chosen API Type */}
 
                     {selectedApiType && !['All Fields', 'Level'].includes(selectedApiType) && (
                       <>
 
                         <FormControl style={{ marginLeft: '3px', width: '180px' }}>
-                          {/* <InputLabel>
+                          <InputLabel sx={{
+                            marginTop: '-8px', // Adjust this value to move the label up
+                            fontSize: 15, // You can adjust the font size as needed
+                          }}>
                             Select
-                          </InputLabel> */}
-                          <InputLabel>
-
-                            <span style={{ fontSize: '13px', position: 'relative', top: '-6px', textAlign: 'center', display: 'inline-block' }}>
-                              Select
-                            </span>
-
                           </InputLabel>
-                          <Select
 
+                          <Select
+                            sx={{
+                              height: '37px',
+
+                            }}
                             value={selectedSearchField}
                             label="Search Field"
-
+                            placeholder='Select'
                             onChange={(e) => setSelectedSearchField(e.target.value)}
-                            style={{ height: '37px' }}
-                          >
 
+                          >
                             {apiDropdownItems.map((item) => (
                               <MenuItem key={item.id} value={item.value}>
                                 {item.value}
@@ -430,6 +431,7 @@ function GuiTableDatabase({ sidebarVisible }) {
                         </FormControl>
                       </>
                     )}
+
                     <div
                       style={{ marginLeft: '3px', width: '180px', backgroundColor: 'white !important' }}
                     >
@@ -626,7 +628,7 @@ function GuiTableDatabase({ sidebarVisible }) {
             </div>
           </div>
         </div>
-      </div>
+      </div >
       <div className="table-pagination">
         <div className="pagination float-right" style={{ marginBottom: '40px', marginRight: '60px' }}>
           {renderPageNumbers()}
@@ -649,7 +651,7 @@ function GuiTableDatabase({ sidebarVisible }) {
         <p>{getRangeLabel()}</p>
       </label>
       <ToastContainer />
-    </div>
+    </div >
 
   );
 }

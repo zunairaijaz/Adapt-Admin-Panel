@@ -203,17 +203,20 @@ a {
 		flex-wrap: wrap;
 	}
 
-	.form-control {
+	.form-control,
+	.mb-3>div {
 		width: 100%;
-		margin-right: 0;
-		margin-bottom: 15px;
 	}
 
-	/* Add space between all form-control elements in my-3 */
+	.mb-3>div {
+		margin-top: 3px;
+	}
+
 	.mb-3 .form-control {
-		margin-bottom: 15px;
-		margin-top: 15px;
-		/* Adjust the value as needed */
+		margin-top: 3px !important;
+
+		margin-bottom: 10px;
+		/* Remove bottom margin for the last div */
 	}
 }
 
@@ -224,10 +227,11 @@ a {
 	}
 
 	.form-control {
-		width: 100%;
 		margin-right: 0;
 		margin-bottom: 15px;
 	}
+
+
 
 	/* Add space between all form-control elements in my-3 */
 	.my-3 .form-control {

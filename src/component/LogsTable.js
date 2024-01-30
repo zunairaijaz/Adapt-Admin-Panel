@@ -298,10 +298,13 @@ function LogsTable({ sidebarVisible }) {
                                 <div className="my-3" style={{ display: 'flex', alignItems: 'center' }}>
 
                                     <FormControl variant="outlined" className="responsive-form-control" style={{ marginRight: '10px' }}>
-                                        <InputLabel>
-                                            {selectedDeviceId === " " ? "All Devices" : <span style={{ position: 'relative', top: '-5px', textAlign: 'center', display: 'inline-block' }}>Device Id</span>}
+                                        <InputLabel sx={{
+                                            marginTop: '-8px', // Adjust this value to move the label up
+                                            fontSize: 15,
+                                        }}
+                                        >
+                                            {selectedDeviceId === " " ? "All Devices" : 'Device Id'}
                                         </InputLabel>
-
                                         <Select
                                             value={selectedDeviceId}
                                             onChange={(e) => handleDeviceIdChange(e.target.value)}
@@ -416,7 +419,7 @@ function LogsTable({ sidebarVisible }) {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div >
             <div className="table-pagination">
                 <div className="pagination float-right" style={{ marginBottom: '40px', marginRight: '60px' }}>
                     {renderPageNumbers()}
