@@ -272,7 +272,7 @@ function LogsTable({ sidebarVisible }) {
                             header: true,
                         });
                         const blob = new Blob([csvString], { type: 'text/csv' });
-                        saveAs(blob, `exported_data_${selectedDeviceId}.csv`);
+                        saveAs(blob, `${selectedDeviceId}.csv`);
                     })
                     .catch((error) => {
                         console.error('Error exporting data:', error);
