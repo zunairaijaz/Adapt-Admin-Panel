@@ -209,7 +209,8 @@ a {
 	}
 
 	.mb-3>div {
-		margin-top: 3px;
+		margin-top: 4px;
+		margin-bottom: 4px;
 	}
 
 	.mb-3 .form-control {
