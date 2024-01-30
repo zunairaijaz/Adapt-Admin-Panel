@@ -351,17 +351,7 @@ function GuiTableDatabase({ sidebarVisible }) {
               <div className="container">
                 <div className='row'>
                   <div className="mb-3" style={{ display: 'flex', alignItems: 'center' }}>
-                    <label htmlFor="search" style={{ marginRight: '2px' }}>
-                    </label>
-                    <input
-                      type="text"
-                      value={searchTerm}
-                      onChange={handleSearchChange}
-                      id="search"
-                      placeholder="Search "
-                      className="form-control"
-                      style={{ width: '150px' }}
-                    />
+
                     {/* <FormControl style={{ marginLeft: '3px', width: '120px' }}>
                     <Select
                       value={searchField}
@@ -431,7 +421,17 @@ function GuiTableDatabase({ sidebarVisible }) {
                         </FormControl>
                       </>
                     )}
-
+                    <label htmlFor="search" style={{ marginRight: '2px' }}>
+                    </label>
+                    <input
+                      type="text"
+                      value={searchTerm}
+                      onChange={handleSearchChange}
+                      id="search"
+                      placeholder="Search "
+                      className="form-control"
+                      style={{ width: '150px' }}
+                    />
                     <div
                       style={{ marginLeft: '3px', width: '180px', backgroundColor: 'white !important' }}
                     >
